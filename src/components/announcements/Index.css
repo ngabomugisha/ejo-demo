@@ -1,0 +1,59 @@
+.head-btn{
+    display: flex;
+}
+
+.head{
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 40px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.123);
+    background-color: white;
+    z-index: 50;
+    
+}
+
+#unread{
+    background-color: #0476f818;
+    border: 0px;
+    max-height: 24px;
+    color: #2D9CDB;
+    border-radius: 3px;
+    padding: 3px 20px 3px;
+    cursor: pointer;
+}
+
+#sent{
+    background-color: #21f17b31;
+    border: 0px;
+    max-height: 24px;
+    color: #219653;
+    border-radius: 3px;
+    margin-left: 30px;
+    padding: 3px 20px 3px;
+    cursor: pointer;
+}
+.msgs-container{
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+}
+.msgs{
+    flex: 0.3;
+    min-height: 100vh;
+}
+.msgs :hover{
+    cursor: pointer;
+}
+.msg-body{
+    flex: 0.7;
+    min-height: 100vh;
+}
+.message{
+    border-bottom: 1px solid rgba(65, 65, 65, 0.226);
+    border-right: 1px solid rgba(65, 65, 65, 0.226);
+    margin: 0 auto !important;
+    padding: 2px 10px 2px;
+}
+.message:hover{
+    color:red
+}

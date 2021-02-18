@@ -1,0 +1,14 @@
+.reminder-container{
+    padding:5px 5px 5px 5px;
+    border-radius:5px
+
+}
+.reminder-container > p {
+    font-size: smaller;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+.reminder-container > h4 {
+    font-size:small;
+    margin-block-start: 0;
+}
