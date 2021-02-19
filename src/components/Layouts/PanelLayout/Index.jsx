@@ -10,7 +10,7 @@ const PanelLayout = (props) => {
 
 
     return (
-        <div className="container">
+        <div className="panel-layout-container">
             <div className='side-menu'>
 
                 <StickyBox>

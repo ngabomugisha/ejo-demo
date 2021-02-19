@@ -17,17 +17,18 @@ const LoginPage = () => {
 
   const handleSubmit = async () => {
     if (!password || !email) return;
-    setErrMessage('');
-    setIsLoading(true);
-    try {
-      await dispatch(handleLogin({ email, password }));
-      setIsLoading(false);
-      history.replace('/teacher');
-    } catch (error) {
-      setErrMessage(error.message || error.error || error);
-      setIsLoading(false);
-    }
-  };
+  //   setErrMessage('');
+  //   setIsLoading(true);
+  //   try {
+  //     await dispatch(handleLogin({ email, password }));
+  //     setIsLoading(false);
+  //     history.replace('/teacher');
+  //   } catch (error) {
+  //     setErrMessage(error.message || error.error || error);
+  //     setIsLoading(false);
+  //   }
+  // 
+};
   return (
     <HomeLayout>
       <>
@@ -71,7 +72,7 @@ const LoginPage = () => {
               textTransform: 'capitalize',
             }}
             variant="contained"
-            onClick={handleSubmit}
+            onClick={()=>history.replace('/teacher')}
           >
             Sign In
           </Button>
