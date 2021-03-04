@@ -1,18 +1,24 @@
-import React ,{useState}from 'react'
+import React, { useState } from 'react'
 import PanelLayout from '../../components/Layouts/PanelLayout/Index'
 import Announcement from '../../components/announcements/Index'
+import { useHistory } from 'react-router-dom'
 
 
 function Main() {
+    const history = useHistory()
 
-const [page, setPage] = useState(null)
+    const [page, setPage] = useState(null)
 
     return (
         <>
-            <PanelLayout selected={1} role="headteacher">
-                <Announcement/>
-            </PanelLayout>
-
+            {
+                sessionStorage.getItem('isloggedin') ?
+                    <PanelLayout selected={1} role="headteacher">
+                        <Announcement />
+                    </PanelLayout>
+                    :
+                    history.replace('/')
+            }
         </>
 
     )

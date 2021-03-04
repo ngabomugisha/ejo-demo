@@ -39,36 +39,36 @@ function Slide1() {
         <div className='slide1-container'>
             <div className='first-field'>
                 <div className="top-field">
-                <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    label="Birthday"
-                    type="date"
-                    color="primary"
-                    defaultValue="2017-05-24"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                /></div>
-                <div className='top-field'>
-                <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-outlined-label">Select Term</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-outlined-label"
-                        id="demo-simple-select-outlined"
-                        value={term}
-                        onChange={handleChange}
-                        label="Select Term"
+                    <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        label="Birthday"
+                        type="date"
                         color="primary"
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={"First Term"}>First Term</MenuItem>
-                        <MenuItem value={"Second Term"}>Second Term</MenuItem>
-                        <MenuItem value={"Third Term"}>Third Term</MenuItem>
-                    </Select>
-                </FormControl>
+                        defaultValue="2017-05-24"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    /></div>
+                <div className='top-field'>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel id="demo-simple-select-outlined-label">Select Term</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            value={term}
+                            onChange={handleChange}
+                            label="Select Term"
+                            color="primary"
+                        >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={"First Term"}>First Term</MenuItem>
+                            <MenuItem value={"Second Term"}>Second Term</MenuItem>
+                            <MenuItem value={"Third Term"}>Third Term</MenuItem>
+                        </Select>
+                    </FormControl>
                 </div>
             </div>
             <div className="topic">
@@ -98,16 +98,16 @@ function Slide1() {
             </div>
             <div className='units'>
                 <div className='top'>
-                <label><span className='spn1'>Expected 9</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='spn2'>Covered 8</span></label><input type='radio' value='' />
+                    <label><span className='spn1'>Expected 9</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='spn2'>Covered 8</span></label><input type='radio' value='' />
                 </div>
-                <p>Food and Nutrition</p> 
+                <p>Food and Nutrition</p>
             </div>
 
             <div className='units'>
                 <div className='top'>
-                <label><span className='spn1'>Expected 9</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='spn2'>Covered 8</span></label><input type='radio' value='' />
+                    <label><span className='spn1'>Expected 9</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className='spn2'>Covered 8</span></label><input type='radio' value='' />
                 </div>
-                <p>Holiday Activities</p> 
+                <p>Holiday Activities</p>
             </div>
             {/*
             <FormControl variant="outlined" color="primary" className={classes.formControl}>

@@ -1,4 +1,4 @@
-import { HANDLE_FETCH_SCHOOLS_SUCCESS } from '../types';
+import { HANDLE_FETCH_SCHOOLS_SUCCESS, HANDLE_ADD_SCHOOL_SUCCESS} from '../types';
 
 const INITIAL_SCHOOL_STATE = {
   list: [],
@@ -10,7 +10,12 @@ export default (state = INITIAL_SCHOOL_STATE, { type, payload }) => {
       return {
         ...state,
         list: payload,
-      };
+      };break;
+      case HANDLE_ADD_SCHOOL_SUCCESS:
+      return {
+        ...state,
+        list: payload,
+      };break;
     default:
       return state;
   }

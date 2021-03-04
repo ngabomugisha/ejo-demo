@@ -9,13 +9,12 @@
     flex-direction: column;
 }
 
-.right-side-hd >h3{
+.in-hd >h3{
     color: #0c393c;
     font-weight: bold;
-    max-height: 0px;
 
 }
-.right-side-hd >p{
+.in-hd >p{
     color: #0c393c;
     font-size: x-small;
     

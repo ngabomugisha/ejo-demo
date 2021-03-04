@@ -1,13 +1,22 @@
 import React from 'react'
-import FeedHead from '../../components/feed/FeedHead'
+import { connect } from 'react-redux'
 import PanelLayout from '../../components/Layouts/PanelLayout/Index'
 
-function Assignment() {
+function Assignment(props) {
     return (
-        <PanelLayout selected={2} role="teacher">
-            <h2>assignment load</h2>
+        <PanelLayout selected={2} role={props.state.auth.user.role}>
+            <div className="assignment-container">
+                <h1>assignmetn scree</h1>
+            </div>
         </PanelLayout>
     )
 }
 
-export default Assignment
+const mapStateToProps = (state) => ({
+    state: state
+})
+
+const mapDispatchToProps = {
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Assignment)

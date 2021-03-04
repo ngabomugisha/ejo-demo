@@ -4,17 +4,18 @@
     display: flex;
     flex-direction: row;
     margin-bottom: 30px;
-    justify-content: space-evenly;
-    width: 100%;
+    justify-content:right;
+    width: 50%;
+    border-radius: 5px;
 }
 .topic > .MuiFormControl-root{
     min-width: 100%;
 }
 .top-field > .MuiFormControl-root{
-    width: 100%;
+    min-width: 100%;
 }
 .top-field{
-    width: 100%
+    min-width: 100%;
 }
 
 .slide1-container{

@@ -1,10 +1,14 @@
 import { combineReducers } from 'redux';
 import auth from './auth.reducers';
-import school from './schools.reducers';
+import schools from './schools.reducers';
+import students from './students.reducers';
+import classes from './classes.reducers'
 
 const reducers = combineReducers({
   auth,
-  school,
+  schools,
+  students,
+  classes,
 });
 
 export default reducers;

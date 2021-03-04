@@ -2,44 +2,78 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 //Authantication
-const LoginPage = lazy(() => import('./pages/Auth/Login'));
-const HomePage = lazy(() => import('./pages/Home'));
-const ForgetPasswordPage = lazy(() => import('./pages/Auth/ForgetPassword'));
+import  LoginPage from './pages/Auth/Login';
+import  HomePage from './pages/Home';
+import  ForgetPasswordPage from './pages/Auth/ForgetPassword';
 
 //Teacher
-const TeacherDashboard = lazy(() => import('./pages/Teacher/Index'));
-const Assignment = lazy(() => import('./pages/Teacher/Assignment'))
-const NewAssignmentPage = lazy(( )=> import('./components/newAssignment/NewAssignment'))
+import  TeacherDashboard from './pages/Teacher/Index';
+import  AssignmentPage from './pages/Teacher/Assignment'
+import  LessonPlanPage from './pages/Teacher/LessonPlan'
+import  NewAssignmentPage from './components/newAssignment/NewAssignment'
+import  NewLessonPlanPage from './components/newLessonplan/NewLessonPlan'
 
 //HeadTeacher
-const HeadTeacherDashboard = lazy(() => import('./pages/HeadTeacher/Index'));
-const ReadAnnouncement = lazy(() => import('./pages/HeadTeacher/announcement/Announcement'))
-const ReportPage = lazy(() => import('./pages/HeadTeacher/report/Index'))
-const CheckInOutPage = lazy(() => import('./pages/HeadTeacher/checkInOut/Index'))
+import  HeadTeacherDashboard from './pages/HeadTeacher/Index';
+import  ReadAnnouncement from './pages/HeadTeacher/announcement/Announcement'
+import  ReportPage from './pages/HeadTeacher/report/Index'
+import  CheckInOutPage from './pages/HeadTeacher/checkInOut/Index'
+
+//School-Admin
+import  schoolAdminDaschbord from './pages/SCHOOL-ADMIN/index'
+import  studentsPage from './pages/SCHOOL-ADMIN/student/index'
+import  teachersPage from './pages/SCHOOL-ADMIN/teacher/index'
+
+//Super-Admin
+import superAdminDashboard from './pages/SUPER-ADMIN/index'
+import schoolsPage from './pages/SUPER-ADMIN/schools/index'
+import coursesPage from './pages/SUPER-ADMIN/courses/index'
 
 export default () => {
   return (
     <Suspense
       fallback={
-        <div style={{ display: 'absolute', top: '50%', left: '50%' }}>
+        <div className="loading">
           <p>Loading.......</p>
         </div>
       }
     >
       <Router>
         <Switch>
+          {/* Authantication routes */}
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/passwords" component={ForgetPasswordPage} />
 
-          <Route exact path="/teacher/assignment" component={Assignment}/>
+          
+          {/* Teacher routes */}
+          <Route exact path="/teacher/lessonPlan" component={LessonPlanPage}/>
+          <Route exact path="/teacher/newLessonPlan" component={NewLessonPlanPage}/>
+          <Route exact path="/teacher/assignment" component={AssignmentPage}/>
           <Route exact path="/teacher/newAssignment" component={NewAssignmentPage}/>
           <Route exact path="/teacher" component={TeacherDashboard} />
 
+
+          {/* headTeacher routes */}
           <Route exact path="/headTeacher" component={HeadTeacherDashboard} />
           <Route exact path="/headTeacher/announcement" component={ReadAnnouncement} />
           <Route exact path="/headTeacher/report" component={ReportPage} />
           <Route exact path="/headTeacher/checkio" component={CheckInOutPage} />
 
+
+          {/* schoolAdmin routes */}
+          <Route exact path="/schoolAdmin" component={schoolAdminDaschbord}/>
+          <Route exact path="/schoolAdmin/students" component={studentsPage}/>
+          <Route exact path="/schoolAdmin/teachers" component={teachersPage}/>
+
+          {/* superAdmin */}
+          <Route exact path="/admin" component={superAdminDashboard}/>
+          <Route exact path="/admin/schools" component={schoolsPage}/>
+          <Route exact path="/admin/courses" component={coursesPage}/>
+
+
+
+
+          {/* home */}
           <Route exact paht="/" component={HomePage} />
         </Switch>
       </Router>

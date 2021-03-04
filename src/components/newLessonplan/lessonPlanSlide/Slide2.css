@@ -1,0 +1,84 @@
+.option{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0px 10px;
+}
+.option > label{
+    color: #0b393c;
+    font-weight: 500;
+}
+
+.radio-group{
+    min-width: 200px;
+    background-color: #F4F8FC;
+    padding: 20px;
+    border: 1px solid #1F72c6;
+    border-radius: 3px;
+    margin-bottom: 30px;
+}
+.slide1-container > h3{
+    color: #1F72c6
+}
+
+fieldset {
+    border: 0;
+}
+input [type=radio]{
+    color:red
+}
+label{
+    width: 100%;
+}
+.MuiButton-containedSizeLarge{
+    width: 100% !important;
+    align-self: center;
+    background-color: white !important;
+}
+.makeStyles-root-10 > *{
+    margin: 0 auto !important;
+}
+
+.makeStyles-root-37 > * {
+
+    margin: 0 auto !important;
+}
+.knowledge-container > h5{
+    color: #1F72c6;
+    margin: 30px 0px 30px;
+}
+
+h7{
+    border: 1px solid #1F72c6;
+    width: 101%;
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    color:#1F72C6;
+    margin:20px 0px 0px
+    
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #1F72C6 !important;
+    margin-right: 5px !important;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+    background-color: #1F72c6 !important;
+    color: white !important;
+    border-bottom: 1px solid #1F72C6 !important;
+
+}
+.nav-item .nav-link{
+    width: 100px !important;
+}
+.nav-link {
+    margin-right: 5px !important;
+    border: 1px solid #1F72c6 !important;
+}
+.slide2-container{
+    margin-top: 50px;
+}

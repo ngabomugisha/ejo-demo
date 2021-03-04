@@ -6,10 +6,13 @@ function RightSide() {
     return (
         <div className='right-side-container'>
             <div className='right-side-hd'>
-                <h3>Reminders</h3>
+                <div className='in-hd'><h3>Reminders</h3></div>
+                <div className='in-hd'>
                 <p className='time'>
                 12:03pm 26th May, 2020
                 </p>
+                </div>
+                
             </div>
             <div className='right-cards'>
                 <div className='right-card'>

@@ -6,16 +6,7 @@ import { store, persistor } from './store';
 
 const App = () => (
   <ReduxProvider store={store}>
-    <PersistGate
-      persistor={persistor}
-      loading={
-        <div>
-          <p>Loading....</p>
-        </div>
-      }
-    >
       <Routes />
-    </PersistGate>
   </ReduxProvider>
 );
 

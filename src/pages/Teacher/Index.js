@@ -1,21 +1,33 @@
-import React ,{useState}from 'react'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import PanelLayout from '../../components/Layouts/PanelLayout/Index'
 import Feed from '../../components/feed/Feed'
+import { useHistory } from 'react-router-dom'
 
 
-function Main() {
-
-const [page, setPage] = useState(null)
+function Main(props) {
+    const history = useHistory()
+    const [page, setPage] = useState(null)
 
     return (
         <>
-            <PanelLayout selected={1} role="teacher">
-                <Feed/>
-            </PanelLayout>
-
+            {sessionStorage.getItem('isloggedin') ?
+                <PanelLayout selected={1} role={props.state.auth.user.role}>
+                    <Feed />
+                </PanelLayout>
+                :
+                history.replace('/')
+            }
         </>
-
     )
 }
 
-export default Main
+const mapStateToProps = (state) => ({
+    state: state
+})
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
