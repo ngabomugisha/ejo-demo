@@ -84,7 +84,7 @@ useEffect(() => {
                         <div className='chrt-hd'>
                             <p> Total number of Students</p>
                         </div>
-                    <h1>{ALL_STUDENTS.length}</h1>
+                    <h1 className="number-student">{ALL_STUDENTS.length}</h1>
                     </Paper>
                 </div>
                 </div>

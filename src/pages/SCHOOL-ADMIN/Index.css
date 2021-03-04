@@ -1,7 +1,9 @@
-h1{
+.number-student{
     color: #1F72C6;
     justify-self: center;
     align-self: center;
     text-align: center;
     padding-bottom: 10px;
+    font-weight: 700;
+    font-size: 2.5rem;
 }
