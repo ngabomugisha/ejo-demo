@@ -11,11 +11,6 @@ export default (state = INITIAL_SCHOOL_STATE, { type, payload }) => {
         ...state,
         list: payload,
       };break;
-      case HANDLE_ADD_SCHOOL_SUCCESS:
-      return {
-        ...state,
-        list: payload,
-      };break;
     default:
       return state;
   }

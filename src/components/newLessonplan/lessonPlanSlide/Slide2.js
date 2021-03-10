@@ -61,11 +61,12 @@ function Slide2() {
         <div className='slide2-container'>
 
             <Tabs
+                fill={true}
                 id="controlled-tab-example"
                 activeKey={key}
                 onSelect={(k) => setKey(k)}
             >
-                <Tab eventKey="home" title="Knowledge">
+                <Tab eventKey="home" title="Knowledge" fill={true}>
                     <div className='knowledge-container'>
                         <h5>Instructional Object</h5>
 
@@ -188,7 +189,7 @@ function Slide2() {
 
                     </div>
                 </Tab>
-                <Tab eventKey="profile" title="Skills">
+                <Tab eventKey="profile" title="Skills" fill={true}>
                 <div className='knowledge-container'>
                         <h5>Instructional Object</h5>
 
@@ -214,7 +215,7 @@ function Slide2() {
                         </div>
                         <div className="topic">
                             <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-outlined-label">Cognitive Domain Level</InputLabel>
+                                <InputLabel id="demo-simple-select-outlined-label" fill>Cognitive Domain Level</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-outlined-label"
                                     id="demo-simple-select-outlined"
@@ -311,7 +312,7 @@ function Slide2() {
 
                     </div>
                 </Tab>
-                <Tab eventKey="contact" title="Attitude and Value">
+                <Tab eventKey="contact" title="Attitude and Value" fill={true}>
                 <div className='knowledge-container'>
                         <h5>Instructional Object</h5>
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import PanelLayout from '../../components/Layouts/PanelLayout/Index'
 import Feed from '../../components/feed/Feed'
 import { useHistory } from 'react-router-dom'
+import Mixed from '../../components/feedCards/Mixed';
 
 
 function Main(props) {
@@ -13,7 +14,9 @@ function Main(props) {
         <>
             {sessionStorage.getItem('isloggedin') ?
                 <PanelLayout selected={1} role={props.state.auth.user.role}>
-                    <Feed />
+                    <Feed>
+                        <Mixed/>
+                        </Feed>
                 </PanelLayout>
                 :
                 history.replace('/')
@@ -27,7 +30,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-
+    
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

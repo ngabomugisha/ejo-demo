@@ -40,13 +40,13 @@
 
 .units{
     width:93%;
-    height: 60px;
+    height: 75px !important;
     border-radius: 5px;
     background-color: #F4F8FC;
     border: 1px solid #1F72C6;
     float: right;
     display: flex;
-    padding: 20px;
+    padding: 10px !important;
     margin-bottom: 30px;
     flex-direction: column;
 }

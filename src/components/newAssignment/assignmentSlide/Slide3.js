@@ -39,7 +39,7 @@ function Slide3() {
                 <InputLabel htmlFor="outlined-age-native-simple">Select Assignment Type</InputLabel>
                 <Select
                     native
-                    minWidth
+                    fullWidth
                     value={state.age}
                     onChange={handleChange}
                     label=" Select Assignment Type"
@@ -55,7 +55,7 @@ function Slide3() {
                 </Select>
             </FormControl>
             <div className="question-field">
-                <TextField id="outlined-basic" label="Question 1" variant="outlined" value="Question 1: What is Climate Change?" />
+                <TextField id="outlined-basic" fullWidth label="Question 1" variant="outlined" value="Question 1: What is Climate Change?" />
             </div>
             <h3>Cognitive Domain Category</h3>
             <div className='radio-groups'>
@@ -76,7 +76,7 @@ function Slide3() {
                 <InputLabel htmlFor="outlined-age-native-simple">Select Number of Question</InputLabel>
                 <Select
                     native
-                    minWidth
+                    fullWidth
                     value={state.age}
                     onChange={handleChange}
                     label="Select Number of Question"

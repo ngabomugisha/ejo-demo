@@ -83,6 +83,7 @@ function Slide2() {
                         color="primary"
                         label="Test Duration"
                         size="small"
+                        fullWidth
                         id="outlined-start-adornment"
                         className={clsx(classes.margin, classes.textField)}
                         InputProps={{

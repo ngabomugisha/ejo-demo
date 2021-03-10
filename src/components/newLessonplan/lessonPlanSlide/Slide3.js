@@ -61,11 +61,12 @@ function Slide3() {
     return (
         <div className='slide3-container'>
             <Tabs
+                fill={true}
                 id="controlled-tab-example"
                 activeKey={key}
                 onSelect={(k) => setKey(k)}
             >
-                <Tab eventKey="home" title="Introduction">
+                <Tab eventKey="home" title="Introduction" fill={true}>
                     <div className='knowledge-container'>
                         <h5>Introduction</h5>
 
@@ -173,11 +174,221 @@ function Slide3() {
                         </div>
                     </div>
                 </Tab>
-                <Tab eventKey="profile" title="Development">
-                    <h2>Skills</h2>
+                <Tab eventKey="profile" title="Development" fill={true}>
+                <div className='knowledge-container'>
+                        <h5>Introduction</h5>
+
+                        <div className='topic'>
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <InputLabel id="demo-simple-select-outlined-label">Content</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="demo-simple-select-outlined"
+                                    onChange={handleChange}
+                                    label="Content"
+                                    color="primary"
+                                >
+                                    <MenuItem value="">
+                                        <em>Select content</em>
+                                    </MenuItem>
+                                    <MenuItem value={"First Term"}>First Term</MenuItem>
+                                    <MenuItem value={"Second Term"}>Second Term</MenuItem>
+                                    <MenuItem value={"Third Term"}>Third Term</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+
+                        <div className="msg-field">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Other Activities"
+                                type="text"
+                                value="Other Activities"
+                                color="primary"
+                                multiline={true}
+                                rowsMax="4"
+
+                            />
+                        </div>
+
+                        <div className={classes.root}>
+                            <input
+                                accept="image/*"
+                                className={classes.input}
+                                id="contained-button-file"
+                                multiple
+                                type="file"
+                            />
+                            <label htmlFor="contained-button-file">
+                                <h7>Upload</h7>
+                            </label>
+                        </div>
+
+                        <div className='topic'>
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <InputLabel id="demo-simple-select-outlined-label">Cross Cutting Issue</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="demo-simple-select-outlined"
+                                    onChange={handleChange}
+                                    label="Cross Cutting Issue"
+                                    color="primary"
+                                >
+                                    <MenuItem value="">
+                                        <em>Select content</em>
+                                    </MenuItem>
+                                    <MenuItem value={"First Term"}>First Term</MenuItem>
+                                    <MenuItem value={"Second Term"}>Second Term</MenuItem>
+                                    <MenuItem value={"Third Term"}>Third Term</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="msg-field">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Comment"
+                                type="text"
+                                color="primary"
+                                multiline={true}
+                                rowsMax="5"
+
+                            />
+                        </div>
+
+
+                        <div className="topic">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Competency"
+                                type="text"
+                                placeholder="Other Materials and References"
+                                color="primary"
+                            />
+                        </div>
+                        <div className="msg-field">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Comment"
+                                type="text"
+                                color="primary"
+                                multiline={true}
+                                rowsMax="5"
+
+                            />
+                        </div>
+                    </div>
                 </Tab>
-                <Tab eventKey="contact" title="Conclusion">
-                    <h2>Attitude and Value</h2>
+                <Tab eventKey="contact" title="Conclusion" fill={true}>
+                <div className='knowledge-container'>
+                        <h5>Introduction</h5>
+
+                        <div className='topic'>
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <InputLabel id="demo-simple-select-outlined-label">Content</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="demo-simple-select-outlined"
+                                    onChange={handleChange}
+                                    label="Content"
+                                    color="primary"
+                                >
+                                    <MenuItem value="">
+                                        <em>Select content</em>
+                                    </MenuItem>
+                                    <MenuItem value={"First Term"}>First Term</MenuItem>
+                                    <MenuItem value={"Second Term"}>Second Term</MenuItem>
+                                    <MenuItem value={"Third Term"}>Third Term</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+
+                        <div className="msg-field">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Other Activities"
+                                type="text"
+                                value="Other Activities"
+                                color="primary"
+                                multiline={true}
+                                rowsMax="4"
+
+                            />
+                        </div>
+
+                        <div className={classes.root}>
+                            <input
+                                accept="image/*"
+                                className={classes.input}
+                                id="contained-button-file"
+                                multiple
+                                type="file"
+                            />
+                            <label htmlFor="contained-button-file">
+                                <h7>Upload</h7>
+                            </label>
+                        </div>
+
+                        <div className='topic'>
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <InputLabel id="demo-simple-select-outlined-label">Cross Cutting Issue</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-outlined-label"
+                                    id="demo-simple-select-outlined"
+                                    onChange={handleChange}
+                                    label="Cross Cutting Issue"
+                                    color="primary"
+                                >
+                                    <MenuItem value="">
+                                        <em>Select content</em>
+                                    </MenuItem>
+                                    <MenuItem value={"First Term"}>First Term</MenuItem>
+                                    <MenuItem value={"Second Term"}>Second Term</MenuItem>
+                                    <MenuItem value={"Third Term"}>Third Term</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="msg-field">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Comment"
+                                type="text"
+                                color="primary"
+                                multiline={true}
+                                rowsMax="5"
+
+                            />
+                        </div>
+
+
+                        <div className="topic">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Competency"
+                                type="text"
+                                placeholder="Other Materials and References"
+                                color="primary"
+                            />
+                        </div>
+                        <div className="msg-field">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                label="Comment"
+                                type="text"
+                                color="primary"
+                                multiline={true}
+                                rowsMax="5"
+
+                            />
+                        </div>
+                    </div>
                 </Tab>
             </Tabs>
 

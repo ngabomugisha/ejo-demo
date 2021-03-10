@@ -7,6 +7,7 @@ const INITIAL_TEACHERS_STATE = {
 export default (state = INITIAL_TEACHERS_STATE, { type, payload }) => {
   switch (type) {
     case HANDLE_FETCH_TEACHERS_SUCCESS:
+      console.log('HANDLE_FETCH_TEACHERS_SUCCESS', payload);
       return {
         ...state,
         list: payload,

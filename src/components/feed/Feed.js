@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { handleFetchSchool } from '../../store/actions/schools.actions';
 
 
-function Feed() {
+function Feed(props) {
+  const {children} = props
   const history = useHistory()
   const dispatch = useDispatch();
   // const { list: ALL_SCHOOLS } = useSelector((state) => state.school);
@@ -25,7 +26,7 @@ function Feed() {
   }, []);
   return (
     <div className="feed">
-        <FeedCards/>
+        {children}
     </div>
   );
 }

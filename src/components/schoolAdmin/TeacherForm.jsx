@@ -449,10 +449,10 @@ export const StudentForm = () => {
                                     </Grid>
 
                                 </Grid>
-
+{/* 
                                 <div className="tags">
                                     <TagsInput selectedTags={selectedTagss} tags={['Nodejs', 'MongoDB']} />
-                                </div>
+                                </div> */}
                                 <Button
                                     variant="contained"
                                     color="primary"
@@ -460,7 +460,7 @@ export const StudentForm = () => {
                                 >
                                     Submit
                             </Button>
-                                <pre>{JSON.stringify(formik.values, null, 2)}</pre>
+                                {/* <pre>{JSON.stringify(formik.values, null, 2)}</pre> */}
 
                             </Form>)}
                     </Formik>

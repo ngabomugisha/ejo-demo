@@ -21,16 +21,11 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormLabel from '@material-ui/core/FormLabel';
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
+import Alert from '@material-ui/lab/Alert';
 import { Autocomplete } from 'formik-material-ui-lab'
 
 
-
-const permanentHealthConditionsOptions = [
-    {condition:'Visual-Difficulities'},
-    {condition:'Physical-Impairement'},
-    {condition:'Hearing-Difficulities'},
-    {condition:'Learning-Difficulities'},
-    {condition:'Phsychologic-Difficulties'}]
+const permanentHealthConditionsOptions = ['VISUAL-DIFFICULTIES', 'PHYSICAL-IMPAIREMENT', 'HEARING-DIFFICULTIES', 'LEARNING-DIFFICULTIES', 'PHSYCHOLOGICAL-DIFFICULTIES']
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -50,7 +45,8 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
-export const StudentForm = () => {
+export const StudentForm = (props) => {
+
     const [] = React.useState('');
     const classes = useStyles();
     const [, setClss] = useState([])
@@ -77,36 +73,6 @@ export const StudentForm = () => {
     const [enableCell, setEnableCell] = useState(true)
     const [enableVillage, setEnableVillage] = useState(true)
     const [aller, setAller] = useState([])
-    
-    const initialValue = {
-        firstName: '',
-        lastName: '',
-        gender: '',
-        studentClass: '',
-        address: '',
-        scholarship: '',
-        dateOfBirth: new Date(),
-        allergies: `${aller}`,
-        permanentHealthConditions: [
-        ],
-        mother: {
-            firstName: "",
-            lastName: "",
-            identificationNumber: "",
-            phone: "",
-            email: "",
-            maritalStatus: ""
-        },
-        father: {
-            firstName: "",
-            lastName: "",
-            identificationNumber: "",
-            phone: "",
-            email: "",
-            maritalStatus: ""
-        },
-    }
-
 
     const handleProvince = (event) => {
         setP(event.target.value)
@@ -125,84 +91,89 @@ export const StudentForm = () => {
         setEnableVillage(false)
     }
 
-
-
-
-    const TagsInput = props => {
-        const [tags, setTags] = React.useState([]);
-        const removeTags = indexToRemove => {
-            setTags([...tags.filter((_, index) => index !== indexToRemove)]);
-        };
-        const addTags = event => {
-            if (event.target.value !== "") {
-                setTags([...tags, event.target.value]);
-                props.selectedTags([...tags, event.target.value]);
-                event.target.value = "";
-            }
-        };
-        return (
-            <div className="tags-input">
-                <ul id="tags">
-                    {tags.map((tag, index) => (
-                        <li key={index} className="tag">
-                            <span className='tag-title'>{tag}</span>
-                            <span className='tag-close-icon'
-                                onClick={() => removeTags(index)}
-                            >
-                                x
-						</span>
-                        </li>
-                    ))}
-                </ul>
-                <input
-                    type="text"
-                    fullWidth
-
-                    onKeyUp={event => event.keyCode === 16 ? addTags(event) : null}
-                    placeholder="Press Shift to add Allergy"
-                />
-            </div>
-        );
-    };
-
-
-    // const post = async (url, data, headers) => {
-    //     return await request('POST', url, data, headers);
-    //   };
-
     const onSubmit = values => {
-        // alert(JSON.stringify(values, null, 2))
-        // const rew = https.post('/students',values, { headers: {'Content-Type': 'application/json', 'Authorization': `Basic ${localStorage.token}` } })
-        //         .then((response) => {
-        //             console.log('data has been saved',response)
-        //         });
 
+        alert(JSON.stringify(values, null, 2))
+   
         const options = {
             method: 'POST',
-            url: 'http://localhost:9000/api/students/',
+            url: '/students/',
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYwMzM3MjJlZThkZWIxMDAzNjA2NDllZiIsImZpcnN0TmFtZSI6InNjaG9vbCIsImxhc3ROYW1lIjoiYWRtaW4iLCJlbWFpbCI6InNjaG9vbGFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJTQ0hPT0wtQURNSU4iLCJzY2hvb2wiOm51bGx9LCJpYXQiOjE2MTQ3NTgzMTl9.3qr_ZlVSUysrxQA29F7U8EmgC_IVJaKyS9gLZKudnsI'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
             },
             data: values
-          };
-          
-          axios({
-              method: 'POST',
-              url: options.url,
-              data: options.data,
-              headers: options.headers
-            }).then(()=> console.log("res").catch((err)=> console.log(err))
-                
-            )
+        };
 
-
-        }
+        https.post(options.url,options.headers,options.data).then(() => {
+            return alert("data recorded")
+        })
     
+    }
+    let iniData = null
+    const data = props.recordForEdit
+    const initialValue = {
+        firstName: null,
+        lastName: null,
+        gender: null,
+        studentClass: null,
+        address: null,
+        scholarship: null,
+        dateOfBirth: null,
+        allergies: null,
+        permanentHealthConditions: permanentHealthConditionsOptions,
+        mother: {
+            firstName: null,
+            lastName: null,
+            identificationNumber: null,
+            phone: null,
+            email: null,
+            maritalStatus: null
+        },
+        father: {
+            firstName: null,
+            lastName: null,
+            identificationNumber: null,
+            phone: null,
+            email: null,
+            maritalStatus: null
+        },
+    }
 
-    const selectedTagss = tags => {
-        console.log(tags);
-    };
+    if(!props.recordForEdit){
+        iniData=initialValue
+    }else{
+
+    const initialValuesforEdit = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: data.gender,
+        studentClass: data.studentClass,
+        address: data.address,
+        scholarship: data.scholarship,
+        dateOfBirth: data.dateOfBirth,
+        allergies: data.allergies,
+        permanentHealthConditions: data.permanentHealthConditions,
+        mother: {
+            firstName: data.mother.firstName,
+            lastName: data.mother.lastName,
+            identificationNumber: data.mother.identificationNumber,
+            phone: data.mother.phone,
+            email: data.mother.email,
+            maritalStatus: data.mother.maritalStatus
+        },
+        father: {
+            firstName: data.father.firstName,
+            lastName: data.father.lastName,
+            identificationNumber: data.father.identificationNumber,
+            phone: data.father.phone,
+            email: data.father.email,
+            maritalStatus: data.father.maritalStatus
+        },
+    }
+
+        iniData=initialValuesforEdit
+    }
 
     useEffect(() => {
         async function fetchDistrict() {
@@ -275,7 +246,7 @@ export const StudentForm = () => {
                 <CssBaseline />
                 <div className={classes.paper}>
                     <Formik
-                        initialValues={initialValue}
+                        initialValues={iniData}
                         validate={(values) => {
                             const errors = {};
                             if (!values.firstName) {
@@ -299,7 +270,6 @@ export const StudentForm = () => {
                                                 variant="outlined"
                                                 required
                                                 fullWidth
-                                                id="firstName"
                                                 label="First Name"
                                             />
                                         </Grid>
@@ -307,8 +277,8 @@ export const StudentForm = () => {
                                             <Field
                                                 as={TextField}
                                                 variant="outlined"
-                                                required
                                                 fullWidth
+                                                required
                                                 label="Last Name"
                                                 name="lastName"
                                             />
@@ -331,7 +301,6 @@ export const StudentForm = () => {
                                         </Grid>
                                         <Grid item xs={12} sm={4}>
                                             <Field
-                                                required
                                                 as={TextField}
                                                 label="Gender"
                                                 name="gender"
@@ -360,7 +329,6 @@ export const StudentForm = () => {
                                                 name="studentClass"
                                                 label="student Class"
                                                 select
-                                                required
                                                 helperText="Please select studentClass"
                                                 variant="outlined"
                                                 fullWidth
@@ -463,7 +431,6 @@ export const StudentForm = () => {
                                         </Grid>
                                         <Grid item xs={12} sm={2}>
                                             <Field
-                                                required
                                                 as={TextField}
                                                 type='text'
                                                 name="address"
@@ -487,60 +454,65 @@ export const StudentForm = () => {
 
                                     </Grid>
                                     {/* health condition and SCHOLASHIP */}
-                                    
-                                        <FormControl component="fieldset">
-                                            <FormLabel component="legend">Permanent Health Conditions</FormLabel>
-                                            <FormGroup aria-label="position" row>
-                                                <Grid container direction="row" justify="center" spacing={4} maxWidth="xs">
-                                                    <Grid item xs={12} sm={8}>
-                                                        <Field
-                                                            className="myfield"
-                                                            name="permanentHealthConditions"
-                                                            multiple
-                                                            fullWidth
-                                                            component={Autocomplete}
-                                                            options={permanentHealthConditionsOptions}
-                                                            getOptionLabel={(option) => option.condition}
-                                                            style={{ minWidth: 500 }}
-                                                            renderInput={(params) => (
-                                                                <TextField
-                                                                    {...params}
-                                                                    error={formik.touched['permanentHealthConditions'] && !!formik.errors['permanentHealthConditions']}
-                                                                    helperText={formik.touched['permanentHealthConditions'] && formik.errors['permanentHealthConditions']}
-                                                                    label="permanentHealthConditions"
-                                                                    variant="outlined"
-                                                                    fullWidth
-                                                                />)} />
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={4}>
-                                                        <Field
-                                                            className="myfield"
-                                                            as={TextField}
-                                                            label="Scholarship"
-                                                            name="scholarship"
-                                                            variant="outlined"
-                                                            style={{ minWidth: 250}}
-                                                            type="text"
-                                                            fullWidth
-                                                            select
-                                                        >
-                                                            <MenuItem value="">
-                                                                <em>None</em>
-                                                            </MenuItem>
-                                                            <MenuItem value="Private">Private</MenuItem>
-                                                            <MenuItem value="Scholarship">Scholarship</MenuItem>
-                                                            <MenuItem value="Other">Other</MenuItem>
-                                                        </Field>
 
-                                                    </Grid>
-                                                </Grid>
-                                <Grid container justify="center" xs={12}>
-                                <div className="tags">
-                                    <TagsInput selectedTags={selectedTagss} />
-                                </div>
-                                </Grid>
-                                            </FormGroup>
-                                        </FormControl>
+                                    <Grid container direction="row" justify="center" spacing={4} maxWidth="xs">
+                                        <Grid item xs={12} sm={8}>
+                                            <FormControl component="fieldset" fullWidth>
+                                                    <Field
+                                                        className="myfield"
+                                                        name="permanentHealthConditions"
+                                                        multiple
+                                                        fullWidth
+                                                        component={Autocomplete}
+                                                        options={permanentHealthConditionsOptions}
+                                                        getOptionLabel={(option) => option.condition}
+                                                        renderInput={(params) => (
+                                                            <TextField
+                                                                {...params}
+                                                                error={formik.touched['permanent Health Conditions'] && !!formik.errors['permanent Health Conditions Error']}
+                                                                helperText={formik.touched['permanent Health Conditions'] && formik.errors['permanent Health Conditions Error']}
+                                                                label="permanent Health Conditions"
+                                                                variant="outlined"
+                                                                fullWidth
+                                                            />)} />
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item xs={12} sm={4}>
+                                            <Field
+                                                className="myfield"
+                                                as={TextField}
+                                                label="Scholarship"
+                                                name="scholarship"
+                                                variant="outlined"
+                                                style={{ minWidth: 250 }}
+                                                type="text"
+                                                fullWidth
+                                                select
+                                            >
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                <MenuItem value="PRIVATE">Private</MenuItem>
+                                                <MenuItem value="SCHOOL">Scholarship</MenuItem>
+                                                <MenuItem value="GOVERMENT">Goverment</MenuItem>
+                                            </Field>
+
+                                        </Grid>
+                                    </Grid>
+
+
+                                    <Grid container justify="center" xs={12} minWidth="xs" width="xs">
+                                        <Grid item xs={12} sm={12}>
+                                            <Field
+                                                as={TextField}
+                                                name="allergies"
+                                                variant="outlined"
+                                                fullWidth
+                                                label="allergies"
+                                            />
+                                        </Grid>
+                                    </Grid>
+
                                     {/* parents's Details */}
                                     <Grid item xs={12} minWidth="xl">
                                         <Accordion defaultActiveKey="">
@@ -574,14 +546,25 @@ export const StudentForm = () => {
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
+
                                                                 <Field
+                                                                    className="myfield"
                                                                     as={TextField}
-                                                                    variant="outlined"
-                                                                    fullWidth
-                                                                    type="text"
-                                                                    label="Marital Status"
+                                                                    label="marital Status"
                                                                     name="father.maritalStatus"
-                                                                />
+                                                                    variant="outlined"
+                                                                    style={{ minWidth: 250 }}
+                                                                    type="text"
+                                                                    fullWidth
+                                                                    select
+                                                                >
+                                                                    <MenuItem value="">
+                                                                        <em>None</em>
+                                                                    </MenuItem>
+                                                                    <MenuItem value="SINGLE">Single</MenuItem>
+                                                                    <MenuItem value="MARIED">Maried</MenuItem>
+                                                                    <MenuItem value="DIVORCED">Divorced</MenuItem>
+                                                                </Field>
                                                             </Grid>
                                                         </Grid>
                                                         <Grid container direction="row" spacing={2}>
@@ -649,14 +632,25 @@ export const StudentForm = () => {
                                                             />
                                                         </Grid>
                                                         <Grid item xs={12} sm={4}>
+
                                                             <Field
+                                                                className="myfield"
                                                                 as={TextField}
-                                                                variant="outlined"
-                                                                fullWidth
-                                                                type="text"
-                                                                label="Marital Status"
+                                                                label="marital Status"
                                                                 name="mother.maritalStatus"
-                                                            />
+                                                                variant="outlined"
+                                                                style={{ minWidth: 250 }}
+                                                                type="text"
+                                                                fullWidth
+                                                                select
+                                                            >
+                                                                <MenuItem value="">
+                                                                    <em>None</em>
+                                                                </MenuItem>
+                                                                <MenuItem value="SINGLE">Single</MenuItem>
+                                                                <MenuItem value="MARIED">Maried</MenuItem>
+                                                                <MenuItem value="DIVORCED">Divorced</MenuItem>
+                                                            </Field>
                                                         </Grid>
                                                     </Grid>
                                                         <Grid container direction="row" spacing={2}>
@@ -700,16 +694,16 @@ export const StudentForm = () => {
                                 </Grid>
                                 <Grid container justify="center" xs={12}>
                                     <Grid item xs={4}>
-                                <Button
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    type="submit"
-                                >
-                                    Submit
+                                        <Button
+                                            fullWidth
+                                            variant="contained"
+                                            color="primary"
+                                            type="submit"
+                                        >
+                                            Submit
                             </Button>
-                            </Grid>
-                            </Grid>
+                                    </Grid>
+                                </Grid>
                                 {/* <pre>{JSON.stringify(formik.values, null, 2)}</pre> */}
                             </Form>)}
                     </Formik>

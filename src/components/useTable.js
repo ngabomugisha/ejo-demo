@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function useTable(records, headCells,filterFn) {
-
+    
     const classes = useStyles();
 
     const pages = [5, 10, 25]
@@ -77,7 +77,7 @@ export default function useTable(records, headCells,filterFn) {
         page={page}
         rowsPerPageOptions={pages}
         rowsPerPage={rowsPerPage}
-        count={records.length}
+        count={(records !== null && records !== undefined) ? records.length : '0'}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
     />)

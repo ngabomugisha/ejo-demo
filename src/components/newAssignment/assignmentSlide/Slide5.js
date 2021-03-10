@@ -59,13 +59,13 @@ function Slide5() {
             </FormControl>
             </div>
             <div className="question-field">
-                <TextField id="outlined-basic" label="Question 1" variant="outlined" value="Question 1: What is Climate Change?" />
+                <TextField  label="Question 1" variant="outlined" placeholder="Question 1: What is Climate Change?" />
             </div>
             <div className="question-field">
-                <TextField id="outlined-basic" label="Set New Question" variant="outlined" value="How to stop Climate Change" />
+                <TextField  label="Set New Question" variant="outlined" placeholder="How to stop Climate Change" />
             </div>
             <div className="question-field">
-                <TextField id="outlined-basic" label="Answer to Question" variant="outlined" value="How to stop Climate Change" />
+                <TextField label="Answer to Question" variant="outlined" placeholder="How to stop Climate Change" />
             </div>
         </div>
     )

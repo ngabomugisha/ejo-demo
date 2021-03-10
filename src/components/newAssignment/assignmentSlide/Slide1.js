@@ -73,13 +73,14 @@ function Slide1() {
             </div>
             <div className="topic">
                 <FormControl variant="outlined" className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
+                    <InputLabel id="demo-simple-select-outlined-label">Select Topic</InputLabel>
                     <Select
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
                         value="none"
+                        fullWidth
                         onChange={handleChange}
-                        label="Age"
+                        label="Select Topic"
                     >
                         <MenuItem value="">
                             <em>None</em>
