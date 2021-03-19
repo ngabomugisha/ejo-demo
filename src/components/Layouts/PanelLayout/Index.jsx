@@ -8,7 +8,6 @@ import FeedHead from '../../feed/FeedHead';
 import { TEACHER, SCHOOLADMIN } from '../../../pages/Auth/Users'
 
 const PanelLayout = (props) => {
-
     function renderSwitch(role) {
         switch (role) {
             case TEACHER:
@@ -24,7 +23,6 @@ const PanelLayout = (props) => {
                     </div>
                 </>
                 break;
-
             default:
                 return <>
                     <div className='main-panel'>
@@ -34,14 +32,10 @@ const PanelLayout = (props) => {
                 break;
         }
     }
-
     return (
         <div className="panel-layout-container">
             <div className='side-menu'>
-
-                <StickyBox>
                     <SideMenu selected={props.selected} role={props.state.auth.user.role} />
-                </StickyBox>
             </div>
             {renderSwitch(props.state.auth.user.role)}
         </div>

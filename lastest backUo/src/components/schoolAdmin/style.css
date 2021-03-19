@@ -1,0 +1,49 @@
+.card{
+    margin: 20px 0px 20px !important;
+    border-radius: 5px !important;
+    color: white !important;
+}
+.accordion>.card>.card-header {
+    background-color: #1f72c7;
+}
+
+.MuiGrid-container {
+    margin-bottom: 20px !important;
+}
+
+.myfield{
+    min-width: 100% !important;
+}
+
+
+
+
+/* Styles for fetails .card */
+
+.details-container{
+	min-width: 900px
+}
+
+.card-inner{
+	padding: 20px;
+}
+
+.card-inner > .paper-title{
+	color: #1f72c7 !important;
+	font-weight: 600 !important;
+}
+.card-inner > .papaer-content{
+	color: #000000;
+	font-weight: 300;
+	margin-top: 10px;
+}
+.paper-line{
+	width: 100%;
+	border: 1px solid whitesmoke;
+}
+
+.paper-container{
+	padding:40px
+}
+
+

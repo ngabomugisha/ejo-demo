@@ -3,7 +3,6 @@
     font-size: large;
     margin-right: 20px;
   }
-  
   .sidebarOption--active {
     color: white;
     background-color:#1f72c7;
@@ -15,23 +14,19 @@
       height: 25px;
       
   }
-
   .sidebarOption {
     display: flex;
     align-items: center;
     width: fit-content;
     padding-right: 5px;
     cursor: pointer;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    max-height: 50px;
-  }
+    margin-bottom: 8px;
+    max-height: 45px;
+    vertical-align: middle;
+}
   .side-icons{
       padding: 20px;
   }
-
-
-
   .sidebarOption:hover {
 
     color: white;
@@ -44,4 +39,19 @@ a :hover{
 }
 a{
   text-decoration: none !important;
+}
+
+@media (max-height:600px){
+  .sidebarOption{
+    
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding-right: 5px;
+    cursor: pointer;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    max-height: 40px;
+    vertical-align: middle;
+  }
 }

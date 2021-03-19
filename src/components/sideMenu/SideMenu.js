@@ -6,12 +6,12 @@ import logo from '../../assets/icons/logo.svg';
 import { TEACHER, SCHOOLADMIN, SUPERADMIN } from '../../pages/Auth/Users'
 import { Link, useHistory } from 'react-router-dom';
 import SideOption from '../sideOption/SideOption';
-import { BiHome, BiDoorOpen, BiCalendar, BiTime } from 'react-icons/bi';
+import { BiHome, BiDoorOpen, BiCalendar, BiTime ,BiCopyAlt} from 'react-icons/bi';
 import { RiBookletLine, RiDashboardLine } from 'react-icons/ri';
 import { IoSettingsOutline } from 'react-icons/io5'
-import { MdPeopleOutline } from "react-icons/md";
+import { MdPeopleOutline, MdDateRange } from "react-icons/md";
 import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
-import { HiOutlineDocumentReport } from "react-icons/hi";
+import { HiOutlineDocumentReport, HiOutlineCollection } from "react-icons/hi";
 
 const renderOptions = (active) => {
   switch (active) {
@@ -91,32 +91,74 @@ function renderSwitch(role, selected) {
               <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard" active /></Link>
                 <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students" /></Link>
                 <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
+                <Link to="/schoolAdmin/discipline"><SideOption Icon={BiCopyAlt} text="Discipline" /></Link>
+                <Link to="/schoolAdmin/term"><SideOption Icon={MdDateRange} text="Term" /></Link>
                 <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
-                <Link to="/schoolAdmin"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
+                <Link to="/schoolAdmin/questions"><SideOption Icon={HiOutlineCollection} text="Questions Bank" /></Link>
+                <Link to="/schoolAdmin/report"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
             2:
-              <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard" /></Link>
-                <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students" active /></Link>
-                <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
-                <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
-                <Link to="/schoolAdmin"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
+            <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard"  /></Link>
+              <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students" active /></Link>
+              <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
+              <Link to="/schoolAdmin/discipline"><SideOption Icon={BiCopyAlt} text="Discipline" /></Link>
+              <Link to="/schoolAdmin/term"><SideOption Icon={MdDateRange} text="Term" /></Link>
+              <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
+              <Link to="/schoolAdmin/questions"><SideOption Icon={HiOutlineCollection} text="Questions Bank" /></Link>
+              <Link to="/schoolAdmin/report"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
             3:
-              <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard" /></Link>
-                <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students" /></Link>
-                <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" active /></Link>
-                <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
-                <Link to="/schoolAdmin"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
+            <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard" /></Link>
+              <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students"  /></Link>
+              <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" active/></Link>
+              <Link to="/schoolAdmin/discipline"><SideOption Icon={BiCopyAlt} text="Discipline" /></Link>
+              <Link to="/schoolAdmin/term"><SideOption Icon={MdDateRange} text="Term" /></Link>
+              <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
+              <Link to="/schoolAdmin/questions"><SideOption Icon={HiOutlineCollection} text="Questions Bank" /></Link>
+              <Link to="/schoolAdmin/report"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
             4:
-              <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard" /></Link>
-                <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students" /></Link>
-                <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
-                <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table"active /></Link>
-                <Link to="/schoolAdmin"><SideOption Icon={HiOutlineDocumentReport} text="Report"  /></Link></>,
+            <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard" /></Link>
+              <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students"/></Link>
+              <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
+              <Link to="/schoolAdmin/discipline"><SideOption Icon={BiCopyAlt} text="Discipline" active/></Link>
+              <Link to="/schoolAdmin/term"><SideOption Icon={MdDateRange} text="Term" /></Link>
+              <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
+              <Link to="/schoolAdmin/questions"><SideOption Icon={HiOutlineCollection} text="Questions Bank" /></Link>
+              <Link to="/schoolAdmin/report"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
             5:
-              <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard" /></Link>
-                <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students" /></Link>
-                <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
-                <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
-                <Link to="/schoolAdmin"><SideOption Icon={HiOutlineDocumentReport} text="Report" active /></Link></>
+            <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard" /></Link>
+              <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students" /></Link>
+              <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
+              <Link to="/schoolAdmin/discipline"><SideOption Icon={BiCopyAlt} text="Discipline" /></Link>
+              <Link to="/schoolAdmin/term"><SideOption Icon={MdDateRange} text="Term" active/></Link>
+              <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
+              <Link to="/schoolAdmin/questions"><SideOption Icon={HiOutlineCollection} text="Questions Bank" /></Link>
+              <Link to="/schoolAdmin/report"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
+            6:
+            <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard"  /></Link>
+              <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students" /></Link>
+              <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
+              <Link to="/schoolAdmin/discipline"><SideOption Icon={BiCopyAlt} text="Discipline" /></Link>
+              <Link to="/schoolAdmin/term"><SideOption Icon={MdDateRange} text="Term" /></Link>
+              <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" active /></Link>
+              <Link to="/schoolAdmin/questions"><SideOption Icon={HiOutlineCollection} text="Questions Bank" /></Link>
+              <Link to="/schoolAdmin/report"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
+            7:
+            <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard"  /></Link>
+              <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students"  /></Link>
+              <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
+              <Link to="/schoolAdmin/discipline"><SideOption Icon={BiCopyAlt} text="Discipline" /></Link>
+              <Link to="/schoolAdmin/term"><SideOption Icon={MdDateRange} text="Term" /></Link>
+              <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
+              <Link to="/schoolAdmin/questions"><SideOption Icon={HiOutlineCollection} text="Questions Bank" active /></Link>
+              <Link to="/schoolAdmin/report"><SideOption Icon={HiOutlineDocumentReport} text="Report" /></Link></>,
+            8:
+            <><Link to="/schoolAdmin"><SideOption Icon={RiDashboardLine} text="Dashboard"  /></Link>
+              <Link to="/schoolAdmin/students"><SideOption Icon={MdPeopleOutline} text="Students"  /></Link>
+              <Link to="/schoolAdmin/teachers"><SideOption Icon={RiBookletLine} text="Teachers" /></Link>
+              <Link to="/schoolAdmin/discipline"><SideOption Icon={BiCopyAlt} text="Discipline" /></Link>
+              <Link to="/schoolAdmin/term"><SideOption Icon={MdDateRange} text="Term" /></Link>
+              <Link to="/schoolAdmin/timeTable"><SideOption Icon={BiTime} text="Time Table" /></Link>
+              <Link to="/schoolAdmin/questions"><SideOption Icon={HiOutlineCollection} text="Questions Bank"/></Link>
+              <Link to="/schoolAdmin/report"><SideOption Icon={HiOutlineDocumentReport} text="Report" active/></Link></>,
           }[selected]
         }
       </>

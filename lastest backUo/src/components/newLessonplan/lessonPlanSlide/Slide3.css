@@ -1,0 +1,60 @@
+.slide3-container{
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.question-field{
+    width: 100%;
+}
+
+.question-field > .MuiFormControl-root{
+    width: 100%;
+}
+.slide3-container > .makeStyles-formControl-14{
+    margin: 20px 0px 20px !important;
+    margin-bottom: 20px;
+}
+
+.slide3-container > .MuiFormControl-root{
+    margin-bottom: 20px;
+    max-width: 100%;
+    margin-left: 0 auto !important;
+}
+
+.MuiInputBase-input{
+    color: #1F72C6 !important;
+}
+
+.slide3-container > h3{
+    color: #1F72c6;
+    padding: 10px 0px 10px;
+}
+
+.msg-field{
+    margin: 25px 0px 0px;
+}
+.msg-field > .MuiFormControl-root{
+    width: 100%;
+}
+
+.msg-field > .MuiInputBase-root, .msg-field .MuiOutlinedInput-root {
+    width: 100%;
+    min-height: 20vh;
+
+}
+
+.makeStyles-root-10 > *{
+    margin: 0 auto !important;
+}
+
+.makeStyles-root-37 > * {
+
+    margin: 0 auto !important;
+}
+
+.makeStyles-root-15 > * {
+    margin: 0 auto !important;
+}

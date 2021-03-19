@@ -1,0 +1,39 @@
+.feed{
+    background-color: #ebeffa;
+    height: 100%;
+    min-height: 100vh;
+    max-height: 100%;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.hd-btn{
+    display: flex;
+    height:min-content;
+
+}
+.hd-btn{
+    padding: 10px 30px 10px;
+    margin-right: 1rem;
+    margin-top: 10px;
+}
+.hd-btn > a > Button{
+    padding: 10px 30px 10px;
+    margin-right: 1rem;
+}
+.hd-btn > a{
+    text-decoration: none;
+}
+
+.hd{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+
+}
+
+.hd-txt{
+    color: #1f72c7;
+    align-self: center;
+}

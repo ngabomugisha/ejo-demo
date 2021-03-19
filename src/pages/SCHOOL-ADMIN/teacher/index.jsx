@@ -128,7 +128,6 @@ export const Index = (props) => {
     return (
         <>
             <PanelLayout selected={3} role={props.state.auth.user.role}>
-
                 <div className="teacher-container">
                     <Paper elevation={5}>
                         <div className="paper-hd"><h2>Teachers List</h2></div>

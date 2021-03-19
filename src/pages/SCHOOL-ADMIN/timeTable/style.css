@@ -1,0 +1,80 @@
+.styles_day_title__1y-BE{
+    background-color: #1f72c8 !important;
+    color: white !important
+}
+.styles_event__2jA91{
+    border-radius: 5px !important;
+    background-color: #0077ff !important;
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.041);
+    cursor:crosshair ;
+}
+.styles_hour__EXCif{
+    background-color: #1f72c8 !important;
+    color: white !important
+
+}
+
+.styles_day__1cspH{
+    background-image: linear-gradient(rgba(43, 51, 78, 0.144) 50%, transparent 50%) !important;
+}
+.timeTable-container{
+    margin-top: 0px !important;
+}
+.form-container{
+    padding: 0px;
+    margin-top: 20px;
+    margin-left:20px;
+    margin-right: 20px;
+}
+
+.TimeTable-co{
+    margin: 30px;
+}
+.skeleton-line{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.MuiSkeleton-pulse{
+    margin-right: 5px;
+}
+.check-btn{
+    background-color: #1f72c8;
+    border-radius: 8px;
+    color: white;
+    border :0px;
+    padding: 10px 15px 10px;
+    margin-top: 5px;
+    width: 100%;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+}
+.check-btn:hover{
+    background-color: #dfe7f031;
+    color: #1f72c8;
+    border: 1px solid #0077ff;
+}
+
+.check-btn-2{
+    background-color: #ffffff;
+    border-radius: 8px;
+    color: #1f72c8;
+    border :0px;
+    padding: 10px 15px 10px;
+    margin-top: 5px;
+    width: 30%;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+    border: 1px solid #1f72c8;
+}
+.check-btn-2:hover{
+    background-color: #dfe7f031;
+    color: #1f72c8;
+    border: 1px solid #0077ff;
+}

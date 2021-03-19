@@ -1,0 +1,18 @@
+.discipline-container{
+    padding: 30px;
+    margin: 40px;
+}
+.dsci{
+    display: flex;
+    justify-content: space-between;
+}
+Paper{
+    margin:20px
+}
+.item{
+    margin:20px;
+    border: 1px solid red
+}
+.Cell-dayOfMonth-51{
+    display: none
+}

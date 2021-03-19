@@ -1,0 +1,31 @@
+.plan-container{
+    background-color: white;
+    max-width: 75%;
+    min-width: 75%;
+    align-self: center;
+    margin-top: 30px;
+    min-height: 100vh;
+    padding: 10px 70px 10px;
+}
+
+.in-card-title > h4{
+    color: black;
+}
+
+.in-card-title > h5{
+    color: black;
+    font-weight: 300;
+    font-size: 1rem;
+}
+.titl > h1{
+    color:#1F72C6
+}
+
+.titl2 > h4{
+
+}
+
+.titl2 > h5{
+    font-weight: 400;
+    font-size: 1rem;
+}

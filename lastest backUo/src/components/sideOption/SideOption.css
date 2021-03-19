@@ -1,0 +1,47 @@
+.sidebarOption > h2 {
+    font-weight: 450;
+    font-size: large;
+    margin-right: 20px;
+  }
+  
+  .sidebarOption--active {
+    color: white;
+    background-color:#1f72c7;
+    border-radius: 10px;
+  }
+  
+  .side-icon{
+      width: 25px;
+      height: 25px;
+      
+  }
+
+  .sidebarOption {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding-right: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-height: 50px;
+  }
+  .side-icons{
+      padding: 20px;
+  }
+
+
+
+  .sidebarOption:hover {
+
+    color: white;
+    background-color: #1f72c7;
+    border-radius: 10px;
+    text-decoration: none  !important;
+  }
+a :hover{
+  text-decoration: none !important;
+}
+a{
+  text-decoration: none !important;
+}

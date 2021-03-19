@@ -1,0 +1,20 @@
+.panel-layout-container{
+    display: flex;
+}
+.side-menu{
+    flex:0.2;
+    border-right: 1px solid #2230312a;
+}
+.feed{
+    flex: 0.6;
+    background-color: #F3F6FC;
+}
+.right-side{
+    flex: 0.2;
+    border-left: 1px solid #2230312a;
+}
+.main-panel{
+    flex: 0.8;
+    min-height: 100vh;
+    background-color: white;
+}

@@ -1,0 +1,80 @@
+
+.first-field{
+    margin-top: 60px;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+    justify-content:right;
+    width: 50%;
+    border-radius: 5px;
+}
+.topic > .MuiFormControl-root{
+    min-width: 100%;
+}
+.top-field > .MuiFormControl-root{
+    min-width: 100%;
+}
+.top-field{
+    min-width: 100%;
+}
+
+.slide1-container{
+    margin-top: 10px !important;
+}
+
+.slide1-container > h3{
+    color: #1F72C6;
+}
+.unit{
+    width:93%;
+    height: 60px;
+    border-radius: 5px;
+    background-color: #F4F8FC;
+    border: 1px solid #1F72C6;
+    float: right;
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.units{
+    width:93%;
+    height: 75px !important;
+    border-radius: 5px;
+    background-color: #F4F8FC;
+    border: 1px solid #1F72C6;
+    float: right;
+    display: flex;
+    padding: 10px !important;
+    margin-bottom: 30px;
+    flex-direction: column;
+}
+
+.units > p{
+    color: #F4A098;
+    font-size: small;
+}
+
+.spn1{
+    background-color: #EB5757;
+    padding: 1px 10px 1px;
+    border-radius: 2px;
+    color: white;
+    font-size: small;
+}
+.spn2{
+    background-color: #1F72C6;
+    padding: 1px 10px 1px;
+    border-radius: 2px;
+    color: white;
+    font-size: small;
+    
+}
+
+.top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+

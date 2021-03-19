@@ -1,0 +1,35 @@
+.card-hd > h3{
+    color: white;
+    background-color: orange;
+    border-radius: 90px;
+    width: min-content;
+    padding: 5px;
+    font-size: 1rem;
+}
+.card-hd{
+    padding: 0px 10px;
+}
+.card-body > h3{
+    color: #0B393C;
+}
+.card-body > p{
+    font-size: smaller;
+    color: #0b393ca8;
+}
+.time{
+    color: #0b393ca8;
+    font-size: x-small;
+}
+.msg-container{
+    display: flex;
+    max-height: 40vh;
+    padding: 0px 20px 10px 0px;
+}
+.time{
+    display: flex;
+    justify-content: space-between;
+}
+.msg-container:hover{
+    border-radius: 20px;
+    background-color: #0025f80c;
+}
