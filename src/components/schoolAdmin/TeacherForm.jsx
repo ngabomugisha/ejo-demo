@@ -22,8 +22,12 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 import { Autocomplete } from 'formik-material-ui-lab'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
-
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -44,10 +48,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const StudentForm = () => {
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
     const [] = React.useState('');
     const classes = useStyles();
     const [, setClss] = useState([])
     const [classs, setClasss] = useState([])
+    const [open, setOpen] = useState(false)
     const [province, setProvince] = useState([])
     const [district, setDistrict] = useState([])
     const [sector, setSector] = useState([])
@@ -147,7 +160,13 @@ export const StudentForm = () => {
 
     const onSubmit = values => {
         alert(JSON.stringify(values, null, 2))
-
+        setOpen(true)
+        // await https.post('/auth/signup', values, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
+        //     if (res.status == 200)
+        //         return setOpen(true);
+        //     else
+        //         return alert("something went wrong")
+        // })
     }
 
 
@@ -468,6 +487,11 @@ export const StudentForm = () => {
                 <Box mt={5}>
                 </Box>
             </Container>
+            <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Student data is saved!
+                </Alert>
+            </Snackbar>
         </>
     )
 

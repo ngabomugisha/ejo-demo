@@ -346,6 +346,7 @@ export const Index = (props) => {
             }
             console.log(fetchSubjects())
             fetchSubjects()
+            setLoadTimetable(true)
 
         }
 
@@ -362,6 +363,7 @@ export const Index = (props) => {
             }
             console.log(fetchSubjects())
             fetchSubjects()
+            setLoadTimetable(true)
         }
         else if (values.class != '' && values.teacher != "" && values.subject == '') {
             async function fetchSubjects() {
@@ -376,6 +378,7 @@ export const Index = (props) => {
             }
             console.log(fetchSubjects())
             fetchSubjects()
+            setLoadTimetable(true)
         }
 
         else if (values.class != '' && values.teacher != "" && values.subject !== '') {
@@ -391,6 +394,7 @@ export const Index = (props) => {
             }
             console.log(fetchSubjects())
             fetchSubjects()
+            setLoadTimetable(true)
         }
         else {
             putMon([])
@@ -404,7 +408,6 @@ export const Index = (props) => {
         console.log("MONDAY DATA", timetabledata)
         if (timetabledata.events.monday || timetabledata.events.tuesday || timetabledata.events.wednesday || timetabledata.events.thursday || timetabledata.events.friday) {
             setTimeout(() => {
-                setLoadTimetable(true)
             }, 2000);
         }
 

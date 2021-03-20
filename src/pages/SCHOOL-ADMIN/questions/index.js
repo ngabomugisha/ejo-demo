@@ -6,6 +6,8 @@ import { handleFetchQuestion } from '../../../store/actions/question.actions'
 import { useDispatch, useSelector } from 'react-redux';
 import QuestionTable from '../../../components/parts/QuestionTable'
 import https from '../../../helpers/https'
+import Skeleton from "@material-ui/lab/Skeleton"
+import { Box } from '@material-ui/core'
 
 
 export const Index = (props) => {
@@ -15,11 +17,19 @@ export const Index = (props) => {
     const dispatch = useDispatch();
     const { list: ALL_QUESTION } = useSelector((state) => state.questions);
     const [subject, setSubject] = React.useState([])
+    const [topic, setTopic] = useState([])
+    const [subtopic, setSubtopic] = useState([])
+    const [unit, setUnit] = useState([])
+
+    const [sub, setSub] = useState("")
+    const [top, setTop] = useState("")
+    const [subT, setSubT] = useState('')
+    const [uni, setUni] = useState('')
 
     const headCells = [
         { id: 'question', label: 'Question' },
         { id: 'subject', label: 'Subject' },
-        { id: 'unit', label: 'Unit' },
+        { id: 'difficultLevel', label: 'Difficult Level' },
         { id: 'type', label: 'Question-Types' },
         { id: 'actions', label: 'Actions', disableSorting: true }
     ]
@@ -62,10 +72,70 @@ console.log('data from localstorage',JSON.parse(localStorage.getItem("students")
 
         {ALL_QUESTION.length > 0 ?
             <QuestionTable data={ALL_QUESTION} head={headCells}/>:
-            // console.log(ALL_QUESTION):
-            <h3>loading......</h3>
-        }
-                  
+            (<Box className="my-bx">
+            <div className="skeleton-line-students">
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+                <Skeleton width="20%" />
+            </div>
+        </Box>)}   
 
             </PanelLayout>
         </>

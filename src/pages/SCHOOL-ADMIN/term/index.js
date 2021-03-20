@@ -121,10 +121,10 @@ console.log('this is data to pass',data,typeof(data))
         <div>
 
             <PanelLayout selected={5} role={props.state.auth.user.role}>
-                <div className="term-continer">
-                        <div className="term-hd">
-                            <h3>Term's Period</h3>
+                        <div className="report-hd">
+                            <h3>Discipline settings</h3>
                         </div>
+                <div className="term-continer">
                     <Paper elevation={4}>
                         <form>
                             <div className="paper-div">

@@ -84,7 +84,7 @@ export const QuestionTable = (props) => {
                 }
                 return data
             },[])}</TableCell>
-            <TableCell>{item.unit}</TableCell>
+            <TableCell>{item.difficultLevel}</TableCell>
             <TableCell>{(item.questionType)}</TableCell>
             <TableCell>
                 <Controls.ActionButton

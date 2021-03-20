@@ -69,12 +69,13 @@ export const Index = (props) => {
     function loadBody() {
         return (
             recordsAfterPagingAndSorting != null ?
-                recordsAfterPagingAndSorting().map(item =>
+                (recordsAfterPagingAndSorting().map(item =>
+                (item.role !=="TEACHER"? null :
                 (<TableRow key={item._id}>
                     <TableCell>{item.firstName}&nbsp;&nbsp;{item.lastName}</TableCell>
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.phoneNumber}</TableCell>
-                    <TableCell>{item.lastLogin}</TableCell>
+                    <TableCell>{(item.lastLogin).substring(0,10)}</TableCell>
                     <TableCell>
                         <Controls.ActionButton
                             color="primary"
@@ -87,7 +88,7 @@ export const Index = (props) => {
                         </Controls.ActionButton>
                     </TableCell>
                 </TableRow>)
-                ) : null)
+                ))):null)
     }
 
     const openInPopup = item => {

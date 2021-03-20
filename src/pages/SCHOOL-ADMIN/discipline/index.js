@@ -10,6 +10,9 @@ export const index = (props) => {
         <div>
             
             <PanelLayout selected={4} role={props.state.auth.user.role}>
+                        <div className="report-hd">
+                            <h3>Discipline settings</h3>
+                        </div>
                 <div className="discipline-container">
                     
                 <div className='hd-1'>

@@ -28,14 +28,24 @@
 	padding: 20px;
 }
 
+.paper-title {
+    color: #1f72c7 !important;
+    font-weight: 600 !important;
+    float: left !important;
+}
+.paper-title2 {
+    color: #1f72c7 !important;
+    font-weight: 600 !important;
+}
+
 .card-inner > .paper-title{
 	color: #1f72c7 !important;
 	font-weight: 600 !important;
+	float: left !important;
 }
 .card-inner > .papaer-content{
 	color: #000000;
 	font-weight: 300;
-	margin-top: 10px;
 }
 .paper-line{
 	width: 100%;
@@ -44,6 +54,10 @@
 
 .paper-container{
 	padding:40px
+}
+.papaer-content{
+	color: #000000;
+	font-weight: 300;
 }
 
 
@@ -141,4 +155,14 @@
 		 width: calc(100vw - 32px);
 	}
 }
- 
+
+.more-details{
+	padding: 20px;
+}
+
+.grouped{
+	padding: 8px;
+	border: 1px solid #1f72c7;
+	border-radius: 5px;
+	background-color: aliceblue;
+}
