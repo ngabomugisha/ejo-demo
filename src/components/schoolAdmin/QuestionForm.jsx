@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Link, useHistory } from 'react-router-dom';
 import './style.css'
 import axios from 'axios'
 import https from '../../helpers/https'
@@ -55,6 +56,7 @@ export const QuestionForm = (props) => {
         setOpen(false);
     };
 
+    const history = useHistory();
 
     const school = props.state.auth.user.school;
     const [tags, setTags] = React.useState(['rob', 'ngabo']);
@@ -172,7 +174,7 @@ export const QuestionForm = (props) => {
             }
             https.post('/question-banks/', setDataS, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
                 if (res.status == 200)
-                    return setOpen(true);
+                    return (setOpen(true), history.go(0) )
                 else
                     return alert("something went wrong")
             })

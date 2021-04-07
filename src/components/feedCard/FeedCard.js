@@ -15,32 +15,32 @@ function FeedCard({title, tag, details, link, time, size, covered}) {
                             <p>Practice Group Work</p>
                     </div>
                     <div className="row1">
-                        <div>
+                        <div className="row1-p">
                             <p>Question 1:</p>
                         </div>
-                        <div>
+                        <div className="row1-p">
                             <p>40 Marks</p>
                         </div>
-                        <div>
+                        <div className="row1-p">
                             <p>Remembraning</p>
                         </div>
                     </div>
                     <div className="row1">
-                        <div>
-                            <p>Question 2:</p>
+                        <div className="row1-p">
+                            <p className="row1-p">Question 2:</p>
                         </div>
-                        <div>
-                            <p>20 Marks</p>
+                        <div className="row1-p">
+                            <p className="row1-p">20 Marks</p>
                         </div>
-                        <div>
-                            <p>Remembraning</p>
+                        <div className="row1-p">
+                            <p className="row1-p">Remembraning</p>
                         </div>
                     </div>
                     <div className="row1">
-                        <div>
+                        <div className="row1-p">
                             <p style={{fontWeight: 800}}>Total:</p>
                         </div>
-                        <div>
+                        <div className="row1-p">
                             <p style={{fontWeight: 800}}>60 Marks</p>
                         </div>
                         <div>

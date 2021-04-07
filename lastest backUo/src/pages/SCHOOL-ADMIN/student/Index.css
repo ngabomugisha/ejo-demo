@@ -92,7 +92,7 @@
   }
   
   .file-upload-content {
-    display: none;
+    display: block;
     text-align: center;
   }
   
@@ -168,3 +168,15 @@
     border: 0;
     transition: all .2s ease;
   }
+
+  .student-controls{
+    padding: 20px;
+  }
+
+  .skeleton-line-students{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    vertical-align: middle;
+    margin-top: 200px;
+}

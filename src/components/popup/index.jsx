@@ -29,7 +29,7 @@ export default function Popup(props) {
                     <Controls.ActionButton
                         color="secondary"
                         onClick={()=>{setOpenPopup(false)}}>
-                        <CloseIcon />
+                        <CloseIcon style={{ color: "white"}}/>
                     </Controls.ActionButton>
                 </div>
             </DialogTitle>

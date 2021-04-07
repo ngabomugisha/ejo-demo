@@ -28,14 +28,24 @@
 	padding: 20px;
 }
 
+.paper-title {
+    color: #1f72c7 !important;
+    font-weight: 600 !important;
+    float: left !important;
+}
+.paper-title2 {
+    color: #1f72c7 !important;
+    font-weight: 600 !important;
+}
+
 .card-inner > .paper-title{
 	color: #1f72c7 !important;
 	font-weight: 600 !important;
+	float: left !important;
 }
 .card-inner > .papaer-content{
 	color: #000000;
 	font-weight: 300;
-	margin-top: 10px;
 }
 .paper-line{
 	width: 100%;
@@ -45,5 +55,114 @@
 .paper-container{
 	padding:40px
 }
+.papaer-content{
+	color: #000000;
+	font-weight: 300;
+}
 
 
+.Cell-dayOfMonth-38{
+	display: none;
+}
+
+
+.timetable-form-container{
+	min-width: 100%;
+}
+
+.MuiDialog-paperWidthLg{
+	min-width: 80%;
+}
+
+.dropzone{
+	min-width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	border: 3px solid #1f72c7;
+	border-radius: 5px;
+	padding: 30px;
+}
+
+.dropzone-message{
+	align-self: center;
+}
+
+
+ .tags-input {
+	 display: flex;
+	 align-items: flex-start;
+	 flex-wrap: wrap;
+	 min-height: 48px;
+	 width: 480px;
+	 padding: 0 8px;
+	 border: 1px solid #d6d8da;
+	 border-radius: 6px;
+	 min-width: 100%;
+}
+ .tags-input:focus-within {
+	 border: 1px solid #0052cc;
+}
+ .tags-input input {
+	 flex: 1;
+	 border: none;
+	 height: 46px;
+	 font-size: 14px;
+	 padding: 4px 0 0 0;
+
+}
+ .tags-input input:focus {
+	 outline: transparent;
+}
+ #tags {
+	 display: flex;
+	 flex-wrap: wrap;
+	 padding: 0;
+	 margin: 8px 0 0 0;
+}
+ .tag {
+	 width: auto;
+	 height: 32px;
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 color: #fff;
+	 padding: 0 8px;
+	 font-size: 14px;
+	 list-style: none;
+	 border-radius: 6px;
+	 margin: 0 8px 8px 0;
+	 background: #0052cc;
+}
+ .tag .tag-title {
+	 margin-top: 3px;
+}
+ .tag .tag-close-icon {
+	 display: block;
+	 width: 16px;
+	 height: 16px;
+	 line-height: 16px;
+	 text-align: center;
+	 font-size: 14px;
+	 margin-left: 8px;
+	 color: #0052cc;
+	 border-radius: 50%;
+	 background: #fff;
+	 cursor: pointer;
+}
+ @media screen and (max-width: 567px) {
+	 .tags-input {
+		 width: calc(100vw - 32px);
+	}
+}
+
+.more-details{
+	padding: 20px;
+}
+
+.grouped{
+	padding: 8px;
+	border: 1px solid #1f72c7;
+	border-radius: 5px;
+	background-color: aliceblue;
+}

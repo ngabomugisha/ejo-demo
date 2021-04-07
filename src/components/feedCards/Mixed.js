@@ -3,9 +3,9 @@ import './FeedCards.css'
 import FeedCard from '../feedCard/FeedCard'
 import LessonCard from '../feedCard/LessonCard'
 
-function Mixed() {
+function Mixed(props) {
     return ( 
-        <div className='cards'>
+        <div className='cards-3'>
             <div className='card'>
                 <LessonCard
                     title='Topic: Importance of Biology'

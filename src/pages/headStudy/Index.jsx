@@ -1,10 +1,12 @@
+
 import React, { useState } from 'react'
+import {connect } from 'react-redux'
 import PanelLayout from '../../components/Layouts/PanelLayout/Index'
 import Announcement from '../../components/announcements/Index'
 import { useHistory } from 'react-router-dom'
 
 
-function Main() {
+function Index(props) {
     const history = useHistory()
 
     const [page, setPage] = useState(null)
@@ -13,7 +15,7 @@ function Main() {
         <>
             {
                 sessionStorage.getItem('isloggedin') ?
-                    <PanelLayout selected={1} role="headteacher">
+                    <PanelLayout selected={1} role={props.state.auth.user.role}>
                         <Announcement />
                     </PanelLayout>
                     :
@@ -23,5 +25,10 @@ function Main() {
 
     )
 }
+const mapStateToProps = (state) => ({
+    state: state
+})
 
-export default Main
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index)

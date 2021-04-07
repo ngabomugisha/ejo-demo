@@ -1,0 +1,396 @@
+import React, { useState, useEffect } from 'react'
+import './NewLessonPlan.css'
+import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import PanelLayout from '../Layouts/PanelLayout/Index'
+import { Link, useHistory } from 'react-router-dom'
+import { Button } from '@material-ui/core';
+import Slide2 from './lessonPlanSlide/Slide2'
+import Slide1 from './lessonPlanSlide/Slide1'
+import Slide3 from './lessonPlanSlide/Slide3';
+
+
+import { useForm, useStep } from "react-hooks-helper";
+import { LessonPlan_start } from "./stepForm/LessonPlan_start";
+import { Address } from "./stepForm/Address";
+import { Contact } from "./stepForm/Contact";
+import { Review } from "./stepForm/Review";
+import { Submit } from "./stepForm/Submit";
+
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+  },
+});
+
+const defaultData = {
+  "unit": null,
+  "unitPlanId": null,
+  "subject": null,
+  "keyUnitCompetency": null,
+  "lessonNumber": 0,
+  "lessonName": null,
+  "knowledge": {
+    "topics": [],
+    "instructionalMaterial": [
+      {
+        "materialType": "",
+        "items": [],
+        "uploads": []
+      }
+    ],
+    "otherMaterialsAndReferences": null
+  },
+  "skills": {
+    "topics": [
+      {
+        "topic": null,
+        "bloomTaxonomy": null,
+        "standardCriteriaPerfomance": 0
+      },
+    ],
+    "instructionalMaterial": [
+      {
+        "materialType": null,
+        "items": [
+          {
+            "item": null
+          },
+        ],
+        "uploads": [
+          { "file1": null }
+        ]
+      }
+    ],
+    "otherMaterialsAndReferences": null
+  },
+  "attitudesAndValues": {
+    "topics": [
+      {
+        "topic": null,
+        "bloomTaxonomy": null,
+        "standardCriteriaPerfomance": 80
+      }
+    ],
+    "instructionalMaterial": [
+      {
+        "materialType": null,
+        "items": [
+          {
+            "item": null
+          },
+        ],
+        "uploads": [
+          { "file1": null }
+        ]
+      }
+    ],
+    "otherMaterialsAndReferences": null
+  },
+
+  "activities": {
+    "introduction": {
+      "content": {
+        "activities": [
+          {
+            "activity": null,
+          }
+        ],
+        "otherActivity": ""
+      },
+      "crossCuttingIssues": {
+        "issues": [
+          {
+            "issue": null
+          }
+        ],
+        "omment": null
+      },
+      "competency": {
+        "competencies": [
+          {
+            "competency": null
+          }
+        ],
+        "comment": null
+      }
+    },
+    "development": {
+      "content": {
+        "activities": [
+          {
+            "activity": null,
+          }
+        ],
+        "otherActivity": ""
+      },
+      "crossCuttingIssues": {
+        "issues": [
+          {
+            "issue": null
+          }
+        ],
+        "omment": null
+      },
+      "competency": {
+        "competencies": [
+          {
+            "competency": null
+          }
+        ],
+        "comment": null
+      }
+    },
+    "conclusion": {
+      "content": {
+        "activities": [
+          {
+            "activity": null,
+          }
+        ],
+        "otherActivity": ""
+      },
+      "crossCuttingIssues": {
+        "issues": [
+          {
+            "issue": null
+          }
+        ],
+        "omment": null
+      },
+      "competency": {
+        "competencies": [
+          {
+            "competency": null
+          }
+        ],
+        "comment": null
+      }
+    },
+
+
+    "exercises": {
+      "questions": [
+        {
+          "difficultLevel": "MEDIUM",
+          "questionsObjective": "REMEMBERING",
+          "question": "What is the answer",
+          "questionType": "MULTI-CHOICE",
+          "possibleAnswer": [
+            {
+              "answer": "answer"
+            },
+            {
+              "answer": "answer2"
+            },
+            {
+              "answer": "answer3"
+            }
+          ],
+          "answers": [
+            {
+              "answer": "answer2"
+            },
+            {
+              "answer": "answer3"
+            }
+          ],
+          "points": 10
+
+        }
+      ]
+    }
+  },
+  "teachingTechniques": {
+    "introduction": {
+      "contentFocus": [
+        {
+          "item": "LIVE-LECTURING"
+        }
+      ],
+      "interactiveFocus": [
+        {
+          "item": "GROUP-WORK"
+        }
+      ],
+      "criticalThinking": [
+        {
+          "item": "CLASS-DISCUSSIONS-DEBATES"
+        }
+      ],
+      "production": [
+        {
+          "item": "SKILLS-PRACTICE"
+        }
+      ],
+      "problemSolving": [
+        {
+          "item": "RESEARCH-INQUIRY"
+        }
+      ],
+      "reflection": [
+        {
+          "item": "REFLECTION-ON-LEARNING"
+        }
+      ],
+      "sitingArrangement": [
+        {
+          "item": "LECTURE/INDEPENDENT-WORK/TEST"
+        }
+      ],
+      "duration": 10
+    },
+    "development": {
+      "contentFocus": [
+        {
+          "item": "LIVE-LECTURING"
+        }
+      ],
+      "interactiveFocus": [
+        {
+          "item": "GROUP-WORK"
+        }
+      ],
+      "criticalThinking": [
+        {
+          "item": "CLASS-DISCUSSIONS-DEBATES"
+        }
+      ],
+      "production": [
+        {
+          "item": "SKILLS-PRACTICE"
+        }
+      ],
+      "problemSolving": [
+        {
+          "item": "RESEARCH-INQUIRY"
+        }
+      ],
+      "reflection": [
+        {
+          "item": "REFLECTION-ON-LEARNING"
+        }
+      ],
+      "sitingArrangement": [
+        {
+          "item": "LECTURE/INDEPENDENT-WORK/TEST"
+        }
+      ],
+      "duration": 10
+    },
+    "conclusion": {
+      "contentFocus": [
+        {
+          "item": "LIVE-LECTURING"
+        }
+      ],
+      "interactiveFocus": [
+        {
+          "item": "GROUP-WORK"
+        }
+      ],
+      "criticalThinking": [
+        {
+          "item": "CLASS-DISCUSSIONS-DEBATES"
+        }
+      ],
+      "production": [
+        {
+          "item": "SKILLS-PRACTICE"
+        }
+      ],
+      "problemSolving": [
+        {
+          "item": "RESEARCH-INQUIRY"
+        }
+      ],
+      "reflection": [
+        {
+          "item": "REFLECTION-ON-LEARNING"
+        }
+      ],
+      "sitingArrangement": [
+        {
+          "item": "LECTURE/INDEPENDENT-WORK/TEST"
+        }
+      ],
+      "duration": 10
+    }
+  },
+  "time": {
+    "day": new Date(),
+    "slotOnTimetable": "603159c6191af33cdc989ff0"
+  }
+}
+
+
+//  const defaultData = {
+//   firstName: "",
+//   lastName: "",
+//   nickName: "",
+//   address: "",
+//   city: "",
+//   state: "",
+//   zip: "",
+//   phone: "",
+//   email: "",
+// };
+
+const steps = [
+  { id: "names" },
+  { id: "address" },
+  { id: "contact" },
+  { id: "review" },
+  { id: "submit" },
+];
+
+
+function NewLessonPlan() {
+  const [formData, setForm] = useForm(defaultData);
+  const { step, navigation } = useStep({
+    steps,
+    initialStep: 0,
+  });
+
+  const props = { formData, setForm, navigation };
+
+const renderswitch = (id) => {
+
+  switch (id) {
+  case "names":
+    return <LessonPlan_start {...props} />;
+  case "address":
+    return <Address {...props} />;
+  case "contact":
+    return <Contact {...props} />;
+  case "review":
+    return <Review {...props} />;
+  case "submit":
+    return <Submit {...props} />;
+}
+
+}
+  return (
+    <>
+      <PanelLayout selected={3} role="TEACHER">
+        <div className="new-lesson-container">
+         {renderswitch(step.id)}
+        </div>
+      </PanelLayout>
+    </>
+  )
+}
+
+
+
+const mapStateToProps = (state) => ({
+  state: state
+})
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewLessonPlan)

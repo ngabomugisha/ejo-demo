@@ -26,7 +26,7 @@ export const Index = (props) => {
 
     return (
         <div>
-            <PanelLayout selected={4} role="headteacher">
+            <PanelLayout selected={4} role={props.state.auth.user.role}>
                 <div className="report-container">
                 <div className="report-hd">
                     <h3>Report</h3>

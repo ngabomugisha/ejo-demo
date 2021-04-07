@@ -56,7 +56,6 @@ export const StudentForm = () => {
         setOpen(false);
     };
 
-    const [] = React.useState('');
     const classes = useStyles();
     const [, setClss] = useState([])
     const [classs, setClasss] = useState([])
@@ -66,17 +65,10 @@ export const StudentForm = () => {
     const [sector, setSector] = useState([])
     const [cell, setCell] = useState([])
     const [village, setVillage] = useState([])
-    const [] = useState([])
-    const [] = useState([])
-    const [] = useState([])
     const [p, setP] = useState("")
     const [d, setD] = useState('')
     const [s, setS] = useState("")
     const [c, setC] = useState('')
-    const [, setV] = useState('')
-    const [] = useState('')
-    const [] = useState('')
-    const [] = useState('')
 
     const [enableDistrict, setEnableDistrict] = useState(true)
     const [enableSector, setEnableSector] = useState(true)
@@ -153,26 +145,22 @@ export const StudentForm = () => {
         );
     };
 
-
-    // const post = async (url, data, headers) => {
-    //     return await request('POST', url, data, headers);
-    //   };
-
-    const onSubmit = values => {
-        alert(JSON.stringify(values, null, 2))
-        setOpen(true)
-        // await https.post('/auth/signup', values, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
-        //     if (res.status == 200)
-        //         return setOpen(true);
-        //     else
-        //         return alert("something went wrong")
-        // })
-    }
-
-
     const selectedTagss = tags => {
         console.log(tags);
     };
+
+
+    const onSubmit = async values => {
+        // alert(JSON.stringify(values, null, 2))
+        setOpen(true)
+        await https.post('/auth/signup', values, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
+            if (res.status == 200)
+                return setOpen(true);
+            else
+                return alert("something went wrong")
+        })
+    }
+
 
     useEffect(() => {
         async function fetchDistrict() {

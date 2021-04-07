@@ -24,3 +24,11 @@
     text-decoration: none;
     color: white;
 }
+.africa{
+    display: flex;
+    justify-content: center;
+}
+
+.africa > img{
+    max-height : 110px;
+}

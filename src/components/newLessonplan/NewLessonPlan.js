@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './NewLessonPlan.css'
+import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import PanelLayout from '../Layouts/PanelLayout/Index'
@@ -8,6 +10,12 @@ import { Button } from '@material-ui/core';
 import Slide2 from './lessonPlanSlide/Slide2'
 import Slide1 from './lessonPlanSlide/Slide1'
 import Slide3 from './lessonPlanSlide/Slide3';
+import { useForm, useStep } from "react-hooks-helper";
+import { LessonPlan_start } from "./stepForm/LessonPlan_start";
+import { LessonPlan_2 } from "./stepForm/LessonPlan_2";
+import { LessonPlan_3 } from "./stepForm/LessonPlan_3";
+import { Review } from "./stepForm/Review";
+import { Submit } from "./stepForm/Submit";
 
 const useStyles = makeStyles({
   root: {
@@ -15,96 +23,372 @@ const useStyles = makeStyles({
   },
 });
 
+const defaultData = {
+  "unit": null,
+  "unitPlanId": null,
+  "subject": null,
+  "keyUnitCompetency": null,
+  "lessonNumber": 0,
+  "lessonName": null,
+  "knowledge": {
+    "topics": [],
+    "instructionalMaterial": [
+      {
+        "materialType": "",
+        "items": [],
+        "uploads": []
+      }
+    ],
+    "otherMaterialsAndReferences": null
+  },
+  "skills": {
+    "topics": [
+      {
+        "topic": null,
+        "bloomTaxonomy": null,
+        "standardCriteriaPerfomance": 0
+      },
+    ],
+    "instructionalMaterial": [
+      {
+        "materialType": null,
+        "items": [
+          {
+            "item": null
+          },
+        ],
+        "uploads": [
+          { "file1": null }
+        ]
+      }
+    ],
+    "otherMaterialsAndReferences": null
+  },
+  "attitudesAndValues": {
+    "topics": [
+      {
+        "topic": null,
+        "bloomTaxonomy": null,
+        "standardCriteriaPerfomance": 80
+      }
+    ],
+    "instructionalMaterial": [
+      {
+        "materialType": null,
+        "items": [
+          {
+            "item": null
+          },
+        ],
+        "uploads": [
+          { "file1": null }
+        ]
+      }
+    ],
+    "otherMaterialsAndReferences": null
+  },
+
+  "activities": {
+    "introduction": {
+      "content": {
+        "activities": [
+          {
+            "activity": null,
+          }
+        ],
+        "otherActivity": ""
+      },
+      "crossCuttingIssues": {
+        "issues": [
+          {
+            "issue": null
+          }
+        ],
+        "omment": null
+      },
+      "competency": {
+        "competencies": [
+          {
+            "competency": null
+          }
+        ],
+        "comment": null
+      }
+    },
+    "development": {
+      "content": {
+        "activities": [
+          {
+            "activity": null,
+          }
+        ],
+        "otherActivity": ""
+      },
+      "crossCuttingIssues": {
+        "issues": [
+          {
+            "issue": null
+          }
+        ],
+        "omment": null
+      },
+      "competency": {
+        "competencies": [
+          {
+            "competency": null
+          }
+        ],
+        "comment": null
+      }
+    },
+    "conclusion": {
+      "content": {
+        "activities": [
+          {
+            "activity": null,
+          }
+        ],
+        "otherActivity": ""
+      },
+      "crossCuttingIssues": {
+        "issues": [
+          {
+            "issue": null
+          }
+        ],
+        "omment": null
+      },
+      "competency": {
+        "competencies": [
+          {
+            "competency": null
+          }
+        ],
+        "comment": null
+      }
+    },
+
+
+    "exercises": {
+      "questions": [
+        {
+          "difficultLevel": "MEDIUM",
+          "questionsObjective": "REMEMBERING",
+          "question": "What is the answer",
+          "questionType": "MULTI-CHOICE",
+          "possibleAnswer": [
+            {
+              "answer": "answer"
+            },
+            {
+              "answer": "answer2"
+            },
+            {
+              "answer": "answer3"
+            }
+          ],
+          "answers": [
+            {
+              "answer": "answer2"
+            },
+            {
+              "answer": "answer3"
+            }
+          ],
+          "points": 10
+
+        }
+      ]
+    }
+  },
+  "teachingTechniques": {
+    "introduction": {
+      "contentFocus": [
+        {
+          "item": "LIVE-LECTURING"
+        }
+      ],
+      "interactiveFocus": [
+        {
+          "item": "GROUP-WORK"
+        }
+      ],
+      "criticalThinking": [
+        {
+          "item": "CLASS-DISCUSSIONS-DEBATES"
+        }
+      ],
+      "production": [
+        {
+          "item": "SKILLS-PRACTICE"
+        }
+      ],
+      "problemSolving": [
+        {
+          "item": "RESEARCH-INQUIRY"
+        }
+      ],
+      "reflection": [
+        {
+          "item": "REFLECTION-ON-LEARNING"
+        }
+      ],
+      "sitingArrangement": [
+        {
+          "item": "LECTURE/INDEPENDENT-WORK/TEST"
+        }
+      ],
+      "duration": 10
+    },
+    "development": {
+      "contentFocus": [
+        {
+          "item": "LIVE-LECTURING"
+        }
+      ],
+      "interactiveFocus": [
+        {
+          "item": "GROUP-WORK"
+        }
+      ],
+      "criticalThinking": [
+        {
+          "item": "CLASS-DISCUSSIONS-DEBATES"
+        }
+      ],
+      "production": [
+        {
+          "item": "SKILLS-PRACTICE"
+        }
+      ],
+      "problemSolving": [
+        {
+          "item": "RESEARCH-INQUIRY"
+        }
+      ],
+      "reflection": [
+        {
+          "item": "REFLECTION-ON-LEARNING"
+        }
+      ],
+      "sitingArrangement": [
+        {
+          "item": "LECTURE/INDEPENDENT-WORK/TEST"
+        }
+      ],
+      "duration": 10
+    },
+    "conclusion": {
+      "contentFocus": [
+        {
+          "item": "LIVE-LECTURING"
+        }
+      ],
+      "interactiveFocus": [
+        {
+          "item": "GROUP-WORK"
+        }
+      ],
+      "criticalThinking": [
+        {
+          "item": "CLASS-DISCUSSIONS-DEBATES"
+        }
+      ],
+      "production": [
+        {
+          "item": "SKILLS-PRACTICE"
+        }
+      ],
+      "problemSolving": [
+        {
+          "item": "RESEARCH-INQUIRY"
+        }
+      ],
+      "reflection": [
+        {
+          "item": "REFLECTION-ON-LEARNING"
+        }
+      ],
+      "sitingArrangement": [
+        {
+          "item": "LECTURE/INDEPENDENT-WORK/TEST"
+        }
+      ],
+      "duration": 10
+    }
+  },
+  "time": {
+    "day": new Date(),
+    "slotOnTimetable": "603159c6191af33cdc989ff0"
+  }
+}
+
+
+const defaultData2 = {
+  firstName: "",
+  lastName: "",
+  nickName: "",
+  address: "",
+  city: "",
+  state: "",
+  zip: "",
+  phone: "",
+  email: "",
+};
+
+const steps = [
+  { id: "names" },
+  { id: "LessonPlan_2" },
+  { id: "LessonPlan_3" },
+  { id: "review" },
+  { id: "submit" },
+];
 
 
 function NewLessonPlan() {
+  const [formData, setForm] = useForm(defaultData);
+  const { step, navigation } = useStep({
+    steps,
+    initialStep: 0,
+  });
 
-  const history = useHistory()
-  const assignment = {
-    date: null,
-    topic: null,
-    assType: null,
-    testDuration: null,
-    assKind: null,
-    numQuestions: null,
-    ansFormat: null,
-    hintQuestion: null,
-    totalMarks: null,
-    questionLibary: null,
-    newQuestion: null,
-    ansquestion: null
-  }
+  const props = { formData, setForm, navigation };
 
+const renderswitch = (id) => {
 
+  switch (id) {
+  case "names":
+    return <LessonPlan_start {...props} />;
+  case "LessonPlan_2":
+    return <LessonPlan_2 {...props} />;
+  case "LessonPlan_3":
+    return <LessonPlan_3 {...props} />;
+  case "review":
+    return <Review {...props} />;
+  case "submit":
+    return <Submit {...props} />;
+}
 
-  const classes = useStyles();
-  const [newLessonPlan, setnewLessonPlan] = React.useState({})
-  const [progress, setProgress] = React.useState(20);
-
-  function renderSwitch(progress) {
-    switch (progress) {
-      case 20:
-        return <Slide1 />
-        break;
-      case 60:
-        return <Slide2 />
-        break;
-      case 100:
-        return <Slide3 />
-        break;
-
-      default:
-        return setProgress(20)
-        break;
-    }
-  }
+}
   return (
     <>
-      <PanelLayout selected={3} role="teacher">
+      <PanelLayout selected={3} role="TEACHER">
         <div className="new-lesson-container">
-          <div className={classes.root}>
-            <LinearProgress variant="determinate" value={progress} />
-          </div>
-          <div className='assignment-field'>
-            {renderSwitch(progress)}
-          </div>
-          <div className='ft-btn'>
-            {
-
-              progress < 100 ? <Button color='primary' className="btn-next" size="large"
-                style={{
-                  borderRadius: 5,
-                  backgroundColor: "#1f75c6",
-                  padding: "7px 15px",
-                  fontSize: "15px",
-                  color: "#fff",
-                  width: '200px',
-                  textTransform: 'capitalize'
-                }}
-                onClick={() => setProgress(progress + 40)}
-              >
-                Next
-                </Button> : <Button color='primary' className="btn-next" size="large"
-                  style={{
-                    borderRadius: 5,
-                    backgroundColor: "#1f75c6",
-                    padding: "7px 15px",
-                    fontSize: "15px",
-                    color: "#fff",
-                    width: '200px',
-                    textTransform: 'capitalize'
-                  }}
-                  onClick={() => history.replace("/teacher")}
-                >
-                  Submit
-                </Button>
-            }
-
-          </div>
+         {renderswitch(step.id)}
         </div>
       </PanelLayout>
     </>
   )
 }
 
-export default NewLessonPlan;
+
+
+const mapStateToProps = (state) => ({
+  state: state
+})
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewLessonPlan)

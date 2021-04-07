@@ -52,11 +52,15 @@
 .btn-join-us {
   padding: 20px;
 }
-.content-text > h1:after{
+.content-text > .home-future:after{
   content: "";
   display: block;
-  width: 80px;
+  width: 105px;
   background-color: #FEBD45;
   height: 15px;
   margin-top: -15px;
+}
+
+.home-future{
+  font-weight: 800;
 }

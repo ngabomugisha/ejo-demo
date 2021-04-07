@@ -162,9 +162,9 @@ const upload = async () => {
     console.log("this is formData :",formData)
     await https.post('/students/create-from-csv' , formData,  {  headers : { 'Content-Type' : 'multipart/form-data', 'Authorization': `Basic ${localStorage.token}` } })
     .then((res)=>{
-        alert("%%%%%%%%%%%%%",res.status)
+        alert(res.status)
     }).catch((erro) => {
-        console.log("@@@@@@",erro)
+        console.log("ERROR :",erro)
     })
 }
 

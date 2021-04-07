@@ -18,5 +18,5 @@ export const store = createStore(
   persistedReducers,
   composeWithDevTools(applyMiddleware(thunk))
 );
-
+console.log('Data from Store', store);
 export const persistor = persistStore(store);

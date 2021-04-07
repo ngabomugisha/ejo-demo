@@ -29,9 +29,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Slide1() {
+function Slide1(props) {
     const classes = useStyles()
     const [term, setTerm] = React.useState('')
+    const recevied = props.Values
+    console.log("RECEIVED,", recevied)
     const handleChange = (event) => {
         setTerm(event.target.value)
     };

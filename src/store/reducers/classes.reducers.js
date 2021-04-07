@@ -15,3 +15,4 @@ export default (state = INITIAL_CLASSES_STATE, { type, payload }) => {
       return state;
   }
 };
+

@@ -8,14 +8,19 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(0.5)
     },
     secondary: {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.secondary.dark,
         '& .MuiButton-label': {
             color: theme.palette.secondary.main,
+        },
+        '&:hover':{
+
+            color: 'red',
+            backgroundColor: '#f35b5b',
         }
     },
     primary: {
         backgroundColor: "#1f72c7",
-        color: "#fff",
+        color: "red",
         '& .MuiButton-label': {
             color: theme.palette.primary.main,
         }

@@ -29,3 +29,29 @@
     font-weight: 400;
     font-size: 1rem;
 }
+
+.select-subject{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.print-lessonPlan-container{
+    margin: 10px;
+}
+
+.print-lp-hd{
+    display: flex;
+    justify-content: space-evenly;
+}
+.ls-table{
+    min-width: 100px
+}
+table{
+    width: 100%;
+}
+th{
+    background-color: rgb(211, 211, 211);
+}
+td{
+    padding: 10px 10px 10px;
+}

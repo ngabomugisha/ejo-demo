@@ -5,7 +5,7 @@ import axios from 'axios'
 import https from '../../helpers/https'
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
+import {FormGroup,TextField} from '@material-ui/core'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,15 +17,15 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormLabel from '@material-ui/core/FormLabel';
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
-import Alert from '@material-ui/lab/Alert';
 import { Autocomplete } from 'formik-material-ui-lab'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
-
-const permanentHealthConditionsOptions = ['VISUAL-DIFFICULTIES', 'PHYSICAL-IMPAIREMENT', 'HEARING-DIFFICULTIES', 'LEARNING-DIFFICULTIES', 'PHSYCHOLOGICAL-DIFFICULTIES']
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -47,26 +47,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 export const StudentForm = (props) => {
 
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
+    const permanentHealthConditionsOptionss = [
+        { 'condition': 'VISUAL-DIFFICULTIES' },
+        { 'condition': 'PHYSICAL-IMPAIREMENT' },
+        { 'condition': 'HEARING-DIFFICULTIES' },
+        { 'condition': 'LEARNING-DIFFICULTIES' },
+        { 'condition': 'PHSYCHOLOGICAL-DIFFICULTIES' }]
+    const school = props.state.auth.user.school;
     const [] = React.useState('');
     const classes = useStyles();
-    const [, setClss] = useState([])
     const [classs, setClasss] = useState([])
+    const [open, setOpen] = useState(false)
     const [province, setProvince] = useState([])
     const [district, setDistrict] = useState([])
     const [sector, setSector] = useState([])
     const [cell, setCell] = useState([])
     const [village, setVillage] = useState([])
-    const [] = useState([])
-    const [] = useState([])
-    const [] = useState([])
     const [p, setP] = useState("")
     const [d, setD] = useState('')
     const [s, setS] = useState("")
     const [c, setC] = useState('')
-    const [, setV] = useState('')
-    const [] = useState('')
-    const [] = useState('')
-    const [] = useState('')
+    const [v, setV] = useState('')
+
 
     const [enableDistrict, setEnableDistrict] = useState(true)
     const [enableSector, setEnableSector] = useState(true)
@@ -91,27 +101,49 @@ export const StudentForm = (props) => {
         setEnableVillage(false)
     }
 
-    const onSubmit = values => {
+    const onSubmit = async (values) => {
 
-        alert(JSON.stringify(values, null, 2))
-   
-        const options = {
-            method: 'POST',
-            url: '/students/',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem("token")}`
-            },
-            data: values
-        };
+        //  alert(JSON.stringify(values, null, 2))
 
-        https.post(options.url,options.headers,options.data).then(() => {
-            return alert("data recorded")
+        await https.post('/students', values, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
+            if (res.status == 200)
+                return setOpen(true);
+            else
+                return alert("something went wrong")
         })
-    
+
+        // const options = {
+        //     method: 'POST',
+        //     url: '/students',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${localStorage.getItem("token")}`
+        //     },
+        //     data: values
+        // };
+
+        // https.post(options.url,options.headers,options.data).then(() => {
+        //     return alert("data recorded")
+        // })
+
     }
     let iniData = null
     const data = props.recordForEdit
+    console.log('DATAFOREDIT:', data)
+
+    if (data !== null && data.address !== undefined) {
+        async function fetchV() {
+            const request = await https.get(`/addresses/villages/${data.address}`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
+            )
+                .then((response) => {
+                    setVillage(response.data)
+                });
+            return request
+        }
+        fetchV()
+        console.log('AFTER REQUEST', village)
+    }
+
     const initialValue = {
         firstName: null,
         lastName: null,
@@ -120,59 +152,60 @@ export const StudentForm = (props) => {
         address: null,
         scholarship: null,
         dateOfBirth: null,
+         ngo: {
+            name: null,
+            contactPerson: {
+                title: null,
+                name: null,
+                phone: null
+            }
+        },
         allergies: null,
-        permanentHealthConditions: permanentHealthConditionsOptions,
-        mother: {
+        permanentHealthConditions: [],
+        guardians: [{
             firstName: null,
             lastName: null,
             identificationNumber: null,
             phone: null,
             email: null,
-            maritalStatus: null
-        },
-        father: {
-            firstName: null,
-            lastName: null,
-            identificationNumber: null,
-            phone: null,
-            email: null,
-            maritalStatus: null
-        },
+            maritalStatus: null,
+            relationship : null
+        }]
     }
 
-    if(!props.recordForEdit){
-        iniData=initialValue
-    }else{
+    if (!props.recordForEdit) {
+        iniData = initialValue
+    } else {
 
-    const initialValuesforEdit = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        gender: data.gender,
-        studentClass: data.studentClass,
-        address: data.address,
-        scholarship: data.scholarship,
-        dateOfBirth: data.dateOfBirth,
-        allergies: data.allergies,
-        permanentHealthConditions: data.permanentHealthConditions,
-        mother: {
-            firstName: data.mother.firstName,
-            lastName: data.mother.lastName,
-            identificationNumber: data.mother.identificationNumber,
-            phone: data.mother.phone,
-            email: data.mother.email,
-            maritalStatus: data.mother.maritalStatus
-        },
-        father: {
-            firstName: data.father.firstName,
-            lastName: data.father.lastName,
-            identificationNumber: data.father.identificationNumber,
-            phone: data.father.phone,
-            email: data.father.email,
-            maritalStatus: data.father.maritalStatus
-        },
-    }
+        const initialValuesforEdit = {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            gender: data.gender ? data.gender : "",
+            studentClass: data.studentClass ? data.studentClass : '',
+            address: data.address ? data.address : '',
+            scholarship: data.scholarship ? data.scholarship : '',
+            dateOfBirth: data.dateOfBirth ? (data.dateOfBirth).substring(0, 10) : '',
+            allergies: data.allergies ? data.allergies : '',
+            permanentHealthConditions: data.permanentHealthConditions ? data.permanentHealthConditions : '',
+            guardians:[ {
+                firstName: !data.guardians ? '' : data.guardians.firstName ? data.guardians.firstName : '',
+                lastName: !data.guardians ? '' : data.guardians.lastName ? data.guardians.lastName : '',
+                identificationNumber: !data.guardians ? '' : data.guardians.identificationNumber ? data.guardians.identificationNumber : '',
+                phone: !data.guardians ? '' : data.guardians.phone ? data.guardians.phone : '',
+                email: !data.guardians ? '' : data.guardians.email ? data.guardians.email : '',
+                maritalStatus: !data.guardians ? '' : data.guardians.maritalStatus ? data.guardians.maritalStatus : ''
+            },
+            {
+                firstName: !data.guardians ? '' : data.guardians.firstName ? data.guardians.firstName : '',
+                lastName: !data.guardians ? '' : data.guardians.lastName ? data.guardians.lastName : '',
+                identificationNumber: !data.guardians ? '' : data.guardians.identificationNumber ? data.guardians.identificationNumber : '',
+                phone: !data.guardians ? '' : data.guardians.phone ? data.guardians.phone : '',
+                email: !data.guardians ? '' : data.guardians.email ? data.guardians.email : '',
+                maritalStatus: !data.guardians ? '' : data.guardians.maritalStatus ? data.guardians.maritalStatus : ''
+            }]
+        }
 
-        iniData=initialValuesforEdit
+        iniData = initialValuesforEdit
     }
 
     useEffect(() => {
@@ -219,16 +252,60 @@ export const StudentForm = (props) => {
         }
         fetchVillage()
     }, [c])
+
+
+    // componentDidMount()
     useEffect(() => {
+
+        async function fetchVillage() {
+            const request = await https.get(`/addresses/villages`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
+            )
+                .then((response) => {
+                    setVillage(response.data)
+                });
+            return request
+        }
+        fetchVillage()
+
+        async function fetchCell() {
+            const request = await https.get(`/addresses/cells`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
+            )
+                .then((response) => {
+                    setCell(response.data)
+                });
+            return request
+        }
+        fetchCell()
+
+        async function fetchSector() {
+            const request = await https.get(`/addresses/sectors`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
+            )
+                .then((response) => {
+                    setSector(response.data)
+                });
+            return request
+        }
+        fetchSector()
+
+        async function fetchDistrict() {
+            const request = await https.get(`/addresses/districts`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
+            )
+                .then((response) => {
+                    setDistrict(response.data)
+                });
+            return request
+        }
+        fetchDistrict()
+
         async function fetchProvinces() {
-            const req = await https.get('/addresses/provinces')
+            const req = await https.get('/addresses/provinces', { headers: { 'Authorization': `Basic ${localStorage.token}` } })
                 .then((response) => {
                     setProvince(response.data)
                 });
             return req
         }
         async function fetchClasses() {
-            const req = await https.get('/classes/602c1e8feeb9ae2820b62120/school-classes', { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+            const req = await https.get(`/classes/${school}/school-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
                 .then((res) => {
                     setClasss(res.data)
                 }).catch(function (err) {
@@ -238,6 +315,7 @@ export const StudentForm = (props) => {
         }
         fetchClasses()
         fetchProvinces()
+
     }, [])
     return (
         <>
@@ -247,15 +325,6 @@ export const StudentForm = (props) => {
                 <div className={classes.paper}>
                     <Formik
                         initialValues={iniData}
-                        validate={(values) => {
-                            const errors = {};
-                            if (!values.firstName) {
-                                errors.firstName = 'Required';
-                            } else if (!values.lastName) {
-                                errors.lastName = 'Required';
-                            }
-                            return errors;
-                        }}
                         onSubmit={onSubmit}
                     >
                         {(formik) => (
@@ -346,7 +415,7 @@ export const StudentForm = (props) => {
                                         </Grid>
                                     </Grid>
                                     {/* address */}
-                                    <Grid container direction="row" spacing={1} justify="space-between">
+                                    <Grid container direction="row" spacing={1} justify="space-between" className="grouped">
                                         <Grid item xs={12} sm={2}>
                                             <FormControl variant="outlined" fullWidth className={classes.formControl}>
                                                 <InputLabel id="demo-simple-select-outlined-label">Province</InputLabel>
@@ -377,7 +446,7 @@ export const StudentForm = (props) => {
                                                     onChange={handleDistrict}
                                                     label="District"
                                                     fullWidth
-                                                    disabled={enableDistrict}>
+                                                >
                                                     <MenuItem value="">
                                                         <em>None</em>
                                                     </MenuItem>
@@ -397,7 +466,6 @@ export const StudentForm = (props) => {
                                                     onChange={handleSector}
                                                     label="Sector"
                                                     fullWidth
-                                                    disabled={enableSector}
                                                 >
                                                     <MenuItem value="">
                                                         <em>None</em>
@@ -418,7 +486,6 @@ export const StudentForm = (props) => {
                                                     onChange={handleCell}
                                                     label="Cell"
                                                     fullWidth
-                                                    disabled={enableCell}
                                                 >
                                                     <MenuItem value="">
                                                         <em>None</em>
@@ -438,7 +505,6 @@ export const StudentForm = (props) => {
                                                 fullWidth
                                                 variant="outlined"
                                                 select
-                                                disabled={enableVillage}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
@@ -446,35 +512,36 @@ export const StudentForm = (props) => {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                {village != null ?
-                                                    village.map(item => (<MenuItem key={item._id} value={item._id}>{item.name}</MenuItem>)) : null
+
+                                                {
+                                                    village == null ? null : village.length > 0 ?
+                                                        village.map(item => (<MenuItem key={item._id} value={item._id}>{item.name}</MenuItem>)) : null
                                                 }
                                             </Field>
                                         </Grid>
-
                                     </Grid>
                                     {/* health condition and SCHOLASHIP */}
 
                                     <Grid container direction="row" justify="center" spacing={4} maxWidth="xs">
                                         <Grid item xs={12} sm={8}>
                                             <FormControl component="fieldset" fullWidth>
-                                                    <Field
-                                                        className="myfield"
-                                                        name="permanentHealthConditions"
-                                                        multiple
-                                                        fullWidth
-                                                        component={Autocomplete}
-                                                        options={permanentHealthConditionsOptions}
-                                                        getOptionLabel={(option) => option.condition}
-                                                        renderInput={(params) => (
-                                                            <TextField
-                                                                {...params}
-                                                                error={formik.touched['permanent Health Conditions'] && !!formik.errors['permanent Health Conditions Error']}
-                                                                helperText={formik.touched['permanent Health Conditions'] && formik.errors['permanent Health Conditions Error']}
-                                                                label="permanent Health Conditions"
-                                                                variant="outlined"
-                                                                fullWidth
-                                                            />)} />
+                                                <Field
+                                                    className="myfield"
+                                                    name="permanentHealthConditions"
+                                                    multiple
+                                                    fullWidth
+                                                    component={Autocomplete}
+                                                    options={permanentHealthConditionsOptionss}
+                                                    getOptionLabel={(option) => option.condition}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            error={formik.touched['permanent Health Conditions'] && !!formik.errors['permanent Health Conditions Error']}
+                                                            helperText={formik.touched['permanent Health Conditions'] && formik.errors['permanent Health Conditions Error']}
+                                                            label="permanent Health Conditions"
+                                                            variant="outlined"
+                                                            fullWidth
+                                                        />)} />
                                             </FormControl>
                                         </Grid>
                                         <Grid item xs={12} sm={4}>
@@ -512,15 +579,57 @@ export const StudentForm = (props) => {
                                             />
                                         </Grid>
                                     </Grid>
-
+{/* NGO details */}
+<Grid container direction="row" spacing={1} justify="space-between" className="grouped">
+                                        <Grid item xs={12} sm={3}>
+                                        <Field
+                                                as={TextField}
+                                                name="ngo.name"
+                                                variant="outlined"
+                                                fullWidth
+                                                label="NGO (Non-government organization)"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={2}>
+                                        <Field
+                                                as={TextField}
+                                                name="ngo.contactPerson.title"
+                                                variant="outlined"
+                                                fullWidth
+                                                label="Title"
+                                                helperText="Contact Person"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={3}>
+                                        <Field
+                                                as={TextField}
+                                                name="ngo.contactPerson.name"
+                                                variant="outlined"
+                                                fullWidth
+                                                label="Name"
+                                                helperText="Contact Person"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={2}>
+                                        <Field
+                                                as={TextField}
+                                                name="ngo.contactPerson.phone"
+                                                variant="outlined"
+                                                fullWidth
+                                                label="Phone"
+                                                helperText="Contact Person"
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                 
                                     {/* parents's Details */}
                                     <Grid item xs={12} minWidth="xl">
                                         <Accordion defaultActiveKey="">
 
-                                            {/* Father's Details */}
+                                            {/* guardians's Details */}
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    Father's Details
+                                                    guardians's Details
                                         </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="0">
                                                     <Card.Body>
@@ -528,7 +637,7 @@ export const StudentForm = (props) => {
                                                             <Grid item xs={12} sm={4}>
                                                                 <Field
                                                                     as={TextField}
-                                                                    name="father.firstName"
+                                                                    name="guardians.firstName"
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="First Name"
@@ -541,7 +650,7 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Last Name"
-                                                                    name="father.lastName"
+                                                                    name="guardians.lastName"
                                                                     type="text"
                                                                 />
                                                             </Grid>
@@ -551,7 +660,7 @@ export const StudentForm = (props) => {
                                                                     className="myfield"
                                                                     as={TextField}
                                                                     label="marital Status"
-                                                                    name="father.maritalStatus"
+                                                                    name="guardians.maritalStatus"
                                                                     variant="outlined"
                                                                     style={{ minWidth: 250 }}
                                                                     type="text"
@@ -575,7 +684,7 @@ export const StudentForm = (props) => {
                                                                     type="number"
                                                                     fullWidth
                                                                     label="ID Number"
-                                                                    name="father.identificationNumber"
+                                                                    name="guardians.identificationNumber"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
@@ -585,7 +694,7 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Phone Number"
-                                                                    name="father.phone"
+                                                                    name="guardians.phone"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
@@ -595,7 +704,17 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Email"
-                                                                    name="father.email"
+                                                                    name="guardians.email"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={4}>
+                                                                <Field
+                                                                    as={TextField}
+                                                                    type="Relationship"
+                                                                    variant="outlined"
+                                                                    fullWidth
+                                                                    label="Relationship"
+                                                                    name="guardians.email"
                                                                 />
                                                             </Grid>
                                                         </Grid>
@@ -604,17 +723,17 @@ export const StudentForm = (props) => {
                                                 </Accordion.Collapse>
                                             </Card>
 
-                                            {/* Mother's Details */}
+                                            {/* guardians's Details */}
                                             <Card>
                                                 <Accordion.Toggle as={Card.Header} eventKey="1">
-                                                    Mother's Details
+                                                    guardians's Details
                                         </Accordion.Toggle>
                                                 <Accordion.Collapse eventKey="1">
                                                     <Card.Body> <Grid container direction="row" spacing={2}>
                                                         <Grid item xs={12} sm={4}>
                                                             <Field
                                                                 as={TextField}
-                                                                name="mother.firstName"
+                                                                name="guardians.firstName"
                                                                 variant="outlined"
                                                                 fullWidth
                                                                 label="First Name"
@@ -627,7 +746,7 @@ export const StudentForm = (props) => {
                                                                 variant="outlined"
                                                                 fullWidth
                                                                 label="Last Name"
-                                                                name="mother.lastName"
+                                                                name="guardians.lastName"
                                                                 type="text"
                                                             />
                                                         </Grid>
@@ -637,7 +756,7 @@ export const StudentForm = (props) => {
                                                                 className="myfield"
                                                                 as={TextField}
                                                                 label="marital Status"
-                                                                name="mother.maritalStatus"
+                                                                name="guardians.maritalStatus"
                                                                 variant="outlined"
                                                                 style={{ minWidth: 250 }}
                                                                 type="text"
@@ -661,7 +780,7 @@ export const StudentForm = (props) => {
                                                                     type="number"
                                                                     fullWidth
                                                                     label="ID Number"
-                                                                    name="mother.identificationNumber"
+                                                                    name="guardians.identificationNumber"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
@@ -671,7 +790,7 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Phone Number"
-                                                                    name="mother.phone"
+                                                                    name="guardians.phone"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
@@ -681,9 +800,19 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Email"
-                                                                    name="mother.email"
+                                                                    name="guardians.email"
                                                                 />
-                                                            </Grid>
+                                                                </Grid>
+                                                                <Grid item xs={12} sm={4}>
+                                                                <Field
+                                                                    as={TextField}
+                                                                    type="Relationship"
+                                                                    variant="outlined"
+                                                                    fullWidth
+                                                                    label="Relationship"
+                                                                    name="guardians.email"
+                                                                />
+                                                                </Grid>
                                                         </Grid>
 
                                                     </Card.Body>
@@ -700,7 +829,7 @@ export const StudentForm = (props) => {
                                             color="primary"
                                             type="submit"
                                         >
-                                            Submit
+                                            Save
                             </Button>
                                     </Grid>
                                 </Grid>
@@ -711,6 +840,11 @@ export const StudentForm = (props) => {
                 <Box mt={5}>
                 </Box>
             </Container>
+            <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Student data is saved!
+                </Alert>
+            </Snackbar>
         </>
     )
 

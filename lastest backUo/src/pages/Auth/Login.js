@@ -19,7 +19,9 @@ const LoginPage = (props) => {
   const [errMessage, setErrMessage] = React.useState('');
 
   const handleSubmit = async () => {
-    if (!password || !email) return;
+    if (!password || !email) {
+      setErrMessage("Email or Password are empty")
+      return setErrMessage;}
     setErrMessage('');
     setIsLoading(true);
     try {
@@ -62,9 +64,11 @@ const LoginPage = (props) => {
               defaultValue=""
               variant="outlined"
               size="small"
+              fullWidth
               color="primary"
               type="email"
               onChange={(e) => setEmail(e.target.value)}
+              error={!!errMessage}
             />
           </div>
           <div className="login-field">
@@ -73,12 +77,13 @@ const LoginPage = (props) => {
               id="outlined-size-small"
               defaultValue=""
               variant="outlined"
+              fullWidth
               size="small"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
               error={!!errMessage}
             />
-            <p>{errMessage}</p>
+            <p className="errorMessage">{errMessage}</p>
           </div>
           <p className="forget-password"><Link to="/passwords">Forgot Password?</Link>
           </p>

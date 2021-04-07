@@ -1,11 +1,34 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { connect , useDispatch, useSelector} from 'react-redux'
 import './style.css'
 import PanelLayout from '../../components/Layouts/PanelLayout/Index'
 import Feed from '../../components/feed/Feed'
 import LessonCards from '../../components/feedCards/LessonCards';
+import { handleFetchLessonPlan } from '../../store/actions/lessonPlans.actions'
 
 export const LessonPlan = (props) => {
+    const dispatch = useDispatch()
+    const SELECTED = useSelector(state => state.teacherData)
+
+          //get lesson plan from selected unit
+          const fetchLessonPlan = async (subject) => {
+            console.log("TRY TO FETCH DATA")
+            try {
+                await dispatch(handleFetchLessonPlan(subject));
+            } catch (error) {
+                alert(error)
+            } 
+        };
+
+  useEffect(() => {
+
+      if(SELECTED.data.subject != null) fetchLessonPlan(SELECTED.data.subject)
+      
+
+
+  }, [])
+
+
     return (
         <PanelLayout selected={3} role={props.state.auth.user.role}>
         <div className="assignment-container">

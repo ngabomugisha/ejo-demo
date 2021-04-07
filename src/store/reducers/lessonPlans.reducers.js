@@ -1,4 +1,6 @@
-import { HANDLE_FETCH_LESSONPLAN_SUCCESS, HANDLE_ADD_LESSONPLAN_SUCCESS} from '../types';
+
+
+import { HANDLE_FETCH_LESSONPLANS_SUCCESS, HANDLE_FETCH_LESSONPLANS_FAIL } from '../types';
 
 const INITIAL_LESSONPLAN_STATE = {
   list: [],
@@ -6,11 +8,12 @@ const INITIAL_LESSONPLAN_STATE = {
 
 export default (state = INITIAL_LESSONPLAN_STATE, { type, payload }) => {
   switch (type) {
-    case HANDLE_FETCH_LESSONPLAN_SUCCESS:
+    case HANDLE_FETCH_LESSONPLANS_SUCCESS:
+      console.log('HANDLE_FETCH_LESSONPLANS_SUCCESS', payload);
       return {
         ...state,
         list: payload,
-      };break;
+      };
     default:
       return state;
   }

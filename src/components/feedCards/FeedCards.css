@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 85%;
+    min-width: 85%;
     align-self: center;
 }
 .card{
@@ -19,4 +19,8 @@
   0 10px 10px rgba(0, 0, 0, 0.02)
 ;
 
+}
+.subject-select{
+  display: flex;
+  justify-content: center;
 }

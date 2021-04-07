@@ -12,176 +12,123 @@ export const Details = (props) => {
     <div className="details-container">
       <Paper elevation={5} className='paper-container'>
       <Grid container xs={12} minWidth="xs" spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={12}>
           <Paper elevation={2}>
+      <h3 style={{color : "#1f72c7",backgroundColor: "whiteSmoke", padding: "3px"}}>Student Information</h3>
+         
             <div className="card-inner">
-            <h6 className="paper-title">First Name</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title">First Name  :</h6>
             <h6 className="papaer-content">
               {data.firstName}
             </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">Last Name</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title">Last Name  :</h6>
             <h6 className="papaer-content">
               {data.lastName}
             </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">gender</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title">Registration Number  :</h6>
+            <h6 className="papaer-content">
+              {!data.registrationNumber ? "-" : data.registrationNumber}
+            </h6>
+            <h6 className="paper-title">gender  :</h6>
             <h6 className="papaer-content">
               {(!data.gender) ?  "-" : data.gender}
             </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">student Class</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title">student Class  :</h6>
             <h6 className="papaer-content">
               {!data.studentClass ? "-" : data.studentClass}
             </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">address</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title">address  :</h6>
             <h6 className="papaer-content">
               {!data.address ? "-" : data.address}
             </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">scholarship</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title">scholarship  :</h6>
             <h6 className="papaer-content">
               {!data.scholarship  ? "-" : data.scholarship}
             </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title"> date Of Birth</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title"> date Of Birth  :</h6>
             <h6 className="papaer-content">
-              {!data.dateOfBirth  ? "-" : data.dateOfBirth}
+              {!data.dateOfBirth  ? "-" : (data.dateOfBirth).substring(0.11)}
             </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">allergies</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title">allergies  :</h6>
             <h6 className="papaer-content">
               {!data.allergies  ? "-" : data.allergies}
             </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={6}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">permanent Health Conditions</h6>
-            <div className="paper-line"></div>
+            <h6 className="paper-title">permanent Health Conditions  :</h6>
             <h6 className="papaer-content">
               {!data.permanentHealthConditions ? "-" : data.permanentHealthConditions.length === 0 ? "-" : (data.permanentHealthConditions.map((item)=> (`${item.condition},  `)))}
             </h6>
+
+            <br/>
+          <Grid className="more-details" item xs={8}>
+            <Paper>
+            <h3 style={{color : "#1f72c7",backgroundColor: "whiteSmoke", padding: "3px"}}>NGO (Non-Governmental Organization) </h3>       
+                  <h6 className="papaer-content">
+              {!data.ngo ? "-" : data.ngo.name == "" ? "-" : data.ngo.name}
+                    </h6>
+              <div className="space"></div>
+            <h6 className="paper-title2"><u>contact person  </u></h6>
+            <div className="paper-title">Title  :</div>            
+                  <h6 className="papaer-content">
+              {!data.ngo ? "-" : data.ngo.contactPerson.title == "" ? "-" : data.ngo.contactPerson.title}
+                    </h6>
+            <h6 className="paper-title">Name  :</h6>            
+                  <h6 className="papaer-content">
+              {!data.ngo ? "-" : data.ngo.contactPerson.name == "" ? "-" : data.ngo.contactPerson.name}
+                    </h6>
+            <h6 className="paper-title">Phone  :</h6>            
+                  <h6 className="papaer-content">
+              {!data.ngo ? "-" : data.ngo.contactPerson.phone == "" ? "-" : data.ngo.contactPerson.phone}
+                    </h6>
+            </Paper>
+            </Grid>
             </div>
           </Paper>
         </Grid>
       </Grid>
       <div></div>
-      <h4>Parents </h4>
-      <h3 style={{color : "#1f72c7",backgroundColor: "whiteSmoke", padding: "3px"}}>Mother</h3>
+      <h4>Guardians </h4>
       <Grid container xs={12} minWidth="xs" spacing={2}>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">First Name</h6>
-            <div className="paper-line"></div>
-            <h6 className="papaer-content">
-              {!data.mother ? "-" : data.mother.firstName == "" ? "-" : data.mother.firstName}
-            </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">Last Name</h6>
-            <div className="paper-line"></div>
-            <h6 className="papaer-content">
-              {!data.mother ? "-" : data.mother.lastName == "" ? "-" : data.mother.lastName}
-            </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">ID Number</h6>
-            <div className="paper-line"></div>
-            <h6 className="papaer-content">
-              {!data.mother ? "-" : (!data.mother.identificationNumber ? "-" : data.mother.identificationNumber)}
-            </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">phone</h6>
-            <div className="paper-line"></div>
-            <h6 className="papaer-content">
-              {!data.mother ? "-" : (!data.mother.phone ? "-" : data.mother.phone)}
-            </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">email</h6>
-            <div className="paper-line"></div>
-            <h6 className="papaer-content">
-              {!data.mother ? "-" : (!data.mother.email ? "-" : data.mother.email)}
-            </h6>
-            </div>
-          </Paper>
-        </Grid>
-        <Grid item xs={3}>
-          <Paper elevation={2}>
-            <div className="card-inner">
-            <h6 className="paper-title">marital Status</h6>
-            <div className="paper-line"></div>
-            <h6 className="papaer-content">
-              {!data.mother ? "-" : (!data.mother.maritalStatus ? "-" : data.mother.maritalStatus)}
-            </h6>
-            </div>
-          </Paper>
-        </Grid>
+        {console.log("DATA :",data)}
+        {!data.guardians ? "-" : data.guardians.map((item) => (
+
+<Grid item xs={6}>
+<Paper elevation={4}>
+<h3 style={{color : "#1f72c7",backgroundColor: "whiteSmoke", padding: "3px"}}> guadian</h3>
+  <div className="card-inner">
+  <h6 className="paper-title">First Name  :</h6>
+  <h6 className="papaer-content">
+    { item.firstName == "" ? "-" : item.firstName}
+  </h6>
+  <h6 className="paper-title">Last Name  :</h6>
+  <h6 className="papaer-content">
+    { item.lastName == "" ? "-" : item.lastName}
+  </h6>
+  <h6 className="paper-title">ID Number  :</h6>
+  <h6 className="papaer-content">
+    { item.identificationNumber == "" ? "-" : item.identificationNumber}
+  </h6>
+  <h6 className="paper-title">phone  :</h6>
+  <h6 className="papaer-content">
+    { item.phone == "" ? "-" : item.phone}
+  </h6>
+  <h6 className="paper-title">email  :</h6>
+  <h6 className="papaer-content">
+    { item.email == "" ? "-" : item.email}
+  </h6>
+  <h6 className="paper-title">marital Status  :</h6>
+  <h6 className="papaer-content">
+    { item.maritalStatus == "" ? "-" : item.maritalStatus}
+  </h6>
+  <h6 className="paper-title">Relationship  :</h6>
+  <h6 className="papaer-content">
+    { item.relationship == "" ? "-" : item.relationship}
+  </h6>
+  </div>
+</Paper>
+</Grid>
+
+        ))}
+    
       </Grid>
 
       </Paper>
