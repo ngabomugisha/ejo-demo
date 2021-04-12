@@ -1,5 +1,5 @@
 import https from '../../helpers/https';
-import { HANDLE_LOGIN, HANDLE_LOGIN_SUCCESS, HANDLE_LOGOUT_SUCCESS } from '../types';
+import { HANDLE_LOGIN, HANDLE_LOGOUT, HANDLE_LOGIN_SUCCESS, HANDLE_LOGOUT_SUCCESS } from '../types';
 
 export const handleLogin = ({ email, password }) => (dispatch) => {
   dispatch({
@@ -12,13 +12,15 @@ export const handleLogin = ({ email, password }) => (dispatch) => {
       type: HANDLE_LOGIN_SUCCESS,
       payload: res.data,
     });
+    console.log("THIS PERSON LOGGED IN:", res.data)
     return res.data;
   });
 };
 
 export const handleLogout = () => (dispatch) => {
   dispatch({
-    type: HANDLE_LOGOUT_SUCCESS,
+    type: HANDLE_LOGOUT,
+    payload: null
   });
   return null
 }

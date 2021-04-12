@@ -22,7 +22,7 @@ export const LessonPlan = (props) => {
 
   useEffect(() => {
 
-      if(SELECTED.data.subject != null) fetchLessonPlan(SELECTED.data.subject)
+      if(SELECTED && SELECTED.data && SELECTED.data.subject != null) fetchLessonPlan(SELECTED.data.subject)
       
 
 

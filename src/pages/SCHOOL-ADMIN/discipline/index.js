@@ -12,7 +12,7 @@ export const index = (props) => {
     return (
         <div>
             
-            <PanelLayout selected={4} role={role}>
+            <PanelLayout selected={5} role={role}>
                         <div className="report-hd">
                             <h3>Terms settings</h3>
                         </div>

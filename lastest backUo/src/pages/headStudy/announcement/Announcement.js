@@ -10,7 +10,7 @@ function Announcement() {
     const history = useHistory()
     return (
         <>
-            <PanelLayout selected={1} role="headteacher">
+            <PanelLayout selected={1} role={props.state.auth.user.role}>
                 <ReadAnouncement/>
             </PanelLayout>
         </>

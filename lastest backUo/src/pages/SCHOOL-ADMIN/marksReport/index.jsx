@@ -605,7 +605,7 @@ class ComponentToPrint extends React.Component {
 
             <div></div>
             <div className="report-ft">
-              <table style={{ width: "100%" }}>
+              <table >
                 <tr>
                   <td style={{ textAlign: "center" }} rowSpan="7"><b><u>DECISION TAKEN</u></b></td>
                 </tr>

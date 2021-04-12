@@ -15,6 +15,7 @@ import { BsFileEarmarkSpreadsheet } from "react-icons/bs";
 import MarksReport from '../../pages/SCHOOL-ADMIN/marksReport'
 import { createMuiTheme } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
+import { RiDeleteBin2Line } from "react-icons/ri";
 
 
 const theme = createMuiTheme({
@@ -89,13 +90,13 @@ export const QuestionTable = (props) => {
             <TableCell>
                 <Controls.ActionButton
                     color="primary"
-                    onClick={() => { setOpenPopup(true); setRecordForEdit(item) }}>
+                    onClick={() => alert("to be added next")}>
                     <EditOutlinedIcon fontSize="small" />
                 </Controls.ActionButton>
                 <Controls.ActionButton
                     onClick={() => openInPrintPopup(item)}
                     color="secondary">
-                    <BsFileEarmarkSpreadsheet fontSize="normal" />
+                    <RiDeleteBin2Line fontSize="normal" />
                 </Controls.ActionButton>
             </TableCell>
         </TableRow>)
@@ -129,7 +130,7 @@ export const QuestionTable = (props) => {
                                 text="Add New Question"
                                 variant="outlined"
                                 startIcon={<AddIcon />}
-                                onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}
+                                onClick={() => alert('to be added after')}
                             />
                         </Grid>
 

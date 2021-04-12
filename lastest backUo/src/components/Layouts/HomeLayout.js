@@ -16,7 +16,7 @@ const HomeLayout = ({ children }) => {
           <img src={logo} className="logo" />
           <div className="content-text">
             <h2>Education is the</h2>
-            <h1>Future</h1>
+            <h1 className="home-future">Future</h1>
 
             <p>
               We are providing the best support <br />

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import './style.css'
-import axios from 'axios'
 import https from '../../helpers/https'
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { FormGroup, TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid';
+import { useHistory } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -18,12 +18,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Formik, Field, Form } from 'formik'
-import * as Yup from 'yup'
 import { Autocomplete } from 'formik-material-ui-lab'
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { handleAddStudent } from '../../store/actions/student.actions'
-
+import { handleAddStudent, handleUpdateStudent } from '../../store/actions/student.actions'
+import { handleFetchProvinces, handleFetchDistricts} from '../../store/actions/address/addresses.actions'
+import {handleFetchClasses} from '../../store/actions/classes.actions'
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const StudentForm = (props) => {
+    const history= useHistory()
 
 
     const handleClose = (event, reason) => {
@@ -70,83 +71,45 @@ export const StudentForm = (props) => {
     const [province, setProvince] = useState([])
     const [district, setDistrict] = useState([])
     const [sector, setSector] = useState([])
+    const [ob , setOb] = useState(null)
     const [cell, setCell] = useState([])
     const [village, setVillage] = useState([])
     const [p, setP] = useState("")
     const [d, setD] = useState('')
     const [s, setS] = useState("")
     const [c, setC] = useState('')
-    const [v, setV] = useState('')
-
-
-    const [enableDistrict, setEnableDistrict] = useState(true)
-    const [enableSector, setEnableSector] = useState(true)
-    const [enableCell, setEnableCell] = useState(true)
-    const [enableVillage, setEnableVillage] = useState(true)
-    const [aller, setAller] = useState([])
+    const [data, setData] = useState(props.recordForEdit)
 
     const handleProvince = (event) => {
         setP(event.target.value)
-        setEnableDistrict(false)
     }
     const handleDistrict = (event) => {
         setD(event.target.value)
-        setEnableSector(false)
     }
     const handleSector = (event) => {
         setS(event.target.value)
-        setEnableCell(false)
     }
     const handleCell = (event) => {
         setC(event.target.value)
-        setEnableVillage(false)
     }
 
-    const onSubmit = async (values) => {
-
-        //  alert(JSON.stringify(values, null, 2))
-
-        // await https.post('/students', values, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
-        //     if (res.status == 200)
-        //         return setOpen(true);
-        //     else
-        //         return alert("something went wrong")
-        // })
-        console.log("VALUES::::::::::::", values)
+    const handleSubmit = async (values) => {
+        console.log("VALUES:::::::::::: submit triggered", values)
+        setOb(values)
+        if(props.update){
+            console.log('______________UPDATE HAPPEN_________________',ob)
+            }
+        else{
         props.handleAddStudent(values)
         setOpen(true)
-        props.close()
-        // const options = {
-        //     method: 'POST',
-        //     url: '/students',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${localStorage.getItem("token")}`
-        //     },
-        //     data: values
-        // };
-
-        // https.post(options.url,options.headers,options.data).then(() => {
-        //     return alert("data recorded")
-        // })
-
-    }
-    let iniData = null
-    const data = props.recordForEdit
-    console.log('DATAFOREDIT:', data)
-
-    if (data !== null && data.address !== undefined) {
-        async function fetchV() {
-            const request = await https.get(`/addresses/villages/${data.address}`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
-            )
-                .then((response) => {
-                    setVillage(response.data)
-                });
-            return request
+        history.goBack()
         }
-        fetchV()
-        console.log('AFTER REQUEST', village)
     }
+
+    let iniData = null
+    console.log('DATAFOREDIT:', props.recordForEdit)
+
+    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$",data)
 
     const initialValue = {
         firstName: null,
@@ -155,6 +118,7 @@ export const StudentForm = (props) => {
         studentClass: null,
         address: null,
         scholarship: null,
+        registrationNumber : null,
         studentProgram: null,
         dateOfBirth: null,
         ngo: {
@@ -187,13 +151,15 @@ export const StudentForm = (props) => {
         }]
     }
 
-    if (!props.recordForEdit) {
+    if (!props.update) {
         iniData = initialValue
-    } else {
+    } 
+    else {
 
         const initialValuesforEdit = {
             firstName: data.firstName,
             lastName: data.lastName,
+            registrationNumber : data.registrationNumber ? data.registrationNumber :'',
             gender: data.gender ? data.gender : "",
             studentClass: data.studentClass ? data.studentClass : '',
             studentProgram: data.studentProgram ? data.studentProgram : '',
@@ -201,38 +167,39 @@ export const StudentForm = (props) => {
             scholarship: data.scholarship ? data.scholarship : '',
             dateOfBirth: data.dateOfBirth ? (data.dateOfBirth).substring(0, 10) : '',
             allergies: data.allergies ? data.allergies : '',
-            permanentHealthConditions: data.permanentHealthConditions ? data.permanentHealthConditions : '',
-            guardians: [{
-                firstName: !data.guardians ? '' : data.guardians[0].firstName ? data.guardians[0].firstName : '',
-                lastName: !data.guardians ? '' : data.guardians[0].lastName ? data.guardians[0].lastName : '',
-                identificationNumber: !data.guardians ? '' : data.guardians[0].identificationNumber ? data.guardians[0].identificationNumber : '',
-                phone: !data.guardians ? '' : data.guardians[0].phone ? data.guardians[0].phone : '',
-                email: !data.guardians ? '' : data.guardians[0].email ? data.guardians[0].email : '',
-                maritalStatus: !data.guardians ? '' : data.guardians[0].maritalStatus ? data.guardians[0].maritalStatus : ''
-            },
-            {
-                firstName: !data.guardians ? '' : data.guardians[1].firstName ? data.guardians[1].firstName : '',
-                lastName: !data.guardians ? '' : data.guardians[1].lastName ? data.guardians[1].lastName : '',
-                identificationNumber: !data.guardians ? '' : data.guardians[1].identificationNumber ? data.guardians[1].identificationNumber : '',
-                phone: !data.guardians ? '' : data.guardians[1].phone ? data.guardians[1].phone : '',
-                email: !data.guardians ? '' : data.guardians[1].email ? data.guardians[1].email : '',
-                maritalStatus: !data.guardians ? '' : data.guardians[1].maritalStatus ? data.guardians[1].maritalStatus : ''
-            }]
+            // permanentHealthConditions: data.permanentHealthConditions ? data.permanentHealthConditions : '',
+            // ngo : !data.ngo ? '' :{
+            //     name: data.ngo? data.ngo.name ? data.ngo.name : '': '',
+            //     contactPerson: { 
+            //         title : !data.ngo? '' : !data.ngo.contactPerson ? '' : !data.ngo.contactPerson.title ? '' : data.ngo.contactPerson.title,
+            //         phone : !data.ngo? '' : !data.ngo.contactPerson ? '' : !data.ngo.contactPerson.phone ? '' : data.ngo.contactPerson.phone,
+            //         name : !data.ngo? '' : !data.ngo.contactPerson ? '' : !data.ngo.contactPerson.name  ?  '' : data.ngo.contactPerson.name,
+            //     }
+            // },
+            // guardians: !data.guardians ? '' : [{
+            //     firstName: !data.guardians ? '' : data.guardians[0].firstName ? data.guardians[0].firstName : '',
+            //     lastName: !data.guardians ? '' : data.guardians[0].lastName ? data.guardians[0].lastName : '',
+            //     identificationNumber: !data.guardians ? '' : data.guardians[0].identificationNumber ? data.guardians[0].identificationNumber : '',
+            //     phone: !data.guardians ? '' : data.guardians[0].phone ? data.guardians[0].phone : '',
+            //     email: !data.guardians ? '' : data.guardians[0].email ? data.guardians[0].email : '',
+            //     maritalStatus: !data.guardians ? '' : data.guardians[0].maritalStatus ? data.guardians[0].maritalStatus : ''
+            // },
+            // {
+            //     firstName: !data.guardians ? '' : data.guardians[1].firstName ? data.guardians[1].firstName : '',
+            //     lastName: !data.guardians ? '' : data.guardians[1].lastName ? data.guardians[1].lastName : '',
+            //     identificationNumber: !data.guardians ? '' : data.guardians[1].identificationNumber ? data.guardians[1].identificationNumber : '',
+            //     phone: !data.guardians ? '' : data.guardians[1].phone ? data.guardians[1].phone : '',
+            //     email: !data.guardians ? '' : data.guardians[1].email ? data.guardians[1].email : '',
+            //     maritalStatus: !data.guardians ? '' : data.guardians[1].maritalStatus ? data.guardians[1].maritalStatus : ''
+            // }]
         }
 
         iniData = initialValuesforEdit
     }
 
     useEffect(() => {
-        async function fetchDistrict() {
-            const request = await https.get(`/addresses/districts/${p}/province-districts`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
-            )
-                .then((response) => {
-                    setDistrict(response.data)
-                });
-            return request
-        }
-        fetchDistrict()
+        props.handleFetchDistricts(p)
+        setDistrict(props.state.districts.list)
     }, [p])
     useEffect(() => {
         async function fetchSector() {
@@ -268,6 +235,18 @@ export const StudentForm = (props) => {
         fetchVillage()
     }, [c])
 
+    useEffect(()=>{
+        console.log('ob is changed bagabo :', ob)
+        if(ob!= null){
+            console.log('______________UPDATE HAPPEN_________________',ob)
+             https.put(`/students/${data._id}`, ob , { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+        .then((res) => {
+            console.log("!!!!!!!!@@@@@@@@@#########$$$$$$$$$$$%", res)
+        })
+        setOpen(true)
+        history.goBack()
+    }
+    },[ob])
 
     // componentDidMount()
     useEffect(() => {
@@ -330,17 +309,31 @@ export const StudentForm = (props) => {
         }
         fetchClasses()
         fetchProvinces()
-
+        if (data){
+            if(data.address) {
+            async function fetchV() {
+                const request = await https.get(`/addresses/villages/${data.address}`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
+                )
+                    .then((response) => {
+                        setVillage(response.data)
+                    });
+                return request
+            }
+            fetchV()
+            console.log('AFTER REQUEST', village)
+        }
+    }
+    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",props.recordForEdit)
     }, [])
     return (
         <>
-
+            <p style={{width: "200px"}}>{JSON.stringify(data)}</p>
             <Container component="main" minWidth="xl" >
                 <CssBaseline />
                 <div className={classes.paper}>
                     <Formik
                         initialValues={iniData}
-                        onSubmit={onSubmit}
+                        onSubmit={handleSubmit}
                     >
                         {(formik) => (
                             <Form>
@@ -626,27 +619,17 @@ export const StudentForm = (props) => {
                                         </Grid>
                                     </Grid>
                                     {/* NGO details */}
-                                    <Grid container direction="row" spacing={1} justify="space-between" className="grouped">
-                                        <Grid item xs={12} sm={3}>
+                                    <Grid container direction="row" spacing="1" justify="space-between" className="grouped">
+                                        <Grid item xs={12} sm={6}>
                                             <Field
                                                 as={TextField}
                                                 name="ngo.name"
                                                 variant="outlined"
                                                 fullWidth
-                                                label="NGO (Non-government organization)"
+                                                label="NGO"
                                             />
                                         </Grid>
-                                        <Grid item xs={12} sm={2}>
-                                            <Field
-                                                as={TextField}
-                                                name="ngo.contactPerson.title"
-                                                variant="outlined"
-                                                fullWidth
-                                                label="Title"
-                                                helperText="Contact Person"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={3}>
+                                        <Grid item xs={12} sm={6}>
                                             <Field
                                                 as={TextField}
                                                 name="ngo.contactPerson.name"
@@ -656,7 +639,17 @@ export const StudentForm = (props) => {
                                                 helperText="Contact Person"
                                             />
                                         </Grid>
-                                        <Grid item xs={12} sm={2}>
+                                        <Grid item xs={12} sm={6}>
+                                            <Field
+                                                as={TextField}
+                                                name="ngo.contactPerson.title"
+                                                variant="outlined"
+                                                fullWidth
+                                                label="Title"
+                                                helperText="Contact Person"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
                                             <Field
                                                 as={TextField}
                                                 name="ngo.contactPerson.phone"
@@ -893,21 +886,20 @@ export const StudentForm = (props) => {
                                 </Grid>
                                 <div style={{ display: "flex" }}>
                                     <Button
-                                        fullWidth
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => props.close()}
-                                    >
+                                        variant="danger"
+                                        block
+                                        size='lg'
+                                        onClick={() => history.goBack()}>
                                         Cancel
-                            </Button>
+                                    </Button>
+                                    <div style={{height:'10px', width: '40px'}}></div>
                                     <Button
-                                        fullWidth
-                                        variant="contained"
-                                        color="primary"
-                                        type="submit"
-                                    >
+                                        variant="primary"
+                                        block
+                                        size='lg'
+                                        type="submit">
                                         Save
-                            </Button>
+                                    </Button>
                                 </div>
                                 {/* <pre>{JSON.stringify(formik.values, null, 2)}</pre> */}
                             </Form>)}
@@ -933,6 +925,17 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = dispatch => ({
     handleAddStudent: async (data) => {
         await dispatch(handleAddStudent(data))
+    },
+
+    handleFetchProvinces: async () => {
+        await dispatch(handleFetchProvinces())
+    },
+
+    handleFetchDistricts: async (province) => {
+        await dispatch(handleFetchDistricts(province))
+    },
+    handleUpdateStudent: (data) => {
+         dispatch(handleUpdateStudent(data))
     }
 })
 

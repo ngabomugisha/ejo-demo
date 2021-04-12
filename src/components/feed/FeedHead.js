@@ -14,12 +14,11 @@ import {
 } from '../../store/actions/data/teacher.data.actions'
 
 
-
 function FeedHead(props) {
   const teacher = props.state.auth.user._id;
   const dispatch = useDispatch()
   const history = useHistory();
-  let DATA = null
+  const [DATA, setDATA] = useState(null)
   const [open, setOpen] = React.useState(false);
   const [classs, setClasss] = React.useState(null);
   const [clas, setClas] = React.useState(null)
@@ -31,7 +30,8 @@ function FeedHead(props) {
   const [subTop, setSubTop] = React.useState(null);
   const [unit, setUnit] = useState(null)
   const [uni, setUni] = useState(null)
-  const {list : SELECTED} = useSelector(state => state.teacherData)
+  const [page, setPage] = useState(null);
+  const [SELECTED, setSELECTED] = useState(null)
   const initValue = {
     class: "",
     subject: "",
@@ -41,46 +41,38 @@ function FeedHead(props) {
   };
 
 
-  let classSelected = null
-  let subjectSelected = null
-  let topicSelected = null
-  let subTopSelected = null
-  let unitSelected = null
-
-  if (SELECTED != undefined) {
-    if(SELECTED.data != undefined){
-    classSelected = (SELECTED.data.class)
-    subjectSelected = (SELECTED.data.subject)
-    topicSelected = (SELECTED.data.topic)
-    subTopSelected = (SELECTED.data.subtopic)
-    unitSelected = (SELECTED.data.unit)
-  }
-}
-
+    // let classSelected = (SELECTED.data.class)
+    // let subjectSelected = (SELECTED.data.subject)
+    // let topicSelected = (SELECTED.data.topic)
+    // let subTopSelected = (SELECTED.data.subtopic)
+    // let unitSelected = (SELECTED.data.unit)
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-
-    DATA = {
+    const done = {
       "class": clas,
       "subject": sub,
       "topic": top,
       "subtopic": subTop,
       "unit": uni}
-      
-    props.handleSetTeacherData(DATA)
-    setOpen(false);
+    localStorage.setItem('DATA', JSON.stringify(done))
+    //   if(DATA.class && DATA.subject)   
+    // props.handleSetTeacherData(DATA)
+    // setOpen(false);
+    console.log("UPDATED DATA", JSON.parse(localStorage.getItem('DATA')))
+    setOpen(false)
   };
 
   const fetchClasses = async () => {
+    console.log(teacher)
     const req = await https.get(`/class-teachers/${teacher}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
       .then((res) => {
         setClasss(res.data)
       }).catch(function (err) {
-        console.log(err);
+        console.log(err, '***********ERRRORR***********');
       });
     return req
   }
@@ -88,12 +80,12 @@ function FeedHead(props) {
     alert(JSON.stringify(values));
   };
 
-  const [page, setPage] = useState(null);
 
   const handleChange = (e) => {
 
-    if (e.target.name === "class")
+    if (e.target.name === "class"){
       setClas(e.target.value)
+    }
 
     if (e.target.name === "subject")
       setSub(e.target.value)
@@ -106,7 +98,6 @@ function FeedHead(props) {
 
     if (e.target.name === "unit") {
       setUni(e.target.value)
-    console.log("DATA:",DATA)
 
     }
 
@@ -154,16 +145,23 @@ function FeedHead(props) {
   useEffect(() => {
     props.handleFetchTeacherData()
     fetchClasses()
-    setSubject()
-    setClas(classSelected)
-    setSub(subjectSelected)
-    setTop(topicSelected)
-    setSubTop(subTopSelected)
-    setUni(unitSelected)
+   
+    // if(props.teacherData != null){
+    //   setSELECTED(props.teacherData.data)
+    // }
+    if (JSON.parse(localStorage.getItem('data')) === undefined) {
+
+      // props.handleFetchTeacherData()
+        setOpen(true)
+      }
+setClas((JSON.parse(localStorage.getItem('DATA'))).class)
+setSub((JSON.parse(localStorage.getItem('DATA'))).subject)
+setTop((JSON.parse(localStorage.getItem('DATA'))).topic)
+setSubTop((JSON.parse(localStorage.getItem('DATA'))).subtopic)
+setUni((JSON.parse(localStorage.getItem('DATA'))).unit)
+
 
   },[])
-    if (!SELECTED) setOpen(true)
-
   return (
     <>
       <div className="hd">
@@ -215,7 +213,7 @@ function FeedHead(props) {
                   </MenuItem>
                   {classs &&
                     classs.map(item => (
-                      <MenuItem key={item.subject} value={item.subject}>{item.class.level.name}&nbsp;{item.class.combination.name}&nbsp;{item.class.label}</MenuItem>
+                      <MenuItem key={item.subject} value={item.subject}>{!item ? '' : !item.class!=null && !item.class!=undefined ? '' : !item.class.level ? '' :item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
                     ))
                   }
                 </TextField>
@@ -339,16 +337,20 @@ function FeedHead(props) {
   )
 }
 
-const mapStateToProps = (state) => ({
-  state: state,
-});
+const mapStateToProps = (state) => {
+  const teacherData = state.teacherData
+  const teacherClass = state.classes.list
+  return{
+    state, teacherData
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   handleFetchTeacherData : () => {
     dispatch(handleFetchTeacherData())
   },
-  handleSetTeacherData : () => {
-    dispatch(handleSetTeacherData())
+  handleSetTeacherData : (data) => {
+    dispatch(handleSetTeacherData(data))
   }
   
   })

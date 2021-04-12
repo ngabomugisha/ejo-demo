@@ -1,5 +1,10 @@
 import './Login.css';
-import React, { useEffect, useState } from 'react';
+import React, {  } from 'react';
+import {
+  withStyles,
+  makeStyles,
+  createMuiTheme,
+} from '@material-ui/core/styles';
 import { useDispatch, connect, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
@@ -8,11 +13,47 @@ import HomeLayout from '../../components/Layouts/HomeLayout';
 import { handleLogin } from '../../store/actions/auth.actions';
 import { SCHOOLADMIN, TEACHER, SUPERADMIN, HEADSTUDY } from './Users'
 import logoAfrica from '../../assets/img/white-logo.png';
-import Alert from 'react-bootstrap/Alert';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { green } from '@material-ui/core/colors';
+
+
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(1),
+  },
+}));
+
+const ValidationTextField = withStyles({
+  root: {
+    '& input:valid + fieldset': {
+      borderColor: 'white',
+      borderWidth: 2,
+      color: 'white'
+    },
+    '& input:invalid + fieldset': {
+      borderColor: 'red',
+      borderWidth: 2,
+      color: 'white'
+    },
+    '& input:valid:focus + fieldset': {
+      borderLeftWidth: 6,
+      borderColor: 'white',
+      color: 'white !important',
+      padding: '4px !important', // override inline-style
+    },
+  },
+})(TextField);
+
+const theme = createMuiTheme({
+  palette: {
+    primary: green,
+  },
+});
+
 
 const LoginPage = (props) => {
 
+  const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
   // const [fine, setFine] = useState(false);
@@ -66,32 +107,36 @@ const LoginPage = (props) => {
     }
 
   };
-  console.log("%$%$%$%$%$%$%$%", props.state)
   return (
     <HomeLayout>
       <>
+
+      <form className={classes.root} noValidate>
         <div className="login-form">
           <div className="africa">
             <img src={logoAfrica} />
           </div>
           <div className="login-field">
-            <TextField
+            <ValidationTextField
               label="Email"
-              id="mui-theme-provider-outlined-input"
+              className={classes.margin}
               defaultValue=""
               variant="outlined"
               size="small"
               fullWidth
+              style={{color: 'red !important'}}
               color="primary"
               type="email"
               onChange={(e) => setEmail(e.target.value)}
               error={!!errMessage}
+              id="validation-outlined-input"
             />
           </div>
           <div className="login-field">
-            <TextField
+            <ValidationTextField
               label="Password"
-              id="outlined-size-small"
+              className={classes.root}
+              id="validation-outlined-input"
               defaultValue=""
               variant="outlined"
               fullWidth
@@ -123,6 +168,7 @@ const LoginPage = (props) => {
         </div>
         <div>
         </div>
+        </form>
       </>
     </HomeLayout>
   )

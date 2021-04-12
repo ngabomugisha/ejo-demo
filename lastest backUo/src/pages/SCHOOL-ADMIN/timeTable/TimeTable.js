@@ -1,13 +1,15 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import './style.css'
 
 // import TimeTable from 'react-timetable-events'
 import TimeTable from '../../../components/react-timetable-events'
 
-export default class App extends Component {
+export function App(props) {
 
-  renderHour(hour, defaultAttributes, styles) {
+  const renderHour = (hour, defaultAttributes, styles) => {
     return (
       <div {...defaultAttributes}
            key={hour}>
@@ -16,12 +18,14 @@ export default class App extends Component {
     );
   }
 
-  renderEvent(event, defaultAttributes, styles) {
+  const renderEvent = (event, defaultAttributes, styles) => {
     const name = event.name
+    const id = event._id
+
     return (
       <div {...defaultAttributes}
            title={name}
-           key={event.id}>
+           key={event.id} onClick= {() => {props.onChange(event._id)}}>
         <span className={styles.event_info}>
            {name.includes('&')? name.substring(0,name.indexOf('&')):name}<br/>{name.includes('&')? name.substring(name.indexOf('&')+1):""} 
         </span>
@@ -32,22 +36,30 @@ export default class App extends Component {
     )
   }
 
-  render () {
+
     return (
       <div>
         <TimeTable
-          events={this.props.data.events}
-          renderHour={this.renderHour}
-          renderEvent={this.renderEvent}
+          events={props.data.events}
+          renderHour={renderHour}
+          renderEvent={renderEvent}
           hoursInterval={[ 8, 17 ]}
           timeLabel="Time table"
         />
       </div>
     )
   }
+
+
+const mapStateToProps = (state) => ({
+    state: state
+})
+
+const mapDispatchToProps = {
+
 }
 
-
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 
 // import "./styles.css";

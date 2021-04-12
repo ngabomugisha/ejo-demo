@@ -3,9 +3,8 @@ import { connect } from 'react-redux'
 import './style.css'
 import axios from 'axios'
 import https from '../../helpers/https'
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {FormGroup,TextField} from '@material-ui/core'
+import { FormGroup, TextField } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { Button } from 'react-bootstrap';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -22,6 +22,7 @@ import * as Yup from 'yup'
 import { Autocomplete } from 'formik-material-ui-lab'
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { handleAddStudent } from '../../store/actions/student.actions'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -105,13 +106,16 @@ export const StudentForm = (props) => {
 
         //  alert(JSON.stringify(values, null, 2))
 
-        await https.post('/students', values, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
-            if (res.status == 200)
-                return setOpen(true);
-            else
-                return alert("something went wrong")
-        })
-
+        // await https.post('/students', values, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
+        //     if (res.status == 200)
+        //         return setOpen(true);
+        //     else
+        //         return alert("something went wrong")
+        // })
+        console.log("VALUES::::::::::::", values)
+        props.handleAddStudent(values)
+        setOpen(true)
+        props.close()
         // const options = {
         //     method: 'POST',
         //     url: '/students',
@@ -151,8 +155,9 @@ export const StudentForm = (props) => {
         studentClass: null,
         address: null,
         scholarship: null,
+        studentProgram: null,
         dateOfBirth: null,
-         ngo: {
+        ngo: {
             name: null,
             contactPerson: {
                 title: null,
@@ -169,7 +174,16 @@ export const StudentForm = (props) => {
             phone: null,
             email: null,
             maritalStatus: null,
-            relationship : null
+            relationship: null
+        },
+        {
+            firstName: null,
+            lastName: null,
+            identificationNumber: null,
+            phone: null,
+            email: null,
+            maritalStatus: null,
+            relationship: null
         }]
     }
 
@@ -182,26 +196,27 @@ export const StudentForm = (props) => {
             lastName: data.lastName,
             gender: data.gender ? data.gender : "",
             studentClass: data.studentClass ? data.studentClass : '',
+            studentProgram: data.studentProgram ? data.studentProgram : '',
             address: data.address ? data.address : '',
             scholarship: data.scholarship ? data.scholarship : '',
             dateOfBirth: data.dateOfBirth ? (data.dateOfBirth).substring(0, 10) : '',
             allergies: data.allergies ? data.allergies : '',
             permanentHealthConditions: data.permanentHealthConditions ? data.permanentHealthConditions : '',
-            guardians:[ {
-                firstName: !data.guardians ? '' : data.guardians.firstName ? data.guardians.firstName : '',
-                lastName: !data.guardians ? '' : data.guardians.lastName ? data.guardians.lastName : '',
-                identificationNumber: !data.guardians ? '' : data.guardians.identificationNumber ? data.guardians.identificationNumber : '',
-                phone: !data.guardians ? '' : data.guardians.phone ? data.guardians.phone : '',
-                email: !data.guardians ? '' : data.guardians.email ? data.guardians.email : '',
-                maritalStatus: !data.guardians ? '' : data.guardians.maritalStatus ? data.guardians.maritalStatus : ''
+            guardians: [{
+                firstName: !data.guardians ? '' : data.guardians[0].firstName ? data.guardians[0].firstName : '',
+                lastName: !data.guardians ? '' : data.guardians[0].lastName ? data.guardians[0].lastName : '',
+                identificationNumber: !data.guardians ? '' : data.guardians[0].identificationNumber ? data.guardians[0].identificationNumber : '',
+                phone: !data.guardians ? '' : data.guardians[0].phone ? data.guardians[0].phone : '',
+                email: !data.guardians ? '' : data.guardians[0].email ? data.guardians[0].email : '',
+                maritalStatus: !data.guardians ? '' : data.guardians[0].maritalStatus ? data.guardians[0].maritalStatus : ''
             },
             {
-                firstName: !data.guardians ? '' : data.guardians.firstName ? data.guardians.firstName : '',
-                lastName: !data.guardians ? '' : data.guardians.lastName ? data.guardians.lastName : '',
-                identificationNumber: !data.guardians ? '' : data.guardians.identificationNumber ? data.guardians.identificationNumber : '',
-                phone: !data.guardians ? '' : data.guardians.phone ? data.guardians.phone : '',
-                email: !data.guardians ? '' : data.guardians.email ? data.guardians.email : '',
-                maritalStatus: !data.guardians ? '' : data.guardians.maritalStatus ? data.guardians.maritalStatus : ''
+                firstName: !data.guardians ? '' : data.guardians[1].firstName ? data.guardians[1].firstName : '',
+                lastName: !data.guardians ? '' : data.guardians[1].lastName ? data.guardians[1].lastName : '',
+                identificationNumber: !data.guardians ? '' : data.guardians[1].identificationNumber ? data.guardians[1].identificationNumber : '',
+                phone: !data.guardians ? '' : data.guardians[1].phone ? data.guardians[1].phone : '',
+                email: !data.guardians ? '' : data.guardians[1].email ? data.guardians[1].email : '',
+                maritalStatus: !data.guardians ? '' : data.guardians[1].maritalStatus ? data.guardians[1].maritalStatus : ''
             }]
         }
 
@@ -352,7 +367,39 @@ export const StudentForm = (props) => {
                                                 name="lastName"
                                             />
                                         </Grid>
+                                        <Grid item xs={6} sm={6}>
+                                            <Field
+                                                as={TextField}
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                                label="Registration Number"
+                                                name="registrationNumber"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Field
+                                                as={TextField}
+                                                label="student Program"
+                                                name="studentProgram"
+                                                variant="outlined"
+                                                type="text"
+                                                fullWidth
+                                                select
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                <MenuItem value="BOARDING">BOARDING</MenuItem>
+                                                <MenuItem value="DAY">DAY</MenuItem>
+
+                                            </Field>
+                                        </Grid>
                                     </Grid>
+
                                     {/* Dob gender Class */}
                                     <Grid container direction="row" spacing={2}>
                                         <Grid item xs={12} sm={4}>
@@ -386,7 +433,6 @@ export const StudentForm = (props) => {
                                                 </MenuItem>
                                                 <MenuItem value="F">Female</MenuItem>
                                                 <MenuItem value="M">Male</MenuItem>
-                                                <MenuItem value="O">other</MenuItem>
 
                                             </Field>
                                         </Grid>
@@ -579,10 +625,10 @@ export const StudentForm = (props) => {
                                             />
                                         </Grid>
                                     </Grid>
-{/* NGO details */}
-<Grid container direction="row" spacing={1} justify="space-between" className="grouped">
+                                    {/* NGO details */}
+                                    <Grid container direction="row" spacing={1} justify="space-between" className="grouped">
                                         <Grid item xs={12} sm={3}>
-                                        <Field
+                                            <Field
                                                 as={TextField}
                                                 name="ngo.name"
                                                 variant="outlined"
@@ -591,7 +637,7 @@ export const StudentForm = (props) => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={2}>
-                                        <Field
+                                            <Field
                                                 as={TextField}
                                                 name="ngo.contactPerson.title"
                                                 variant="outlined"
@@ -601,7 +647,7 @@ export const StudentForm = (props) => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={3}>
-                                        <Field
+                                            <Field
                                                 as={TextField}
                                                 name="ngo.contactPerson.name"
                                                 variant="outlined"
@@ -611,7 +657,7 @@ export const StudentForm = (props) => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} sm={2}>
-                                        <Field
+                                            <Field
                                                 as={TextField}
                                                 name="ngo.contactPerson.phone"
                                                 variant="outlined"
@@ -621,7 +667,7 @@ export const StudentForm = (props) => {
                                             />
                                         </Grid>
                                     </Grid>
-                                 
+
                                     {/* parents's Details */}
                                     <Grid item xs={12} minWidth="xl">
                                         <Accordion defaultActiveKey="">
@@ -634,33 +680,33 @@ export const StudentForm = (props) => {
                                                 <Accordion.Collapse eventKey="0">
                                                     <Card.Body>
                                                         <Grid container direction="row" spacing={2}>
-                                                            <Grid item xs={12} sm={4}>
+                                                            <Grid item xs={12} sm={6}>
                                                                 <Field
                                                                     as={TextField}
-                                                                    name="guardians.firstName"
+                                                                    name="guardians[0].firstName"
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="First Name"
                                                                     type="text"
                                                                 />
                                                             </Grid>
-                                                            <Grid item xs={12} sm={4}>
+                                                            <Grid item xs={12} sm={6}>
                                                                 <Field
                                                                     as={TextField}
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Last Name"
-                                                                    name="guardians.lastName"
+                                                                    name="guardians[0].lastName"
                                                                     type="text"
                                                                 />
                                                             </Grid>
-                                                            <Grid item xs={12} sm={4}>
+                                                            <Grid item xs={12} sm={6}>
 
                                                                 <Field
                                                                     className="myfield"
                                                                     as={TextField}
                                                                     label="marital Status"
-                                                                    name="guardians.maritalStatus"
+                                                                    name="guardians[0].maritalStatus"
                                                                     variant="outlined"
                                                                     style={{ minWidth: 250 }}
                                                                     type="text"
@@ -675,16 +721,14 @@ export const StudentForm = (props) => {
                                                                     <MenuItem value="DIVORCED">Divorced</MenuItem>
                                                                 </Field>
                                                             </Grid>
-                                                        </Grid>
-                                                        <Grid container direction="row" spacing={2}>
-                                                            <Grid item xs={12} sm={4}>
+                                                            <Grid item xs={12} sm={6}>
                                                                 <Field
                                                                     as={TextField}
                                                                     variant="outlined"
                                                                     type="number"
                                                                     fullWidth
                                                                     label="ID Number"
-                                                                    name="guardians.identificationNumber"
+                                                                    name="guardians[0].identificationNumber"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
@@ -694,7 +738,7 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Phone Number"
-                                                                    name="guardians.phone"
+                                                                    name="guardians[0].phone"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
@@ -704,83 +748,96 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Email"
-                                                                    name="guardians.email"
+                                                                    name="guardians[0].email"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
                                                                 <Field
                                                                     as={TextField}
-                                                                    type="Relationship"
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Relationship"
-                                                                    name="guardians.email"
-                                                                />
+                                                                    name="guardians[0].relationship"
+                                                                    type="text"
+                                                                    fullWidth
+                                                                    select
+                                                                    InputLabelProps={{
+                                                                        shrink: true,
+                                                                    }}
+                                                                >
+                                                                    <MenuItem value="">
+                                                                        <em>None</em>
+                                                                    </MenuItem>
+                                                                    <MenuItem value="FATHER">FATHER</MenuItem>
+                                                                    <MenuItem value="MOTHER">MOTHER</MenuItem>
+                                                                    <MenuItem value="GUARDIAN">GUARDIAN</MenuItem>
+                                                                </Field>
                                                             </Grid>
                                                         </Grid>
 
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>
+
+
 
                                             {/* guardians's Details */}
                                             <Card>
-                                                <Accordion.Toggle as={Card.Header} eventKey="1">
+                                                <Accordion.Toggle as={Card.Header} eventKey="0">
                                                     guardians's Details
                                         </Accordion.Toggle>
-                                                <Accordion.Collapse eventKey="1">
-                                                    <Card.Body> <Grid container direction="row" spacing={2}>
-                                                        <Grid item xs={12} sm={4}>
-                                                            <Field
-                                                                as={TextField}
-                                                                name="guardians.firstName"
-                                                                variant="outlined"
-                                                                fullWidth
-                                                                label="First Name"
-                                                                type="text"
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={12} sm={4}>
-                                                            <Field
-                                                                as={TextField}
-                                                                variant="outlined"
-                                                                fullWidth
-                                                                label="Last Name"
-                                                                name="guardians.lastName"
-                                                                type="text"
-                                                            />
-                                                        </Grid>
-                                                        <Grid item xs={12} sm={4}>
-
-                                                            <Field
-                                                                className="myfield"
-                                                                as={TextField}
-                                                                label="marital Status"
-                                                                name="guardians.maritalStatus"
-                                                                variant="outlined"
-                                                                style={{ minWidth: 250 }}
-                                                                type="text"
-                                                                fullWidth
-                                                                select
-                                                            >
-                                                                <MenuItem value="">
-                                                                    <em>None</em>
-                                                                </MenuItem>
-                                                                <MenuItem value="SINGLE">Single</MenuItem>
-                                                                <MenuItem value="MARIED">Maried</MenuItem>
-                                                                <MenuItem value="DIVORCED">Divorced</MenuItem>
-                                                            </Field>
-                                                        </Grid>
-                                                    </Grid>
+                                                <Accordion.Collapse eventKey="0">
+                                                    <Card.Body>
                                                         <Grid container direction="row" spacing={2}>
-                                                            <Grid item xs={12} sm={4}>
+                                                            <Grid item xs={12} sm={6}>
+                                                                <Field
+                                                                    as={TextField}
+                                                                    name="guardians[1].firstName"
+                                                                    variant="outlined"
+                                                                    fullWidth
+                                                                    label="First Name"
+                                                                    type="text"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={6}>
+                                                                <Field
+                                                                    as={TextField}
+                                                                    variant="outlined"
+                                                                    fullWidth
+                                                                    label="Last Name"
+                                                                    name="guardians[1].lastName"
+                                                                    type="text"
+                                                                />
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={6}>
+
+                                                                <Field
+                                                                    className="myfield"
+                                                                    as={TextField}
+                                                                    label="marital Status"
+                                                                    name="guardians[1].maritalStatus"
+                                                                    variant="outlined"
+                                                                    style={{ minWidth: 250 }}
+                                                                    type="text"
+                                                                    fullWidth
+                                                                    select
+                                                                >
+                                                                    <MenuItem value="">
+                                                                        <em>None</em>
+                                                                    </MenuItem>
+                                                                    <MenuItem value="SINGLE">Single</MenuItem>
+                                                                    <MenuItem value="MARIED">Maried</MenuItem>
+                                                                    <MenuItem value="DIVORCED">Divorced</MenuItem>
+                                                                </Field>
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={6}>
                                                                 <Field
                                                                     as={TextField}
                                                                     variant="outlined"
                                                                     type="number"
                                                                     fullWidth
                                                                     label="ID Number"
-                                                                    name="guardians.identificationNumber"
+                                                                    name="guardians[1].identificationNumber"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
@@ -790,7 +847,7 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Phone Number"
-                                                                    name="guardians.phone"
+                                                                    name="guardians[1].phone"
                                                                 />
                                                             </Grid>
                                                             <Grid item xs={12} sm={4}>
@@ -800,39 +857,58 @@ export const StudentForm = (props) => {
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Email"
-                                                                    name="guardians.email"
+                                                                    name="guardians[1].email"
                                                                 />
-                                                                </Grid>
-                                                                <Grid item xs={12} sm={4}>
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={4}>
                                                                 <Field
                                                                     as={TextField}
-                                                                    type="Relationship"
                                                                     variant="outlined"
                                                                     fullWidth
                                                                     label="Relationship"
-                                                                    name="guardians.email"
-                                                                />
-                                                                </Grid>
+                                                                    name="guardians[1].relationship"
+                                                                    type="text"
+                                                                    fullWidth
+                                                                    select
+                                                                    InputLabelProps={{
+                                                                        shrink: true,
+                                                                    }}
+                                                                >
+                                                                    <MenuItem value="">
+                                                                        <em>None</em>
+                                                                    </MenuItem>
+                                                                    <MenuItem value="FATHER">FATHER</MenuItem>
+                                                                    <MenuItem value="MOTHER">MOTHER</MenuItem>
+                                                                    <MenuItem value="GUARDIAN">GUARDIAN</MenuItem>
+                                                                </Field>
+                                                            </Grid>
                                                         </Grid>
 
                                                     </Card.Body>
                                                 </Accordion.Collapse>
                                             </Card>
+
                                         </Accordion>
                                     </Grid>
                                 </Grid>
-                                <Grid container justify="center" xs={12}>
-                                    <Grid item xs={4}>
-                                        <Button
-                                            fullWidth
-                                            variant="contained"
-                                            color="primary"
-                                            type="submit"
-                                        >
-                                            Save
+                                <div style={{ display: "flex" }}>
+                                    <Button
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => props.close()}
+                                    >
+                                        Cancel
                             </Button>
-                                    </Grid>
-                                </Grid>
+                                    <Button
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        type="submit"
+                                    >
+                                        Save
+                            </Button>
+                                </div>
                                 {/* <pre>{JSON.stringify(formik.values, null, 2)}</pre> */}
                             </Form>)}
                     </Formik>
@@ -854,8 +930,10 @@ const mapStateToProps = (state) => ({
     state: state
 })
 
-const mapDispatchToProps = {
-
-}
+const mapDispatchToProps = dispatch => ({
+    handleAddStudent: async (data) => {
+        await dispatch(handleAddStudent(data))
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentForm)

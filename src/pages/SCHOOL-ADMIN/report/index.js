@@ -57,9 +57,7 @@ export const Index = (props) => {
         try {
             setIsLoading(true)
             await dispatch(handleUpdateTerm(id, data));
-            setTimeout(() => {
                 fetchTermsData()
-            }, 2000);
         } catch (error) {
             console.log(error)
         }
@@ -119,7 +117,7 @@ export const Index = (props) => {
     return (
         <div>
 
-            <PanelLayout selected={8} role={props.state.auth.user.role}>
+            <PanelLayout selected={9} role={props.state.auth.user.role}>
                 <div className="report-container">
                     <div className="report-hd">
                         <h3>Report</h3>

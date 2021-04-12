@@ -139,13 +139,11 @@ export const Index = (props) => {
         if (teacherData){
             props.handleUpdateClass({id: id, data: teacherData})
                         handleOpenMsg('success', 'Class Updated')
-                        setTimeout(() => {
                             props.handleFetchClasses(school)
                             setTEACHER(props.state.teachers)
                             setData(formatData(TEACHER.list))
                             update()
                             setData(formatData(TEACHER.list))
-                        }, 0);
                         setOpen(false);
                         setUpdating(false)
                         setTeacherData({
@@ -278,9 +276,7 @@ export const Index = (props) => {
     const update = () => {
         props.handleFetchTeachers(school)
         setTEACHER(props.state.teachers)
-        setTimeout(() => {
             setData(formatData(props.list))
-        }, 0);
     }
 
     useEffect(() => {

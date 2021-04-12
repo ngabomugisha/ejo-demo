@@ -1,11 +1,8 @@
-import React, { Component, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { connect } from 'react-redux'
-import {bindActionCreators} from 'redux'
 import './style.css'
 import ReactToPrint from "react-to-print";
-import { Avatar } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import PrintIcon from '@material-ui/icons/Print';
 
 
@@ -23,6 +20,8 @@ constructor(props){
 }
 
   render() {
+    const { match, location, history } = this.props
+    console.log('LLLLLLLLLLLL',location)
     let less=null
     if(this.props.data){
      less = this.props.data[0]
@@ -52,8 +51,8 @@ constructor(props){
 
         <tr>
           <td>1</td>
-          <td>{less && less.time && (less.time.day).substring(0,(less.time.day).indexOf('T'))}</td>
-          <td>{less && less.subject && less.subject}</td>
+          <td>{!less ? "" : !less.time ? "" : (less.time.day).substring(0,(less.time.day).indexOf('T'))}</td>
+          <td>{!less ? "" : !less.subject ? "" : less.subject}</td>
           <td>{`S1`}</td>
           <td>{`1`}</td>
           <td>{`1 of 4`}</td>

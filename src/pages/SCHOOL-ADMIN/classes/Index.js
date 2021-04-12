@@ -138,13 +138,11 @@ export const Index = (props) => {
         if (classData.level !== null && classData.combination !== null && classData.label !== null){
             props.handleUpdateClass({id: id, data: classData})
                         handleOpenMsg('success', 'Class Updated Successfully')
-                        setTimeout(() => {
                             props.handleFetchClasses(school)
                             setCLASSES(props.state.classes)
                             setData(formatData(CLASSES.list))
                             update()
                             setData(formatData(CLASSES.list))
-                        }, 0);
                         setOpen(false);
                         setUpdating(false)
                         setClassData({
@@ -158,7 +156,6 @@ export const Index = (props) => {
     const handleCreate = () => {
         props.handleAddClass(classData)   
         handleOpenMsg('success', 'Class Created Successfully')
-        setTimeout(() => {
             props.handleFetchClasses(school)
             setCLASSES(props.state.classes)
             setData(formatData(CLASSES.list))
@@ -170,13 +167,11 @@ export const Index = (props) => {
                 combination: null,
                 label: null
             })
-        }, 0);
     };
 
     const handleDelete = (i) => {
         props.handleDeleteClass(i)   
         handleOpenMsg('warning', 'Class Deleted')
-        setTimeout(() => {
             props.handleFetchClasses(school)
             setCLASSES(props.state.classes)
             setData(formatData(CLASSES.list))
@@ -188,7 +183,6 @@ export const Index = (props) => {
                 combination: null,
                 label: null
             })
-        }, 0);
     };
 
     const handleChange = e => {
@@ -258,9 +252,7 @@ export const Index = (props) => {
         props.handleFetchCombination()
         props.handleFetchLevels()
         setCLASSES(props.state.classes)
-        setTimeout(() => {
             setData(formatData(CLASSES.list))
-        }, 0);
     }
 
     useEffect(() => {

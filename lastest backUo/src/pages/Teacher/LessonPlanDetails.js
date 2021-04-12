@@ -7,7 +7,7 @@ export const LessonPlanDetails = (props) => {
     return (
         <div>
         <PanelLayout selected={3} role={props.state.auth.user.role}>
-                <LessonPlanDetailsComponent/>
+                <LessonPlanDetailsComponent data={props.location.stat}/>
             </PanelLayout>
         </div>
     )

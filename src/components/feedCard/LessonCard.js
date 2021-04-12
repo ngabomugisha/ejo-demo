@@ -26,7 +26,7 @@ function LessonCard({title, tag, details, link, time, size, covered, data}) {
                 </p>
                 <Link to={{
                     pathname: '/teacher/lessonPlan/details',
-                    stat: data
+                    state: {data: data}
             }} >
                 <p className='card2-link'>
                     {link.txt}

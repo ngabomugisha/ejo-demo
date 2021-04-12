@@ -25,7 +25,7 @@ function Feed(props) {
     fetchData();
   }, []);
   return (
-    <div className="feed">
+    <div className="in-feed">
         {children}
     </div>
   );

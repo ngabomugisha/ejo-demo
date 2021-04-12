@@ -57,9 +57,7 @@ console.log('this is data to pass',data,typeof(data))
                 try{
                     setIsLoading(true)
                     await dispatch(handleUpdateTerm(id,data));
-                    setTimeout(() => {
                         fetchTermsData()
-                    }, 2000);
                 } catch (error)
                 {
                     console.log(error)
@@ -120,9 +118,9 @@ console.log('this is data to pass',data,typeof(data))
     return (
         <div>
 
-            <PanelLayout selected={5} role={props.state.auth.user.role}>
+            <PanelLayout selected={6} role={props.state.auth.user.role}>
                         <div className="report-hd">
-                            <h3>Discipline settings</h3>
+                            <h3>Terms settings</h3>
                         </div>
                 <div className="term-continer">
                     <Paper elevation={4}>

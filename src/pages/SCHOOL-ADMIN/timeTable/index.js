@@ -409,11 +409,9 @@ export const Index = (props) => {
     useEffect(() => {
         fetchTermsData()
 
-        console.log("MONDAY DATA", timetabledata)
-        if (timetabledata.events.monday || timetabledata.events.tuesday || timetabledata.events.wednesday || timetabledata.events.thursday || timetabledata.events.friday) {
-            setTimeout(() => {
-            }, 2000);
-        }
+        // console.log("MONDAY DATA", timetabledata)
+        // if (timetabledata.events.monday || timetabledata.events.tuesday || timetabledata.events.wednesday || timetabledata.events.thursday || timetabledata.events.friday) {
+        // }
 
     }, [mon])
 
@@ -460,7 +458,7 @@ export const Index = (props) => {
 
     return (
         <div>
-            <PanelLayout selected={props.state.auth.user.role === SCHOOLADMIN ? 6 : 3} role={props.state.auth.user.role} >
+            <PanelLayout selected={props.state.auth.user.role === SCHOOLADMIN ? 7 : 3} role={props.state.auth.user.role} >
                 <div className="timeTable-container">
                     <div>
                         <div className="form-container">

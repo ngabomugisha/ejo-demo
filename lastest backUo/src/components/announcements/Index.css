@@ -49,11 +49,21 @@
     min-height: 100vh;
 }
 .message{
-    border-bottom: 1px solid rgba(65, 65, 65, 0.226);
-    border-right: 1px solid rgba(65, 65, 65, 0.226);
     margin: 0 auto !important;
-    padding: 2px 10px 2px;
+    padding: 2px 3px 2px;
 }
 .message:hover{
     color:red
+}
+
+.MuiToggleButtonGroup-groupedHorizontal:not(:first-child){
+    color: #219653 ;
+    background-color: #21f17b31 ;
+
+}
+
+.MuiToggleButtonGroup-groupedHorizontal:not(:last-child){
+    color: #2D9CDB ;
+    background-color: #0476f818 ;
+
 }

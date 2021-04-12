@@ -1,18 +1,18 @@
 import React from 'react'
 import './Index.css'
 
-function Index() {
+function Index({announcement, sender ,starter, time}) {
     return (
         <div className="msg-container">
             <div className="card-hd">
-                <h3>JF</h3>
+                <h3>{starter && starter.toUpperCase()}</h3>
             </div>
             <div className="card-body">
-                <h3>James Fred</h3>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
+                <h3>{sender && sender}</h3>
+                <p>{announcement && announcement}</p>
                 <div className="time">
-                    <span>12:09 pm</span>
-                    <span>4th May, 2020</span>
+                    <span>{time && time.substring(11,16)}</span>
+                    <span>{time && time.substring(0,10)}</span>
                 </div>
             </div>
         </div>

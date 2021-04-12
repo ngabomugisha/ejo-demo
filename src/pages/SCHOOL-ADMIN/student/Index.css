@@ -180,3 +180,20 @@
     vertical-align: middle;
     margin-top: 200px;
 }
+
+.student-form{
+  padding: 20px;
+  margin: 40px;
+}
+.ag-pivot-off .ag-header-group-cell {
+  font-size:medium;
+  color: #1f72c7;
+}
+
+.ag-pivot-on .ag-header-group-cell {
+  font-size: medium;
+  color: green;
+}
+.ag-header-group-cell-with-group {
+  background-color: #00e7b1;
+}

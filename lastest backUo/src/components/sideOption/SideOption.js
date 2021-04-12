@@ -11,6 +11,11 @@ function SideOption({ active, text, Icon ,color}) {
 
   const handleSubmit = async () => {
     sessionStorage.clear()
+    try {
+      await dispatch(handleLogout())}
+      catch (err){ 
+        alert("ERROR IN LOGOUT", err)
+      }
     history.replace('/')
   };
 
