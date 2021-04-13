@@ -154,11 +154,11 @@ function FeedHead(props) {
       // props.handleFetchTeacherData()
         setOpen(true)
       }
-setClas((JSON.parse(localStorage.getItem('DATA'))).class)
-setSub((JSON.parse(localStorage.getItem('DATA'))).subject)
-setTop((JSON.parse(localStorage.getItem('DATA'))).topic)
-setSubTop((JSON.parse(localStorage.getItem('DATA'))).subtopic)
-setUni((JSON.parse(localStorage.getItem('DATA'))).unit)
+setClas((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).class : null)
+setSub((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).subject : null)
+setTop((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).topic : null)
+setSubTop((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).subtopic : null)
+setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).unit : null)
 
 
   },[])

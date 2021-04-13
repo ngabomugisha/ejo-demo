@@ -210,7 +210,7 @@ export const Index = (props) => {
     const formatData = (unformatted) => {
         let i = 1
         const formatted = []
-        unformatted.forEach(i => formatted.push({ level: i.level.name, combination: i.combination.name, label: i.label, id: i._id }))
+        unformatted.forEach(i => formatted.push({ level: i.level ? i.level.name : '', combination: i.combination? i.combination.name: '', label: i.label, id: i._id }))
         return formatted
     }
     const editRow = (parms) => {

@@ -53,11 +53,13 @@ function LessonCards(props) {
   console.log("SUBJECTTTTT:", subject)
   useEffect(() => {
     props.handleFetchTeacherData()
-    if((JSON.parse(localStorage.getItem('DATA'))).subject !== null)
+    if((JSON.parse(localStorage.getItem('DATA')))){
+      if((JSON.parse(localStorage.getItem('DATA'))).subject !== null)
     {props.handleFetchLessonPlan((JSON.parse(localStorage.getItem('DATA'))).subject)}
     else{
       handleClick()
     }
+  }
   }, [])
 
 

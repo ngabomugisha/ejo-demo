@@ -195,12 +195,16 @@ export const Index = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({
-    state: state
-})
-
-const mapDispatchToProps = {
-
+const mapStateToProps = (state) => {
+    return {
+        state
+    }
 }
+
+const mapDispatchToProps = dispatch => ({
+    handleFetchClasses : (school) => {
+        dispatch(handleFetchClasses(school))
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index)

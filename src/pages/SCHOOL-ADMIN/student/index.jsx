@@ -515,8 +515,8 @@ const handleUpload = async () => {
                                                     <MenuItem value="">
                                                         <em>NONE</em>
                                                     </MenuItem>
-                                                    {props.classes != null ?
-                                                        props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level.name} {item.combination.name} {item.label}</MenuItem>)) : null
+                                                    {props.classes != null & props.classes != undefined ?
+                                                        props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level ? item.level.name : ''} {item.combination ? item.combination.name: ""} {item.label}</MenuItem>)) : null
                                                     }
                                                 </TextField>
                                                 <DropzoneArea
