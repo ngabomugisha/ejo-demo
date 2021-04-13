@@ -159,15 +159,15 @@ export const StudentForm = (props) => {
         const initialValuesforEdit = {
             firstName: data.firstName,
             lastName: data.lastName,
-            registrationNumber : data.registrationNumber ? data.registrationNumber :'',
-            gender: data.gender ? data.gender : "",
-            studentClass: data.studentClass ? data.studentClass : '',
-            studentProgram: data.studentProgram ? data.studentProgram : '',
-            address: data.address ? data.address : '',
-            scholarship: data.scholarship ? data.scholarship : '',
-            dateOfBirth: data.dateOfBirth ? (data.dateOfBirth).substring(0, 10) : '',
-            allergies: data.allergies ? data.allergies : '',
-            // permanentHealthConditions: data.permanentHealthConditions ? data.permanentHealthConditions : '',
+            registrationNumber : data.registrationNumber ? data.registrationNumber : null,
+            gender: data.gender ? data.gender : null,
+            studentClass: data.studentClass ? data.studentClass : null,
+            studentProgram: data.studentProgram ? data.studentProgram : null,
+            address: data.address ? data.address : null,
+            scholarship: data.scholarship ? data.scholarship : null,
+            dateOfBirth: data.dateOfBirth ? (data.dateOfBirth).substring(0, 10) : null,
+            allergies: data.allergies ? data.allergies : null,
+            // permanentHealthConditions: data.permanentHealthConditions ? data.permanentHealthConditions : null,
             // ngo : !data.ngo ? '' :{
             //     name: data.ngo? data.ngo.name ? data.ngo.name : '': '',
             //     contactPerson: { 
@@ -327,7 +327,7 @@ export const StudentForm = (props) => {
     }, [])
     return (
         <>
-            <p style={{width: "200px"}}>{JSON.stringify(data)}</p>
+            {/* <p style={{width: "200px"}}>{JSON.stringify(data)}</p> */}
             <Container component="main" minWidth="xl" >
                 <CssBaseline />
                 <div className={classes.paper}>

@@ -1,4 +1,4 @@
-import { HANDLE_FETCH_TEACHERS_SUCCESS } from '../types';
+import { HANDLE_FETCH_TEACHERS_SUCCESS, HANDLE_ADD_TEACHERS_FAIL  } from '../types';
 
 const INITIAL_TEACHERS_STATE = {
   list: [],
@@ -12,6 +12,14 @@ export default (state = INITIAL_TEACHERS_STATE, { type, payload }) => {
         ...state,
         list: payload,
       };
+      break;
+       case HANDLE_ADD_TEACHERS_FAIL:
+      console.log('HANDLE_FETCH_TEACHERS_SUCCESS', payload);
+      return {
+        ...state,
+        list: payload,
+      };
+      break;
     default:
       return state;
   }

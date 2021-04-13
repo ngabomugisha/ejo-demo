@@ -15,7 +15,6 @@ import { Box } from '@material-ui/core'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import 'ag-grid-enterprise'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button } from 'react-bootstrap';
 import StudentForm from '../../../components/schoolAdmin/StudentForm'
@@ -174,9 +173,9 @@ export const Index = (props) => {
 const handleUpload = async () => {
 
     const formData = new FormData()
-    formData.append('studentClass', studentClass._id)
+    formData.append('studentClass', studentClass)
     formData.append('students',file)
-
+    console.log("******************", file,studentClass)
     const dat = {
         'studentClass': studentClass._id,
         'students':file
@@ -225,14 +224,14 @@ const handleUpload = async () => {
                  guardian2Relationship: i.guardians ? i.guardians.length > 1 ? i.guardians[1].relationship : '':'' ,
                  guardian2Identifation: i.guardians ? i.guardians.length > 1 ? i.guardians[1].identificationNumber : '':'' ,
                 
-                 studentClass: 
+                 class: 
                     props.classes.reduce(function (match, check){ 
-                    if(check._id === i.class){
-                        let find = check.name;
-                        match.push(find)
+                    if(check._id == i.class){
+                        let find = check.level.name + " "+ (check.combination ? check.combination.name: "") +check.label 
+                        match =find
                     }
                     return match
-                    },[])[0],
+                    },'a'),
 
                  address: 
                     props.villages.reduce(function (match, check){ 
@@ -280,7 +279,7 @@ const handleUpload = async () => {
     { headerName: '#', field: 'No', sortable: true, filter: true, checkboxSelection: true, headerCheckboxSelection: true, },
     { headerName: 'First Name', field: 'firstName', sortable: true, filter: true, },
     { headerName: 'Last Name', field: 'lastName', sortable: true, filter: true, },
-    { headerName: 'Student Class', field: 'studentClass', },
+    { headerName: 'Class', field: 'class', },
     { headerName: 'registration Number', field: 'registrationNumber', },
     { headerName: 'gender ', field: 'gender', },
     { headerName: 'studentProgram', field: 'studentProgram', },
@@ -556,6 +555,7 @@ const handleUpload = async () => {
 }
 
 const mapStateToProps = (state) => {
+
     const  classes  = state.classes.list
     const villages = state.villages.list
     const { students } = state

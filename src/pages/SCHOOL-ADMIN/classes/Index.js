@@ -16,7 +16,6 @@ import EditorWrapText from 'material-ui/svg-icons/editor/wrap-text'
 import { AgGridReact, AgGridColumn } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import 'ag-grid-enterprise'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button } from 'react-bootstrap';
 import EditorFormatListBulleted from 'material-ui/svg-icons/editor/format-list-bulleted'
@@ -233,7 +232,8 @@ export const Index = (props) => {
         console.log(parms.value,"%%%%%")
         setId(parms.value)
         handleDelete(parms.value)
-        setUpdating(true)
+        setUpdating(false)
+        setOpen(false)
     }
     const columns = [{ headerName: 'Level', field: 'level', sortable: true, filter: true, checkboxSelection: true, headerCheckboxSelection: true, flex: 1 },
     { headerName: 'Combination', field: 'combination', sortable: true, filter: true, flex: 1 },
@@ -241,9 +241,9 @@ export const Index = (props) => {
     { headerName: 'Label', field: 'label', flex: 1 },
     {
         headerName: "Action", field: "id",
-        cellRendererFramework: (params) => <div style={{display: "flex"}}>
-            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', padding:"5px" }} className="edit-btn-class" onClick={() => editRow(params)}>Edit</div>
-            <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', padding:"3px" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div>
+        cellRendererFramework: (params) => <div style={{display: "flex", justifyContent : "space-evenly"}}>
+            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"35px", paddingRight:"35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => editRow(params)}>Edit</div>
+            <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div>
         </div>
     }]
 
@@ -422,7 +422,7 @@ export const Index = (props) => {
                                                 shrink: true,
                                             }}
                                         >
-                                            <MenuItem value="">
+                                            <MenuItem value={null}>
                                                 <em>None</em>
                                             </MenuItem>
                                             {COMBINATIONS &&

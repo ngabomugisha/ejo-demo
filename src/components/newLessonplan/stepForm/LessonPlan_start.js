@@ -197,7 +197,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
                   done = yes;
                 }
                 return done;
-              }, []) +
+              }, '') +
               "& Teacher :" +
               teacher.reduce(function (done2, cond2) {
                 if (cond2._id === opt.teacher) {
@@ -205,7 +205,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
                   done2 = yes2;
                 }
                 return done2;
-              }, []),
+              }, ''),
             type: "custom",
             startTime: moment(
               "2018-02-23T" +

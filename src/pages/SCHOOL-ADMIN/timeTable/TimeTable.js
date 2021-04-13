@@ -25,7 +25,7 @@ export function App(props) {
     return (
       <div {...defaultAttributes}
            title={name}
-           key={event.id} onClick= {() => {props.onChange(event._id)}}>
+           key={event.id} onClick= {() => {props.onChange && props.onChange(event._id)}}>
         <span className={styles.event_info}>
            {name.includes('&')? name.substring(0,name.indexOf('&')):name}<br/>{name.includes('&')? name.substring(name.indexOf('&')+1):""} 
         </span>

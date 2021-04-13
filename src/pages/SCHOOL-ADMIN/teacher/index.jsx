@@ -13,7 +13,6 @@ import EditorWrapText from 'material-ui/svg-icons/editor/wrap-text'
 import { AgGridReact, AgGridColumn } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import 'ag-grid-enterprise'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button } from 'react-bootstrap';
 import EditorFormatListBulleted from 'material-ui/svg-icons/editor/format-list-bulleted'
@@ -100,6 +99,7 @@ export const Index = (props) => {
     const [openMsg, setOpenMsg] = useState(false)
     const [Data, setData] = useState([])
     const [msg, setMsg] = useState(null)
+    const [ updateData, setUpdateData] = useState(null)
     const [type, setType] = useState(null)
     const [id, setId] = useState(null)
     const [updating, setUpdating] = useState(false)
@@ -165,9 +165,9 @@ export const Index = (props) => {
         setTimeout(() => {
             props.handleFetchTeachers(school)
             setTEACHER(props.state.teachers)
-            setData(formatData(props.list))
+            setData(formatData(props.list?props.list:[]))
             update()
-            setData(formatData(props.list))
+            setData(formatData(props.list?props.list:[]))
         }, 0);
     };
 
@@ -233,22 +233,25 @@ export const Index = (props) => {
     const formatData = (unformatted) => {
         let i = 1
         const formatted = []
-        unformatted.forEach(i => { formatted.push({ firstName: i.firstName, lastName: i.lastName, email: i.email, school: i.school, role: i.role, phoneNumber: i.phoneNumber, level: i.level, yearsOfExperience: i.yearsOfExperience, workingStatus: i.workingStatus, id: i._id }) })
+        unformatted.forEach(i => {if(i.role === "TEACHER") formatted.push({ firstName: i.firstName, lastName: i.lastName, email: i.email, school: i.school, role: i.role, phoneNumber: i.phoneNumber, level: i.level, yearsOfExperience: i.yearsOfExperience, workingStatus: i.workingStatus, id: i._id }) })
         return formatted
     }
-    const editRow = (parms) => {
-        p2 = Object.assign({}, parms['data']);
-        // edit = {
-        //     school: school,
-        //     level: (LEVELS.find(item => item.name === p2.level))._id,
-        //     combination: (COMBINATIONS.find(item => item.name === p2.combination))._id,
-        //     label: p2.label,
+        // const editRow = (parms) => {
+        //     p2 = Object.assign({}, parms['data']);
+
+        //     console.log("data to edit ::::::::::", props.teachers.reduce(function(done, check){
+        //         if(check._id === parms.value){
+        //             done.push({
+        //                 check
+        //             })
+        //         }
+        //         return done
+        //     },''))
+
+        //     setId(parms.value)
+        //     setUpdating(true)
+        //     handleClickOpen()
         // }
-        // setClassData(edit)
-        setId(parms.value)
-        setUpdating(true)
-        handleClickOpen()
-    }
     // const deleteRow = (parms) => {
     //     console.log(parms.value,"%%%%%")
     //     setId(parms.value)
@@ -267,9 +270,9 @@ export const Index = (props) => {
     { headerName: 'ID', field: 'id', hide: true, flex: 1 },
     {
         headerName: "Action", field: "id",
-        cellRendererFramework: (params) => <div style={{ display: "flex" }}>
-            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', padding: "5px" }} className="edit-btn-class" onClick={() => alert("edit")}>Edit</div>
-            <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', padding: "3px" }} className="edit-btn-class" onClick={() => alert("edit")}>Delete</div>
+        cellRendererFramework: (params) => <div style={{display: "flex", justifyContent : "space-evenly"}}>
+        {/* <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"35px", paddingRight:"35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => editRow(params)}>Edit</div> */}
+        {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
         </div>
     }]
 
@@ -313,7 +316,7 @@ export const Index = (props) => {
                                         className="ag-theme-alpine">
                                         <AgGridReact
                                             columnDefs={columns}
-                                            rowData={formatData(props.list)}
+                                            rowData={formatData(props.list?props.list:[])}
                                             rowSelection={'multiple'}
                                             onGridReady={onGridReady}
                                         />

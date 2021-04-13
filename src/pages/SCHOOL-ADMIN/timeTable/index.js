@@ -321,6 +321,9 @@ export const Index = (props) => {
             }
         }
     }
+    const handleClose =()=>{
+        setOpenPopup(false)
+    }
 
     const handleSave = () => {
         setOpenPopup(true)
@@ -584,7 +587,7 @@ export const Index = (props) => {
                 title="Create new timetable slot"
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}>
-                <TimetableForm class={classs} subject={subject} teachers={teacher} terms={ALL_TERMS} />
+                <TimetableForm class={classs} subject={subject} teachers={teacher} terms={ALL_TERMS} close={handleClose}/>
 
             </Popup>
         </div>
