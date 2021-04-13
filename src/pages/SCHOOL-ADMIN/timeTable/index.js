@@ -14,6 +14,7 @@ import Skeleton from "@material-ui/lab/Skeleton"
 import moment from 'moment';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { handleFetchTerms, handleUpdateTerm } from '../../../store/actions/term.action'
+import {handleFetchClasses} from '../../../store/actions/classes.actions'
 import { useDispatch, useSelector } from 'react-redux';
 import {SCHOOLADMIN} from '../../../pages/Auth/Users'
 
@@ -29,7 +30,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Index = (props) => {
-    const school = props.state.auth.user.school;
+    let school = null
+    let role = null
+    let p2 = null
+    let edit = null
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+  
     const classes = useStyles();
     const [classs, setClasss] = React.useState([]);
     const { list: ALL_TERMS } = useSelector((state) => state.terms);
@@ -457,6 +463,7 @@ export const Index = (props) => {
             return req
         }
         fetchClasses()
+        props.handleFetchClasses(school)
     }, [])
 
     return (
@@ -490,8 +497,8 @@ export const Index = (props) => {
                                                     <MenuItem value="">
                                                         <em>None</em>
                                                     </MenuItem>
-                                                    {classs != null ?
-                                                        classs.map(item => (<MenuItem key={item._id} value={item._id}>{item.label}</MenuItem>)) : ""
+                                                    {props.classes ?
+                                                        props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level? item.level.name: ''} {item.combination? item.combination.name : ""} {item.label}</MenuItem>)) : ""
                                                     }
                                                 </Field>
                                             </Grid>
@@ -594,12 +601,18 @@ export const Index = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({
-    state: state
+const mapStateToProps = (state) => {
+    const classes = state.classes.list
+    return {
+        state,classes
+    }
+}
+
+const mapDispatchToProps = dispatch => ({
+    handleFetchClasses : (school) => {
+        dispatch(handleFetchClasses(school))
+    }
 })
 
-const mapDispatchToProps = {
-
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index)

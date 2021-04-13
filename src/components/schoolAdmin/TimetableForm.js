@@ -390,4 +390,4 @@ const mapDispatchToProps = dispatch => ({
     }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimetableForm)
+    export default connect(mapStateToProps, mapDispatchToProps)(TimetableForm)
