@@ -519,7 +519,7 @@ const handleUpload = async () => {
                                                     }
                                                 </TextField>
                                                 <DropzoneArea
-                                                    acceptedFiles={['text/csv']}
+                                                    acceptedFiles={[".csv, text/csv, application/vnd.ms-excel, application/csv, text/x-csv, application/x-csv, text/comma-separated-values, text/x-comma-separated-values"]}
                                                     filesLimit={1}
                                                     dropzoneText={"Drag and drop a CSV File here or click to browse"}
                                                     onChange={(files) => setFile(files[0])}
