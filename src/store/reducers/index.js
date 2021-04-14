@@ -11,6 +11,7 @@ import terms from './terms.reducers'
 import questions from './question.reduces'
 import lessonPlans from './lessonPlans.reducers'
 import teacherData from './data/teacher.data.reducer'
+import classTeacher from './classTeacher.reducers'
 import subjects from './subject.reducers'
 import subtopics from './subtopic.reducers'
 import topics from './topic.reducers'
@@ -31,6 +32,7 @@ const reducers = combineReducers({
   classes,
   combinations,
   levels,
+  classTeacher,
   teachers,
   terms,
   questions,
