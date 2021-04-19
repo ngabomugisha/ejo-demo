@@ -18,13 +18,12 @@ import EditorWrapText from 'material-ui/svg-icons/editor/wrap-text'
 import { AgGridReact, AgGridColumn } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import 'ag-grid-enterprise'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button } from 'react-bootstrap';
 import EditorFormatListBulleted from 'material-ui/svg-icons/editor/format-list-bulleted'
 import { DeleteForeverTwoTone } from '@material-ui/icons'
 import * as users from '../../Auth/Users'
-
+import {MdDeleteForever} from "react-icons/md";
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -319,7 +318,7 @@ export const Index = (props) => {
                                 <div style={{ height: '90%', boxSizing: 'border-box' }}>
                                     <div style={searchDivStyle}>
                                         <input type="search" style={searchStyle} onChange={onFilterTextChange} placeholder="search ....." />
-                                        <Button style={{borderRadius: "15px"}} onClick={() => onExportClick()}>export</Button>
+                                        {/* <Button onClick={() => onExportClick()}>export</Button> */}
                                     </div>
                                     <div
                                         id="myGrid"
@@ -578,13 +577,15 @@ export const Index = (props) => {
     <tr>
       <th>Class</th>
       <th> Subject</th>
+      <th>delete</th>
     </tr>
   </thead>
   <tbody>
       {props.classTeacher.map(i => (
           <tr>
-              <td>{i.class.level.name} {i.class.label}</td>
+              <td>{i.class.level.name}</td>
               <td>{i.subject.name}</td>
+              <td><MdDeleteForever/></td>
           </tr>
       ))}
   </tbody>

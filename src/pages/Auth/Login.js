@@ -1,59 +1,37 @@
 import './Login.css';
 import React, {  } from 'react';
-import {
-  withStyles,
-  makeStyles,
-  createMuiTheme,
-} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, connect, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
+import { Button, TextField,InputBase } from '@material-ui/core';
 import HomeLayout from '../../components/Layouts/HomeLayout';
 import { handleLogin } from '../../store/actions/auth.actions';
 import { SCHOOLADMIN, TEACHER, SUPERADMIN, HEADSTUDY } from './Users'
 import logoAfrica from '../../assets/img/white-logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { green } from '@material-ui/core/colors';
+import InputGroup from 'react-bootstrap/InputGroup'
 
-
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
+const styles = makeStyles(theme => ({
+  textField: {
+    border: "1px solid #1F72C6",
+    borderRadius: theme.shape.borderRadius,
+    color: 'green',
+    backgroundColor: 'whitesmoke'
   },
+  inputBase: {
+      color: 'white',
+      border: "1px solid #1F72C6",
+      borderRadius: theme.shape.borderRadius,
+      height: "7vh",
+      padding: theme.spacing(1),
+      backgroundColor: 'whitesmoke'
+  }
 }));
-
-const ValidationTextField = withStyles({
-  root: {
-    '& input:valid + fieldset': {
-      borderColor: 'white',
-      borderWidth: 2,
-      color: 'white'
-    },
-    '& input:invalid + fieldset': {
-      borderColor: 'red',
-      borderWidth: 2,
-      color: 'white'
-    },
-    '& input:valid:focus + fieldset': {
-      borderLeftWidth: 6,
-      borderColor: 'white',
-      color: 'white !important',
-      padding: '4px !important', // override inline-style
-    },
-  },
-})(TextField);
-
-const theme = createMuiTheme({
-  palette: {
-    primary: green,
-  },
-});
 
 
 const LoginPage = (props) => {
 
-  const classes = useStyles();
+  const classes = styles();
   const history = useHistory();
   const dispatch = useDispatch();
   // const [fine, setFine] = useState(false);
@@ -117,33 +95,37 @@ const LoginPage = (props) => {
             <img src={logoAfrica} />
           </div>
           <div className="login-field">
-            <ValidationTextField
-              label="Email"
-              className={classes.margin}
-              defaultValue=""
-              variant="outlined"
+            <TextField
+              className={classes.textField}
               size="small"
               fullWidth
-              style={{color: 'red !important'}}
+              variant="outlined"
+              label="Email"
+              placeholder="Email"
               color="primary"
-              type="email"
               onChange={(e) => setEmail(e.target.value)}
               error={!!errMessage}
-              id="validation-outlined-input"
+              InputProps={{
+                className: classes.input,
+            }}
             />
           </div>
           <div className="login-field">
-            <ValidationTextField
-              label="Password"
-              className={classes.root}
-              id="validation-outlined-input"
-              defaultValue=""
-              variant="outlined"
+            <TextField
+              className={classes.textField}
+              placeholder="Password"
+              id="custom-css-outlined-input"
               fullWidth
+              variant="outlined"
               size="small"
+              color="primary"
               type="password"
+              label="password"
               onChange={(e) => setPassword(e.target.value)}
               error={!!errMessage}
+              InputProps={{
+                className: classes.input,
+            }}
             />
             <p className="errorMessage">{errMessage}</p>
           </div>

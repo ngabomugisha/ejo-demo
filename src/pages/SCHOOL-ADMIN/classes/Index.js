@@ -278,7 +278,7 @@ export const Index = (props) => {
                                 <div style={{ height: '90%', boxSizing: 'border-box' }}>
                                     <div style={searchDivStyle}>
                                         <input type="search" style={searchStyle} onChange={onFilterTextChange} placeholder="search ....." />
-                                        <Button onClick={() => onExportClick()}>export</Button>
+                                        {/* <Button onClick={() => onExportClick()}>export</Button> */}
                                     </div>
                                     <div
                                         id="myGrid"

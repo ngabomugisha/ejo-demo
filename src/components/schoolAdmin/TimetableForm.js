@@ -130,8 +130,10 @@ export const TimetableForm = (props) => {
 
         https.post('/timetables', convertedData, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
             if (res.status == 200)
-                {setOpen(true)
-                props.close()}
+                {
+                    props.close()
+                    setOpen(true)
+                }
             else
                 return alert("something went wrong")
         })
@@ -279,6 +281,9 @@ export const TimetableForm = (props) => {
                                                 </MenuItem>
                                                 <MenuItem value="5">
                                                     Friday
+                                                </MenuItem>
+                                                <MenuItem value="6">
+                                                    Saturday
                                                 </MenuItem>
 
                                             </Field>

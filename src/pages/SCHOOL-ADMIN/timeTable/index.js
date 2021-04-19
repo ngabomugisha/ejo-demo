@@ -50,6 +50,7 @@ export const Index = (props) => {
     const [wed, setWed] = useState([])
     const [thu, setThu] = useState([])
     const [fri, setFri] = useState([])
+    const [sat, setSat] = useState([])
     const dispatch = useDispatch();
 
     let timetabledata = {
@@ -58,7 +59,8 @@ export const Index = (props) => {
             tuesday: tue,
             wednesday: wed,
             thursday: thu,
-            friday: fri
+            friday: fri,
+            saturday: sat
         }
     }
 
@@ -291,6 +293,48 @@ export const Index = (props) => {
             return fit;
         }, []))
 
+                //this is for saturday
+                setSat(dt.reduce(function (fit, opt) {
+
+                    if (opt.time.dayOfWeek == 6) {
+                        var sm = {
+                            'id': 6,
+                            "_id": opt._id,
+                            'name': subject.reduce(function (done, cond) {
+                                if (cond._id === opt.subject) {
+                                    var yes = cond.name
+                                    done = yes
+                                }
+                                return done;
+                            }, []) + "& Teacher :" +
+                                teacher.reduce(function (done2, cond2) {
+                                    if (cond2._id === opt.teacher) {
+                                        var yes2 = cond2.firstName + " " + "" + cond2.lastName;
+                                        done2 = yes2;
+                                    }
+                                    return done2;
+                                }, [])
+                            ,
+                            'type': "custom",
+                            'startTime':
+                                moment("2018-02-23T" +
+                                    opt.time.starts.substring(0, 2) +
+                                    ":" +
+                                    opt.time.starts.substring(2, 4) +
+                                    ":00"),
+                            'endTime':
+                                moment("2018-02-23T" +
+                                    opt.time.ends.substring(0, 2) +
+                                    ":" +
+                                    opt.time.ends.substring(2, 4) +
+                                    ":00")
+                        };
+                        fit.push(sm);
+                    }
+                    console.log("RETURNED OBJECT:", fit)
+                    return fit;
+                }, []))
+
         if (mon.length > 0) {
             timetabledata = {
                 'events': {
@@ -323,6 +367,15 @@ export const Index = (props) => {
                 'events': {
                     ...timetabledata.events,
                     'friday': fri
+                }
+            }
+        }
+
+        if (sat.length > 0) {
+            timetabledata = {
+                'events': {
+                    ...timetabledata.events,
+                    'saturday': sat
                 }
             }
         }
