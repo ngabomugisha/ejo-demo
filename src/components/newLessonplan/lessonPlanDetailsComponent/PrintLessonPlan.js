@@ -28,9 +28,28 @@ constructor(props){
       alert("please select subject first")
       
     }
-    const intro = []
-    Object.entries(less.teachingTechniques.introduction).forEach(([key, value]) => intro.push(`${key}: ${Object.entries(value)}`))
-    console.log('$$$$#######@@@@@@!!!!!!!!:',intro)
+    const introKeys = Object.keys(less.teachingTechniques.introduction)
+    const introValues = Object.values(less.teachingTechniques.introduction)
+
+    const devKeys = Object.keys(less.teachingTechniques.development)
+    const devValues = Object.values(less.teachingTechniques.development)
+    
+    const concKeys = Object.keys(less.teachingTechniques.conclusion)
+    const concValues = Object.values(less.teachingTechniques.conclusion)
+    
+    // const intro = []
+    // Object.entries(less.teachingTechniques.introduction).forEach(([key, value]) => intro.push(`${key}: ${Object.entries(value)}`))
+    // console.log('$$$$#######@@@@@@!!!!!!!!:',intro)
+    let teac = []
+    const forRender = (k,v) => {
+      if(k && v)
+      for(var i = 0 ; i< k.length -1 ; i++){
+          if(v[i][0])
+            teac.push(k[i]+ ":" + v[i][0]['item'])
+      }
+    }
+
+
     return (
       <div className="print-lessonPlan-container">
       <div className="print-lp-hd">
@@ -121,31 +140,36 @@ constructor(props){
 
           <tr>
             <td><h4>Introduction:</h4><p>{less.teachingTechniques.introduction.duration} Min</p></td>
-            <td>{}</td>
-            <td>{Object.keys(less.teachingTechniques.introduction).forEach(e=>(e+"="+less.teachingTechniques.introduction[e]['item']))}</td>
-            <td></td>
+            <td>{forRender(introKeys, introValues)}{teac && teac.map(i=>(<p>{i}</p>))}</td>
+            <td>{less.activities.introduction.content.activities.map(i=>i.activity)}</td>
+            <td>
+              <li style={{fontWeight: "700", fontSize: "large"}}>Competency :</li>{less.activities.introduction.competency.competencies.map(i => i.competency)}
+              <li style={{fontWeight: "700", fontSize: "large"}}>CrossCutting Issues :</li>{less.activities.introduction.crossCuttingIssues.issues.map(i => i.issue)}
+            </td>
             
           </tr>
           <tr>
-            <td><h4>Development of lesson:</h4><p>{less.teachingTechniques.development.duration} Min</p></td>
+            <td><h4>Development:</h4><p>{less.teachingTechniques.development.duration} Min</p></td>
+            <td>{forRender(devKeys, devValues)}{teac && teac.map(i=>(<p>{i}</p>))}</td>
+            <td>{less.activities.development.content.activities.map(i=>i.activity)}</td>
             <td>
-              {
-                intro
-}
+              <li style={{fontWeight: "700", fontSize: "large"}}>Competency :</li>{less.activities.development.competency.competencies.map(i => i.competency)}
+              <li style={{fontWeight: "700", fontSize: "large"}}>CrossCutting Issues :</li>{less.activities.development.crossCuttingIssues.issues.map(i => i.issue)}
             </td>
-            <td></td>
-            <td></td>
             
           </tr>
           <tr>
             <td><h4>Conclusion:</h4><p>Summary and assessment {less.teachingTechniques.conclusion.duration} Min</p></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{forRender(concKeys, concValues)}{teac && teac.map(i=>(<p>{i}</p>))}</td>
+            <td>{less.activities.conclusion.content.activities.map(i=>i.activity)}</td>
+            <td>
+              <li style={{fontWeight: "700", fontSize: "large"}}>Competency :</li>{less.activities.conclusion.competency.competencies && less.activities.conclusion.competency.competencies.map(i => i.competency)}
+              <li style={{fontWeight: "700", fontSize: "large"}}>CrossCutting Issues :</li>{less.activities.conclusion.crossCuttingIssues.issues && less.activities.conclusion.crossCuttingIssues.issues.map(i => i.issue)}
+            </td>
             
           </tr>
           <tr>
-            <td><h4>Teacher self-evaluation:</h4><p>5 Min</p></td>
+            <td><h4>Teacher self-evaluation:</h4><p></p></td>
             <td colSpan={3}></td>
             
           </tr>

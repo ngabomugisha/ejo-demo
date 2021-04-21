@@ -34,6 +34,7 @@ function LessonCard({title, tag, details, link, time, size, covered, data}) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {
+      if(data)
       setOpen(true);
     };
     const handleClose = () => {

@@ -7,10 +7,9 @@ import LessonCards from '../../components/feedCards/LessonCards';
 import { handleFetchLessonPlanSubject } from '../../store/actions/lessonPlans.actions'
 
 export const LessonPlan = (props) => {
+    const dataSelected = JSON.parse(localStorage.getItem('DATA'))
     const dispatch = useDispatch()
     const SELECTED = useSelector(state => state.teacherData)
-
-          //get lesson plan from selected subject
           const fetchLessonPlan = async (subject) => {
             console.log("TRY TO FETCH DATA")
             try {
@@ -19,9 +18,10 @@ export const LessonPlan = (props) => {
                 alert(error)
             } 
         };
-console.log("^^^^^^^^^^%%%%%%%%%%%%%",props.state)
   useEffect(() => {
-    // if(SELECTED && SELECTED.data && SELECTED.data.subject != null) fetchLessonPlan(SELECTED.data.subject)
+    if(dataSelected != null && dataSelected.subject != "" && dataSelected.subject){
+        fetchLessonPlan(dataSelected.subject)
+    }
   }, [])
 
 
