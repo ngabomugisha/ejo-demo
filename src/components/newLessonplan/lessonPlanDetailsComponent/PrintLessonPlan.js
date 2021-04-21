@@ -4,7 +4,9 @@ import { connect } from 'react-redux'
 import './style.css'
 import ReactToPrint from "react-to-print";
 import PrintIcon from '@material-ui/icons/Print';
-
+import {handleFetchSchool} from '../../../store/actions/schools.actions'
+import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 
 const thStyle = {
@@ -18,22 +20,22 @@ class ComponentToPrint extends React.Component {
 constructor(props){
   super(props)
 }
-
   render() {
-    const { match, location, history } = this.props
-    console.log('LLLLLLLLLLLL',location)
     let less=null
     if(this.props.data){
-     less = this.props.data[0]
+     less = this.props.data
     }else{
       alert("please select subject first")
       
     }
+    const intro = []
+    Object.entries(less.teachingTechniques.introduction).forEach(([key, value]) => intro.push(`${key}: ${Object.entries(value)}`))
+    console.log('$$$$#######@@@@@@!!!!!!!!:',intro)
     return (
       <div className="print-lessonPlan-container">
       <div className="print-lp-hd">
-        <h4>School Name :</h4>
-        <h4>Teacher's Name :</h4>
+        <h4>School Name :  {this.props.school} </h4>
+        <h4>Teacher's Name : {this.props.teacher.firstName} {this.props.teacher.lastName}</h4>
         </div>
         <div className="print-ls-table">
 
@@ -57,7 +59,7 @@ constructor(props){
           <td>{`1`}</td>
           <td>{`1 of 4`}</td>
           <td>{`40 min`}</td>
-          <td>{`24`}</td>
+          <td>{less.classSize}</td>
         </tr>
 
         <tr>
@@ -72,8 +74,16 @@ constructor(props){
 
 <tr>
   <td colSpan="8">
-    <h8 style={{fontWeight:"bold"}}>Learning Objectives</h8>
-    <p>{}</p>
+    <h4 style={{fontWeight:"bold"}}>Learning Objectives</h4>
+    <h6>knowledge :</h6>
+      <p>{less.knowledge.topics.map(item => (<li>{item.topic}</li>))}</p>
+
+    <h6>Skills :</h6>
+      <p>{less.skills.topics.map(item => (<li>{item.topic}</li>))}</p>
+
+    <h6>attitudes And Values :</h6>
+      <p>{less.attitudesAndValues.topics.map(item => (<li>{item.topic}</li>))}</p>
+
   </td>
 </tr>
 
@@ -84,7 +94,7 @@ constructor(props){
 
 <tr>
   <td colSpan="2">Learning Materials</td>
-  <td colSpan="6"></td>
+  <td colSpan="6">{less.knowledge.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}</td>
 </tr>
 
 <tr>
@@ -106,14 +116,37 @@ constructor(props){
             <th></th>
             <th>Teacher activities</th>
             <th>Learner activities</th>
-            <th>Generic Compotences and cross-cutting issues to be addressed</th>
+            <th>Generic Competences and cross-cutting issues to be addressed</th>
           </tr>
 
           <tr>
-            <td><h3>Introduction:</h3><p>5 Min</p></td>
+            <td><h4>Introduction:</h4><p>{less.teachingTechniques.introduction.duration} Min</p></td>
+            <td>{}</td>
+            <td>{Object.keys(less.teachingTechniques.introduction).forEach(e=>(e+"="+less.teachingTechniques.introduction[e]['item']))}</td>
+            <td></td>
+            
+          </tr>
+          <tr>
+            <td><h4>Development of lesson:</h4><p>{less.teachingTechniques.development.duration} Min</p></td>
+            <td>
+              {
+                intro
+}
+            </td>
+            <td></td>
+            <td></td>
+            
+          </tr>
+          <tr>
+            <td><h4>Conclusion:</h4><p>Summary and assessment {less.teachingTechniques.conclusion.duration} Min</p></td>
             <td></td>
             <td></td>
             <td></td>
+            
+          </tr>
+          <tr>
+            <td><h4>Teacher self-evaluation:</h4><p>5 Min</p></td>
+            <td colSpan={3}></td>
             
           </tr>
 
@@ -128,36 +161,50 @@ constructor(props){
 
 
 
-export function Index(){
+export function Index(props){
   let componentRef = useRef()
   const dispatch = useDispatch();
 
 
   const { list: PLAN } = useSelector((state) => state.lessonPlans);
-
-
-
+  const { user } = useSelector((state) => state.auth)
+  const {list : schools} = useSelector((state) => state.schools)
+  const school = schools.reduce(function (fit, condition) {
+    if (condition._id == user.school) {
+      let keyUnit = condition.name;
+      fit = keyUnit;
+    }
+    return fit;
+  }, "")
+  console.log("00000000000000099999999:",school)
 
     return (
       <div>
         <ReactToPrint
-          trigger={() => <button className="print-btn"> Print This School Report <PrintIcon/></button>}
+          trigger={() => <Button className="check-btn"> Print This Lesson Plan <PrintIcon/></Button>}
           content={() => componentRef}
         />
-        <ComponentToPrint ref={(el) => (componentRef = el)} data={PLAN}/>
+        <ComponentToPrint ref={(el) => (componentRef = el)} data={props.lessonPlan} school={school} teacher={user}/>
       </div>
     )
   
 }
 
-function mapStateToProps(state){
+const mapStateToProps = (state) => {
+  const { auth } = state
+  const {list : schools} = state
+  const user = auth.user
   return {
-    state2 : state
+      state, user , schools
   }
 }
 
-const mapDispatchToProps = {
 
-}
+const mapDispatchToProps = dispatch => ({
+  handleFetchSchool: async () => {
+      await dispatch(handleFetchSchool())
+  },
+})
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index)

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './FeedCards.css'
 import { connect } from 'react-redux'
-import { handleFetchLessonPlan } from '../../store/actions/lessonPlans.actions'
+import { handleFetchLessonPlanSubject } from '../../store/actions/lessonPlans.actions'
 import {handleFetchTeacherData} from '../../store/actions/data/teacher.data.actions'
 import { useDispatch } from 'react-redux';
 import LessonCard from '../feedCard/LessonCard'
@@ -71,13 +71,13 @@ function LessonCards(props) {
           item => (
             <div className='card'>
               <LessonCard
-                title={item.name}
-                details={item.keyCompetency}
+                title={item.lessonName}
+                details={item.keyUnitCompetency}
                 tag='Lesson plan'
                 link={{ txt: 'View More Details', link: 'google.com' }}
                 size={7}
                 covered={4}
-                time={(item.time.start).substring(0, 10)}
+                time={(item.time.day).substring(0, 10)}
                 data={item}
               />
             </div>
@@ -107,7 +107,7 @@ const mapDispatchToProps = dispatch =>({
     dispatch(handleFetchTeacherData())
   },
   handleFetchLessonPlan: (data) => {
-    dispatch(handleFetchLessonPlan(data))
+    dispatch(handleFetchLessonPlanSubject(data))
   }
 })
 

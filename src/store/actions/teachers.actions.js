@@ -27,12 +27,12 @@ export const handleAddTeacher = data => async dispatch => {
     payload: res.data,
   });
 })
-// .catch(function(erro){
-//   dispatch({
-//     type: actions.HANDLE_ADD_TEACHERS_FAIL,
-//     payload: erro,
-//   });
-// })
+.catch(function(erro){
+  dispatch({
+    type: actions.HANDLE_ADD_TEACHERS_FAIL,
+    payload: erro,
+  });
+})
 } 
 
 

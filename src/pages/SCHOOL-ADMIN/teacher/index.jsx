@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import './Index.css'
 import https from '../../../helpers/https'
 import PanelLayout from '../../../components/Layouts/PanelLayout/Index'
-import { connect } from 'react-redux'
+import { connect, useDispatch, useSelector } from 'react-redux'
 import { handleAddTeacher, handleFetchTeachers } from '../../../store/actions/teachers.actions'
-import {handleFetchSubject} from '../../../store/actions/subjects.actions'
-import {handleFetchClasses} from '../../../store/actions/classes.actions'
-import {handleFetchClassTeacher} from '../../../store/actions/classTeacher.actions'
+import { handleFetchSubject } from '../../../store/actions/subjects.actions'
+import { handleFetchClasses } from '../../../store/actions/classes.actions'
+import { handleFetchClassTeacher } from '../../../store/actions/classTeacher.actions'
 import { TextField, Grid, Snackbar, Switch, Select, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, InputLabel } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -18,7 +18,6 @@ import EditorWrapText from 'material-ui/svg-icons/editor/wrap-text'
 import { AgGridReact, AgGridColumn } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import 'ag-grid-enterprise'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button } from 'react-bootstrap';
 import EditorFormatListBulleted from 'material-ui/svg-icons/editor/format-list-bulleted'
@@ -74,7 +73,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export const Index = (props) => { 
+export const Index = (props) => {
+    const dispatch = useDispatch()
     let school = null
     let role = null
     if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
@@ -85,16 +85,17 @@ export const Index = (props) => {
     const onGridReady = (params) => {
         setGridApi(params.api);
         setGridColumnApi(params.columnApi);
-        const updateData = (data) => {setRowData(data);};}
-    const onExportClick = () => {gridApi.exportDataAsExcel({ allColumns: false });}
+        const updateData = (data) => { setRowData(data); };
+    }
+    const onExportClick = () => { gridApi.exportDataAsExcel({ allColumns: false }); }
     const searchDivStyle = { backgroundColor: "#dedede", padding: 10, display: "flex" }
-    const searchStyle = {width: "100%", padding: "10px 20px", borderRadius: 20, outline: 0,border: "2px #1F72C6 solid", fontSize: "100%"}
-    const onFilterTextChange = (e) => {gridApi.setQuickFilter(e.target.value)}
+    const searchStyle = { width: "100%", padding: "10px 20px", borderRadius: 20, outline: 0, border: "2px #1F72C6 solid", fontSize: "100%" }
+    const onFilterTextChange = (e) => { gridApi.setQuickFilter(e.target.value) }
     const [TEACHER, setTEACHER] = useState(props.state.teachers)
     const [openMsg, setOpenMsg] = useState(false)
     const [Data, setData] = useState([])
     const [msg, setMsg] = useState(null)
-    const [ updateData, setUpdateData] = useState(null)
+    const [updateData, setUpdateData] = useState(null)
     const [type, setType] = useState(null)
     const [id, setId] = useState(null)
     const [updating, setUpdating] = useState(false)
@@ -113,7 +114,7 @@ export const Index = (props) => {
     })
     const [classData, setClassData] = useState({
         subject: null,
-        assignedClass : null
+        assignedClass: null
     })
     const [open, setOpen] = React.useState(false);
     const [openClass, setOpenClass] = React.useState(false);
@@ -137,46 +138,53 @@ export const Index = (props) => {
     }
 
     const handleUpdate = async () => {
-        if (teacherData){
-            props.handleUpdateClass({id: id, data: teacherData})
-                        handleOpenMsg('success', 'Class Updated')
-                            props.handleFetchClasses(school)
-                            setTEACHER(props.state.teachers)
-                            setData(formatData(TEACHER.list))
-                            update()
-                            setData(formatData(TEACHER.list))
-                        setOpen(false);
-                        setUpdating(false)
-                        setTeacherData({
-                            school: school,
-                            role: users.TEACHER,
-                            firstName: null,
-                            lastName: null,
-                            email: null,
-                            phoneNumber: null,
-                            level: null,
-                            yearsOfExperience: null,
-                            workingStatus: null
-                        })
+        if (teacherData) {
+            props.handleUpdateClass({ id: id, data: teacherData })
+            handleOpenMsg('success', 'Class Updated')
+            props.handleFetchClasses(school)
+            setTEACHER(props.state.teachers)
+            setData(formatData(TEACHER.list))
+            update()
+            setData(formatData(TEACHER.list))
+            setOpen(false);
+            setUpdating(false)
+            setTeacherData({
+                school: school,
+                role: users.TEACHER,
+                firstName: null,
+                lastName: null,
+                email: null,
+                phoneNumber: null,
+                level: null,
+                yearsOfExperience: null,
+                workingStatus: null
+            })
         }
     };
-    const handleCreate = () => {
-        props.handleAddTeacher(teacherData)   
-        handleOpenMsg('success', 'Teacher Updated')
-        setTimeout(() => {
-            props.handleFetchTeachers(school)
-            setTEACHER(props.state.teachers)
-            setData(formatData(props.list?props.list:[]))
-            update()
-            setData(formatData(props.list?props.list:[]))
-        }, 0);
+    const handleCreate = async () => {
+
+        https.post('/auth/signup', teacherData, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+            .then((res) => {
+                handleOpenMsg('success', 'Teacher Updated')
+                setTimeout(() => {
+                    props.handleFetchTeachers(school)
+                    setTEACHER(props.state.teachers)
+                    setData(formatData(props.list ? props.list : []))
+                    update()
+                    setData(formatData(props.list ? props.list : []))
+                }, 0);
+            })
+            .catch(function (erro) {
+                handleOpenMsg('warning', erro.message)
+            })
+
     };
 
     const handleCreateClass = async () => {
         // alert(JSON.stringify(classData))
         handleOpenMsg('success', 'processing.....')
         await https.post('/class-teachers/', classData, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
-            if (res.status == 200) {handleOpenMsg('success', 'class is assigned successfully'); handleClose()}
+            if (res.status == 200) { handleOpenMsg('success', 'class is assigned successfully'); handleClose() }
             else handleOpenMsg('warning', 'Class has not assigned')
         })
     };
@@ -236,32 +244,32 @@ export const Index = (props) => {
                 ...teacherData,
                 level: e.target.value
             })
-        if(e.target.name === 'clas') setClassData({
+        if (e.target.name === 'clas') setClassData({
             ...classData,
             assignedClass: e.target.value
         })
-        if(e.target.name=== 'subject') setClassData({
+        if (e.target.name === 'subject') setClassData({
             ...classData,
             subject: e.target.value
         })
-            
+
     }
 
     const formatData = (unformatted) => {
         let i = 1
         const formatted = []
-        unformatted.forEach(i => {if(i.role === "TEACHER") formatted.push({ firstName: i.firstName, lastName: i.lastName, email: i.email, school: i.school, role: i.role, phoneNumber: i.phoneNumber, level: i.level, yearsOfExperience: i.yearsOfExperience, workingStatus: i.workingStatus, id: i._id }) })
+        unformatted.forEach(i => { if (i.role === "TEACHER") formatted.push({ firstName: i.firstName, lastName: i.lastName, email: i.email, school: i.school, role: i.role, phoneNumber: i.phoneNumber, level: i.level, yearsOfExperience: i.yearsOfExperience, workingStatus: i.workingStatus, id: i._id }) })
         return formatted
     }
-        const editRow = (parms) => {
-            if(id== null) props.handleFetchClassTeacher(parms.value)
-            setId(parms.value)
-            setClassData({
-                ...classData,
-                teacher: parms.value
-            })
-            setOpenClass(true)
-        }
+    const editRow = (parms) => {
+        if (id == null) props.handleFetchClassTeacher(parms.value)
+        setId(parms.value)
+        setClassData({
+            ...classData,
+            teacher: parms.value
+        })
+        setOpenClass(true)
+    }
     // const deleteRow = (parms) => {
     //     console.log(parms.value,"%%%%%")
     //     setId(parms.value)
@@ -280,9 +288,9 @@ export const Index = (props) => {
     { headerName: 'ID', field: 'id', hide: true, flex: 1 },
     {
         headerName: "Action", field: "id",
-        cellRendererFramework: (params) => <div style={{display: "flex", justifyContent : "space-evenly"}}>
-        <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"35px", paddingRight:"35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => editRow(params)}>Assigned Classes</div>
-        {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
+        cellRendererFramework: (params) => <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft: "35px", paddingRight: "35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => editRow(params)}>Assigned Classes</div>
+            {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
         </div>
     }]
 
@@ -290,7 +298,7 @@ export const Index = (props) => {
         props.handleFetchSubject()
         props.handleFetchTeachers(school)
         setTEACHER(props.state.teachers)
-            setData(formatData(props.list))
+        setData(formatData(props.list))
     }
 
     useEffect(() => {
@@ -300,8 +308,8 @@ export const Index = (props) => {
         }
     }, [TEACHER])
     useEffect(() => {
-        if(id)
-        props.handleFetchClassTeacher(id)
+        if (id)
+            props.handleFetchClassTeacher(id)
     }, [id])
     useEffect(() => {
     }, [])
@@ -319,7 +327,7 @@ export const Index = (props) => {
                                 <div style={{ height: '90%', boxSizing: 'border-box' }}>
                                     <div style={searchDivStyle}>
                                         <input type="search" style={searchStyle} onChange={onFilterTextChange} placeholder="search ....." />
-                                        <Button style={{borderRadius: "15px"}} onClick={() => onExportClick()}>export</Button>
+                                        <Button style={{ borderRadius: "15px" }} onClick={() => onExportClick()}>export</Button>
                                     </div>
                                     <div
                                         id="myGrid"
@@ -330,7 +338,7 @@ export const Index = (props) => {
                                         className="ag-theme-alpine">
                                         <AgGridReact
                                             columnDefs={columns}
-                                            rowData={formatData(props.list?props.list:[])}
+                                            rowData={formatData(props.list ? props.list : [])}
                                             rowSelection={'multiple'}
                                             onGridReady={onGridReady}
                                         />
@@ -570,26 +578,26 @@ export const Index = (props) => {
                         <DialogContentText>
                             <div className="frm" style={{ minWidth: "100%" }}>
                                 <Grid container spacing={2}>
-                                <Grid item xs={12} sm={12}>
-                                
- {props.classTeacher !== null ?
-  <Table striped bordered hover>
-      <thead>
-    <tr>
-      <th>Class</th>
-      <th> Subject</th>
-    </tr>
-  </thead>
-  <tbody>
-      {props.classTeacher.map(i => (
-          <tr>
-              <td>{i.class.level.name} {i.class.label}</td>
-              <td>{i.subject.name}</td>
-          </tr>
-      ))}
-  </tbody>
-</Table>: null
-}
+                                    <Grid item xs={12} sm={12}>
+
+                                        {props.classTeacher !== null ?
+                                            <Table striped bordered hover>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Class</th>
+                                                        <th> Subject</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {props.classTeacher.map(i => (
+                                                        <tr>
+                                                            <td>{i.class.level.name} {i.class.label}</td>
+                                                            <td>{i.subject.name}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </Table> : null
+                                        }
                                     </Grid>
                                     <Grid item xs={6} sm={6}>
                                         <TextField
@@ -608,8 +616,8 @@ export const Index = (props) => {
                                                 <em>None</em>
                                             </MenuItem>
                                             {props.classes != null & props.classes != undefined ?
-                                                        props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level ? item.level.name : ''} {item.combination ? item.combination.name: ""} {item.label}</MenuItem>)) : null
-                                                    }
+                                                props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level ? item.level.name : ''} {item.combination ? item.combination.name : ""} {item.label}</MenuItem>)) : null
+                                            }
                                         </TextField>
                                     </Grid>
                                     <Grid item xs={6} sm={6}>
@@ -630,7 +638,7 @@ export const Index = (props) => {
                                             </MenuItem>
                                             {
                                                 props.subjects &&
-                                                props.subjects.map(i => 
+                                                props.subjects.map(i =>
                                                     (<MenuItem value={i._id} key={i._id}>{i.name}</MenuItem>))
 
                                             }
@@ -644,9 +652,9 @@ export const Index = (props) => {
                         <Button onClick={handleClose} color="primary">
                             Cancel
                         </Button>
-                        
-                            <Button onClick={handleCreateClass} color="primary">
-                                Assign
+
+                        <Button onClick={handleCreateClass} color="primary">
+                            Assign
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -680,10 +688,10 @@ const mapDispatchToProps = dispatch => ({
     handleAddTeacher: async (data) => {
         await dispatch(handleAddTeacher(data))
     },
-    handleFetchClasses : (school) => {
+    handleFetchClasses: (school) => {
         dispatch(handleFetchClasses(school))
     },
-    handleFetchSubject : () => {
+    handleFetchSubject: () => {
         dispatch(handleFetchSubject())
     },
     handleFetchClassTeacher: (id) => {
