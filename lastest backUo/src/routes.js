@@ -24,7 +24,9 @@ import CheckInOutPage from './pages/headStudy/checkInOut/Index'
 //School-Admin
 import schoolAdminDaschbord from './pages/SCHOOL-ADMIN/index'
 import studentsPage from './pages/SCHOOL-ADMIN/student/index'
+import studentAddPage from './pages/SCHOOL-ADMIN/student/AddStudent'
 import TeachersPage from './pages/SCHOOL-ADMIN/teacher/index'
+import TeachersClassPage from './pages/SCHOOL-ADMIN/teacher/Classes'
 import timeTablePage from './pages/SCHOOL-ADMIN/timeTable/index'
 import disciplinePage from './pages/SCHOOL-ADMIN/discipline/index'
 import termPage from './pages/SCHOOL-ADMIN/term/index'
@@ -75,12 +77,13 @@ export default () => {
           {/* schoolAdmin routes */}
           <Route exact path="/schoolAdmin" component={schoolAdminDaschbord} />
           <Route exact path="/schoolAdmin/students" component={studentsPage} />
+          <Route exact path="/schoolAdmin/students/add" component={studentAddPage} />
           <Route exact path="/schoolAdmin/term" component={termPage} />
           <Route exact path="/schoolAdmin/discipline" component={disciplinePage} />
           <Route exact path="/schoolAdmin/questions" component={questionsPage} />
           <Route exact path="/schoolAdmin/report" component={reportPage} />
           <Route exact path="/schoolAdmin/classes" component={classesPage} />
-          
+          <Route exact path="/schoolAdmin/teachers/classes" component={TeachersClassPage} />
           <Route exact path="/schoolAdmin/teachers">
             <TeachersPage  />
           </Route>

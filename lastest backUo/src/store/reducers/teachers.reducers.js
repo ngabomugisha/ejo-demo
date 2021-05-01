@@ -1,4 +1,4 @@
-import { HANDLE_FETCH_TEACHERS_SUCCESS } from '../types';
+import { HANDLE_FETCH_TEACHERS_SUCCESS, HANDLE_ADD_TEACHERS_FAIL  } from '../types';
 
 const INITIAL_TEACHERS_STATE = {
   list: [],

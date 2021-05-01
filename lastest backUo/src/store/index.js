@@ -10,7 +10,6 @@ const persistConfig = {
   key: 'root',
   storage,
   stateReconciler: hardSet,
-  blackList : []
 };
 
 const persistedReducers = persistReducer(persistConfig, reducers);

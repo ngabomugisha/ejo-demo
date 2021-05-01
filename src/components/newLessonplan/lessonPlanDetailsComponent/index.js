@@ -134,7 +134,7 @@ useEffect(() => {
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey="0">
                           <Card.Body>
-                              <div className="in-card-title"><h4>Content Focus:</h4><h5> Live Lecturing Assigned Reading/Text </h5></div>
+                              <div className="in-card-title"><h4>Content Focus:</h4><h5>Live Lecturing Assigned Reading/Text </h5></div>
                               <div className="in-card-title"><h4>Interactivity Focus:</h4><h5> Sed ut perspiciatis </h5></div>
                               <div className="in-card-title"><h4>Critical Thinking: Production: Problem Solving: Reflection:</h4><h5></h5></div>
                          </Card.Body>

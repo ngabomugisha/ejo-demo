@@ -45,9 +45,7 @@ function LessonCards(props) {
 
     setOpenAlert(false);
   };
-  console.log('SELECTED DATA',props.selected, '**************')
   const [fetchedPlans, setFetchedPlans] = useState(props.lesss)
-  console.log("FETCHED DATA", fetchedPlans, "**********")
   const dispatch = useDispatch();
   const [subjects, setSubjects] = React.useState('');
   const [plans, setPlans] = useState(null)
@@ -69,7 +67,7 @@ function LessonCards(props) {
   }
   }, [])
 
-  const teacher = props.state.auth.user._id;
+  const teacher = props.state.auth && props.state.auth.user && props.state.auth.user._id;
   const history = useHistory();
   const [DATA, setDATA] = useState(null)
   const [classs, setClasss] = React.useState(null);
@@ -114,12 +112,10 @@ function LessonCards(props) {
     //   if(DATA.class && DATA.subject)   
     // props.handleSetTeacherData(DATA)
     // setOpen(false);
-    console.log("UPDATED DATA", JSON.parse(localStorage.getItem('DATA')))
     setOpen(false)
   };
 
   const fetchClasses = async () => {
-    console.log(teacher)
     const req = await https.get(`/class-teachers/${teacher}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
       .then((res) => {
         setClasss(res.data)
@@ -371,13 +367,13 @@ setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.get
           item => (
             <div className='card'>
               <LessonCard
-                title={item.lessonName}
-                details={item.keyUnitCompetency}
+                title={item && item.lessonName}
+                details={item && item.keyUnitCompetency}
                 tag='Lesson plan'
                 link={{ txt: 'View More Details', link: 'google.com' }}
                 size={7}
                 covered={4}
-                time={(item.time.day).substring(0, 10)}
+                time={item.time && (item.time.day).substring(0, 10)}
                 data={item}
               />
             </div>

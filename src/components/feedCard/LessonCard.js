@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import './LessonCard.css'
 import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 import PrintDetail from '../../components/newLessonplan/lessonPlanDetailsComponent/PrintLessonPlan'
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -15,7 +16,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-
+import { handleFetchSubject} from '../../store/actions/subjects.actions'
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: 'relative',
@@ -30,44 +31,47 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function LessonCard({title, tag, details, link, time, size, covered, data}) {  
+function LessonCard(props) {  
+  
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [subjects, setSubjects] = useState([])
     const handleClickOpen = () => {
-      if(data)
+      if(props.data)
       setOpen(true);
     };
     const handleClose = () => {
       setOpen(false);
     };
-  
+  useEffect(() => {
+  }, [])
     return (<>
         <div className='card-container'>
             <div className='card-hd'>
-                <h4 className='card-title'>{title}</h4>
-                <h4 className='card2-tag'>{tag}</h4>
+                <h4 className='card-title'>{props.title}</h4>
+                <h4 className='card2-tag'>{props.tag}</h4>
             </div>
             <div className='card2-body'>
                 <p className='card2-details'>
-                    {details}
+                    {props.details}
                 </p>
             </div>
             <div className='card2-ft'>
                 <p className='card2-time'>
-                    {time}
+                    {props.time}
                 </p>
                 <p className='card2-size'>
-                    Expected: {size}
+                    Expected: {props.size}
                 </p>
                 <p className='card2-covered'>
-                    Covered: {covered}
+                    Covered: {props.covered}
                 </p>
                 {/* <Link to={{
                     pathname: '/teacher/lessonPlan/details',
                     state: {data: data}
             }} > */}
                 <p className='card2-link' onClick={handleClickOpen}>
-                    {link.txt}
+                    {props.link.txt}
                 </p>
                 {/* </Link> */}
 
@@ -88,11 +92,26 @@ function LessonCard({title, tag, details, link, time, size, covered, data}) {
             </Button>
           </Toolbar>
         </AppBar>
-       <PrintDetail lessonPlan = {data}/>
+       <PrintDetail lessonPlan = {props.data} subjects={subjects}/>
       </Dialog>
 
         </>
     )
 }
 
-export default LessonCard
+const mapStateToProps = (state) => {
+    const {subjects} = state
+    // const list = subjects.list
+  return{
+    state,
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  handleFetchSubject: async () => {
+      await dispatch(handleFetchSubject())
+  },
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LessonCard)

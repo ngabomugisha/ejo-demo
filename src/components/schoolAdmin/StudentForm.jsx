@@ -236,7 +236,6 @@ export const StudentForm = (props) => {
     }, [c])
 
     useEffect(()=>{
-        console.log('ob is changed bagabo :', ob)
         if(ob!= null){
             console.log('______________UPDATE HAPPEN_________________',ob)
              https.put(`/students/${data._id}`, ob , { headers: { 'Authorization': `Basic ${localStorage.token}` } })
@@ -323,7 +322,6 @@ export const StudentForm = (props) => {
             console.log('AFTER REQUEST', village)
         }
     }
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",props.recordForEdit)
     }, [])
     return (
         <>
@@ -562,7 +560,16 @@ export const StudentForm = (props) => {
                                     {/* health condition and SCHOLASHIP */}
 
                                     <Grid container direction="row" justify="center" spacing={4} maxWidth="xs">
-                                        <Grid item xs={12} sm={8}>
+                                        <Grid item xs={12} sm={12}>
+                                            <Field
+                                                as={TextField}
+                                                name="allergies"
+                                                variant="outlined"
+                                                fullWidth
+                                                label="allergies"
+                                            />
+                                    </Grid>
+                                        <Grid item xs={12} sm={12}>
                                             <FormControl component="fieldset" fullWidth>
                                                 <Field
                                                     className="myfield"
@@ -583,7 +590,7 @@ export const StudentForm = (props) => {
                                                         />)} />
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={12} sm={4}>
+                                        <Grid item xs={12} sm={12}>
                                             <Field
                                                 className="myfield"
                                                 as={TextField}
@@ -606,18 +613,8 @@ export const StudentForm = (props) => {
                                         </Grid>
                                     </Grid>
 
-
-                                    <Grid container justify="center" xs={12} minWidth="xs" width="xs">
-                                        <Grid item xs={12} sm={12}>
-                                            <Field
-                                                as={TextField}
-                                                name="allergies"
-                                                variant="outlined"
-                                                fullWidth
-                                                label="allergies"
-                                            />
-                                        </Grid>
-                                    </Grid>
+<div className="label-ngo">
+                                 
                                     {/* NGO details */}
                                     <Grid container direction="row" spacing="1" justify="space-between" className="grouped">
                                         <Grid item xs={12} sm={6}>
@@ -660,7 +657,7 @@ export const StudentForm = (props) => {
                                             />
                                         </Grid>
                                     </Grid>
-
+                                    </div>
                                     {/* parents's Details */}
                                     <Grid item xs={12} minWidth="xl">
                                         <Accordion defaultActiveKey="">

@@ -447,7 +447,7 @@ export const Index = (props) => {
             setLoadTimetable(true)
         }
 
-        else if (values.class != '' && values.teacher != "" && values.subject !== '') {
+        else if (values.class != '' && values.teacher != "" && values.subject != '') {
             async function fetchSubjects() {
                 const req = await https.get(`/timetables/${values.class}/${values.teacher}/${values.subject}/class-teacher-subject`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
                     .then((res) => {
@@ -548,7 +548,7 @@ export const Index = (props) => {
                                                     }}
                                                 >
                                                     <MenuItem value="">
-                                                        <em>None</em>
+                                                        <em>All</em>
                                                     </MenuItem>
                                                     {props.classes ?
                                                         props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level? item.level.name: ''} {item.combination? item.combination.name : ""} {item.label}</MenuItem>)) : ""
@@ -570,7 +570,7 @@ export const Index = (props) => {
                                                     }}
                                                 >
                                                     <MenuItem value="">
-                                                        <em>None</em>
+                                                        <em>All</em>
                                                     </MenuItem>
                                                     {teacher != null ?
                                                         teacher.map(item => (<MenuItem key={item._id} value={item._id}>{item.firstName}&nbsp;{item.lastName}</MenuItem>)) : ""

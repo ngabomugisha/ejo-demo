@@ -13,8 +13,31 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MdDateRange } from "react-icons/md";
 import Spinner from 'react-bootstrap/Spinner'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(3),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+    },
     container: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -26,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
 export const Index = (props) => {
     const classes = useStyles();
     const { list: ALL_TERMS } = useSelector((state) => state.terms);
@@ -34,9 +59,17 @@ export const Index = (props) => {
     const [start, setStart] = useState('')
     const [end, setEnd] = useState('')
     const [term1, setTerm1] = useState(null)
+    const [open, setOpen] = useState(false)
     const [term2, setTerm2] = useState(null)
     const [term3, setTerm3] = useState(null)
     const [updateData, setUpdateData] = useState({})
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
     const fetchTermsData = async () => {
         try {
@@ -59,6 +92,7 @@ console.log('this is data to pass',data,typeof(data))
                 try{
                     setIsLoading(true)
                     await dispatch(handleUpdateTerm(id,data));
+                    setOpen(true)
                         fetchTermsData()
                 } catch (error)
                 {
@@ -190,6 +224,12 @@ console.log('this is data to pass',data,typeof(data))
                     </Paper>                    
                 </div>
             </PanelLayout>
+
+            <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Date is updated!
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

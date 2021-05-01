@@ -14,6 +14,7 @@ import Skeleton from "@material-ui/lab/Skeleton"
 import moment from 'moment';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { handleFetchTerms, handleUpdateTerm } from '../../../store/actions/term.action'
+import {handleFetchClasses} from '../../../store/actions/classes.actions'
 import { useDispatch, useSelector } from 'react-redux';
 import {SCHOOLADMIN} from '../../../pages/Auth/Users'
 
@@ -29,7 +30,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Index = (props) => {
-    const school = props.state.auth.user.school;
+    let school = null
+    let role = null
+    let p2 = null
+    let edit = null
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+  
     const classes = useStyles();
     const [classs, setClasss] = React.useState([]);
     const { list: ALL_TERMS } = useSelector((state) => state.terms);
@@ -44,6 +50,7 @@ export const Index = (props) => {
     const [wed, setWed] = useState([])
     const [thu, setThu] = useState([])
     const [fri, setFri] = useState([])
+    const [sat, setSat] = useState([])
     const dispatch = useDispatch();
 
     let timetabledata = {
@@ -52,7 +59,8 @@ export const Index = (props) => {
             tuesday: tue,
             wednesday: wed,
             thursday: thu,
-            friday: fri
+            friday: fri,
+            saturday: sat
         }
     }
 
@@ -285,6 +293,48 @@ export const Index = (props) => {
             return fit;
         }, []))
 
+                //this is for saturday
+                setSat(dt.reduce(function (fit, opt) {
+
+                    if (opt.time.dayOfWeek == 6) {
+                        var sm = {
+                            'id': 6,
+                            "_id": opt._id,
+                            'name': subject.reduce(function (done, cond) {
+                                if (cond._id === opt.subject) {
+                                    var yes = cond.name
+                                    done = yes
+                                }
+                                return done;
+                            }, []) + "& Teacher :" +
+                                teacher.reduce(function (done2, cond2) {
+                                    if (cond2._id === opt.teacher) {
+                                        var yes2 = cond2.firstName + " " + "" + cond2.lastName;
+                                        done2 = yes2;
+                                    }
+                                    return done2;
+                                }, [])
+                            ,
+                            'type': "custom",
+                            'startTime':
+                                moment("2018-02-23T" +
+                                    opt.time.starts.substring(0, 2) +
+                                    ":" +
+                                    opt.time.starts.substring(2, 4) +
+                                    ":00"),
+                            'endTime':
+                                moment("2018-02-23T" +
+                                    opt.time.ends.substring(0, 2) +
+                                    ":" +
+                                    opt.time.ends.substring(2, 4) +
+                                    ":00")
+                        };
+                        fit.push(sm);
+                    }
+                    console.log("RETURNED OBJECT:", fit)
+                    return fit;
+                }, []))
+
         if (mon.length > 0) {
             timetabledata = {
                 'events': {
@@ -320,6 +370,18 @@ export const Index = (props) => {
                 }
             }
         }
+
+        if (sat.length > 0) {
+            timetabledata = {
+                'events': {
+                    ...timetabledata.events,
+                    'saturday': sat
+                }
+            }
+        }
+    }
+    const handleClose =()=>{
+        setOpenPopup(false)
     }
 
     const handleSave = () => {
@@ -409,11 +471,9 @@ export const Index = (props) => {
     useEffect(() => {
         fetchTermsData()
 
-        console.log("MONDAY DATA", timetabledata)
-        if (timetabledata.events.monday || timetabledata.events.tuesday || timetabledata.events.wednesday || timetabledata.events.thursday || timetabledata.events.friday) {
-            setTimeout(() => {
-            }, 2000);
-        }
+        // console.log("MONDAY DATA", timetabledata)
+        // if (timetabledata.events.monday || timetabledata.events.tuesday || timetabledata.events.wednesday || timetabledata.events.thursday || timetabledata.events.friday) {
+        // }
 
     }, [mon])
 
@@ -456,11 +516,12 @@ export const Index = (props) => {
             return req
         }
         fetchClasses()
+        props.handleFetchClasses(school)
     }, [])
 
     return (
         <div>
-            <PanelLayout selected={props.state.auth.user.role === SCHOOLADMIN ? 6 : 3} role={props.state.auth.user.role} >
+            <PanelLayout selected={props.state.auth.user.role === SCHOOLADMIN ? 7 : 3} role={props.state.auth.user.role} >
                 <div className="timeTable-container">
                     <div>
                         <div className="form-container">
@@ -489,8 +550,8 @@ export const Index = (props) => {
                                                     <MenuItem value="">
                                                         <em>None</em>
                                                     </MenuItem>
-                                                    {classs != null ?
-                                                        classs.map(item => (<MenuItem key={item._id} value={item._id}>{item.label}</MenuItem>)) : ""
+                                                    {props.classes ?
+                                                        props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level? item.level.name: ''} {item.combination? item.combination.name : ""} {item.label}</MenuItem>)) : ""
                                                     }
                                                 </Field>
                                             </Grid>
@@ -586,19 +647,25 @@ export const Index = (props) => {
                 title="Create new timetable slot"
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}>
-                <TimetableForm class={classs} subject={subject} teachers={teacher} terms={ALL_TERMS} />
+                <TimetableForm class={classs} subject={subject} teachers={teacher} terms={ALL_TERMS} close={handleClose}/>
 
             </Popup>
         </div>
     )
 }
 
-const mapStateToProps = (state) => ({
-    state: state
+const mapStateToProps = (state) => {
+    const classes = state.classes.list
+    return {
+        state,classes
+    }
+}
+
+const mapDispatchToProps = dispatch => ({
+    handleFetchClasses : (school) => {
+        dispatch(handleFetchClasses(school))
+    }
 })
 
-const mapDispatchToProps = {
-
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index)

@@ -1,80 +1,50 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { connect,useSelector } from 'react-redux'
 import './style.css'
 import PanelLayout from '../../../components/Layouts/PanelLayout/Index'
 import Table from './Table'
 import { Button, Paper, TextField } from '@material-ui/core'
+import Discipline from './Discipline'
+import {handleFetchDisciplines, handleUpdateDiscipline} from '../../../store/actions/discipline.actions'
 
-export const index = (props) => {
+export const Index = (props) => {
     let school = null
     let role = null
-    if (props.state.auth != undefined){if(props.state.auth.user != undefined) {school = props.state.auth.user.school; role = props.state.auth.user.role}}
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+
+    useEffect(() => {
+        props.handleFetchDisciplines()
+    }, [])
     return (
         <div>
-            
+
             <PanelLayout selected={5} role={role}>
-                        <div className="report-hd">
-                            <h3>Terms settings</h3>
-                        </div>
-                <div className="discipline-container">
-                    
-                <div className='hd-1'>
-
-</div>
-                <Paper className='item' elevation={0}>
-
-                    <div className='dsci'>
-                        <h3>key word 1</h3>
-                        <TextField
-                        defaultValue="40"
-                        />
-                        <Button>
-                            edit
-                        </Button>
-                    </div>
-
-                </Paper>
-                <Paper className='item' elevation={0}>
-
-                    <div className='dsci'>
-                        <h3>key word 1</h3>
-                        <TextField
-                        value="40"
-                        />
-                        <Button>
-                            edit
-                        </Button>
-                    </div>
-
-                </Paper>
-                <Paper className='item' elevation={0}>
-
-                    <div className='dsci'>
-                        <h3>key word 1</h3>
-                        <TextField
-                        value="40"
-                        />
-                        <Button>
-                            edit
-                        </Button>
-                    </div>
-
-                </Paper>
-
-                <div className="btn-save-disc">
+                <div className="report-hd">
+                    <h3>Discipline settings</h3>
                 </div>
+                <div className="discipline-container">
+
+                    <Discipline  />
+
                 </div>
             </PanelLayout>
         </div>
     )
 }
 
-const mapStateToProps = (state) => ({
-    state: state
-})
 
-const mapDispatchToProps = {
-    
+const mapStateToProps = (state) => {
+    const { discipline } = state
+    const list = discipline.list
+    return {
+        state, list
+    }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(index)
+const mapDispatchToProps = dispatch => ({
+    handleFetchDisciplines: async () => {
+        await dispatch(handleFetchDisciplines())
+    },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index)

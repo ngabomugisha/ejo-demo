@@ -3,6 +3,7 @@ import auth from './auth.reducers';
 import schools from './schools.reducers';
 import students from './students.reducers';
 import student from './data/student.reducers'
+import discipline from './discipline.reducers'
 import classes from './classes.reducers'
 import combinations from './combinations.reducers'
 import levels from './levels.reducers'
@@ -33,6 +34,7 @@ const reducers = combineReducers({
   combinations,
   levels,
   classTeacher,
+  discipline,
   teachers,
   terms,
   questions,

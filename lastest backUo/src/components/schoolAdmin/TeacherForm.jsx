@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
-export const StudentForm = () => {
+export const StudentForm = (props) => {
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -231,6 +231,7 @@ export const StudentForm = () => {
 
             <Container component="main" minWidth="xl" >
                 <CssBaseline />
+                <p>is this the one?</p>
                 <div className={classes.paper}>
                     <Formik
                         initialValues={initialValue}

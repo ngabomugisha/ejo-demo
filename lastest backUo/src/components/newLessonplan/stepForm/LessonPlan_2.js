@@ -19,6 +19,9 @@ import { v4 as uuidv4 } from "uuid";
 import img from "../../../assets/img/home.png";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TiUpload } from "react-icons/ti";
+import LinearProgress from '@material-ui/core/LinearProgress';
+import ProgressBar from 'react-bootstrap/ProgressBar'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,9 +72,9 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
   //to be removed
   const [values, setValues] = useState({
     amount: "",
-    password: "",
-    weight: "",
-    weightRange: "",
+    knowledge: "",
+    bloomTaxonomyLevel: "",
+    standardCriteriaPerformance: "",
     showPassword: false,
   });
 
@@ -194,10 +197,11 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
                       <Select
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
-                        value={input.knowledge}
+                        value={inputs.knowledge}
                         onChange={(e) => handleChangeInput(input.id, e)}
                         label="Select Knowledge"
                         color="primary"
+                        name="knowledge"
                         autoWidth={false}
                       >
                         {units &&
@@ -255,7 +259,8 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
                       <Select
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
-                        value={input.bloomTaxonomyLevel}
+                        value={inputs.bloomTaxonomyLevel}
+                        name='bloomTaxonomyLevel'
                         onChange={(e) => handleChangeInput(input.id, e)}
                         label="Cognitive Domain Level"
                       >
@@ -278,7 +283,8 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
                       <Select
                         labelId="demo-simple-select-outlined-label"
                         id="demo-simple-select-outlined"
-                        value={input.standardCriteriaPerformance}
+                        name='standardCriteriaPerformance'
+                        value={inputs.standardCriteriaPerformance}
                         onChange={(e) => handleChangeInput(input.id, e)}
                         label="Standard Criteria Performance"
                       >
@@ -297,7 +303,10 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
                         <MenuItem value={100}>100</MenuItem>
                       </Select>
                     </FormControl>
+                   
+      {/* <LinearProgress variant="determinate" value={input.standardCriteriaPerformance} /> */}
                   </div>
+                  <ProgressBar now={input.standardCriteriaPerformance} label={`${input.standardCriteriaPerformance}%`} />
                     <div className="delete-btn">
                     {inputs.length <= 1 ? "":
                       <button

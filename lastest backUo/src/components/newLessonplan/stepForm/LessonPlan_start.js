@@ -28,6 +28,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState("paper");
   const [slot, setSlot] = useState(null);
+  const [lessonNum,setLessonNum] = useState(null)
   const handleClickOpen = () => {
     setOpen(true);
     setScroll("paper");
@@ -78,19 +79,24 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
       units.reduce(function (fit, condition) {
         if (condition._id == uni) {
           let keyUnit = condition.keyCompetency;
-          fit.push(keyUnit);
+          fit = keyUnit;
         }
         return fit;
-      }, [])
+      }, "")
     );
     {
       if (keyUnitComp) {
-        formData.keyUnitCompetency = keyUnitComp[0];
+        formData.keyUnitCompetency = keyUnitComp;
       }
     }
   };
 
   //END OF HANDLE SUBJ............................
+
+  const handleChange = (e) => {
+    if(e.target.name == 'lessonNum') setLessonNum(e.target.value)
+  }
+
 
   const [classs, setClasss] = React.useState([]);
   const [selectedDate, setSelectedDate] = React.useState(
@@ -191,7 +197,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
                   done = yes;
                 }
                 return done;
-              }, []) +
+              }, '') +
               "& Teacher :" +
               teacher.reduce(function (done2, cond2) {
                 if (cond2._id === opt.teacher) {
@@ -199,7 +205,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
                   done2 = yes2;
                 }
                 return done2;
-              }, []),
+              }, ''),
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
@@ -690,12 +696,15 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
             variant="outlined"
             type="text"
             fullWidth
+            value={lessonNum}
+            name="lessonNum"
             select
+            onChange={handleChange}
             InputLabelProps={{
               shrink: true,
             }}
           >
-            <MenuItem value="">1</MenuItem>
+            <MenuItem key= '1' value="1">1</MenuItem>
           </TextField>
         </Grid>
 

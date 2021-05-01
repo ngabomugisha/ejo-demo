@@ -17,9 +17,25 @@ import { AgGridReact, AgGridColumn } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
+// // import Dialog from '@material-ui/core/Dialog';
+// import DialogActions from '@material-ui/core/DialogActions';
+// import DialogContent from '@material-ui/core/DialogContent';
+// import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogTitle from '@material-ui/core/DialogTitle';
 import EditorFormatListBulleted from 'material-ui/svg-icons/editor/format-list-bulleted'
 import { DeleteForeverTwoTone } from '@material-ui/icons'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Draggable from 'react-draggable';
+import { AiOutlineWarning} from 'react-icons/ai'
+
+function PaperComponent(props) {
+    return (
+        <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper {...props} />
+        </Draggable>
+    );
+}
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -102,11 +118,12 @@ export const Index = (props) => {
     const { list: LEVELS } = props.state.levels
     const [openMsg, setOpenMsg] = useState(false)
     const [Data, setData] = useState([])
-    const [msg , setMsg] = useState(null)
+    const [msg, setMsg] = useState(null)
     const [type, setType] = useState(null)
     const [id, setId] = useState(null)
     const [updating, setUpdating] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [isConfirmed, setIsConfirmed] = useState(false)
     const classes = useStyles();
     const [classData, setClassData] = useState({
         school: school,
@@ -117,10 +134,25 @@ export const Index = (props) => {
     const [open, setOpen] = React.useState(false);
     const [fullWidth, setFullWidth] = React.useState(true);
     const [maxWidth, setMaxWidth] = React.useState('md');
+    const [show, setShow] = useState(false);
+
+    const handleCloseDelete = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const [openDel, setOpenDel] = React.useState(false);
+
+    const handleClickOpenDel = () => {
+        setOpenDel(true);
+    };
+
+    const handleCloseDel = () => {
+        setOpenDel(false);
+    };
+
     const handleClickOpen = () => {
         setOpen(true);
     };
-    const handleOpenMsg = (ty,msg) => {
+    const handleOpenMsg = (ty, msg) => {
         setMsg(msg)
         setType(ty)
         setOpenMsg(true)
@@ -134,54 +166,58 @@ export const Index = (props) => {
     }
 
     const handleUpdate = async () => {
-        if (classData.level !== null && classData.combination !== null && classData.label !== null){
-            props.handleUpdateClass({id: id, data: classData})
-                        handleOpenMsg('success', 'Class Updated Successfully')
-                            props.handleFetchClasses(school)
-                            setCLASSES(props.state.classes)
-                            setData(formatData(CLASSES.list))
-                            update()
-                            setData(formatData(CLASSES.list))
-                        setOpen(false);
-                        setUpdating(false)
-                        setClassData({
-                            school: school,
-                            level: null,
-                            combination: null,
-                            label: null
-                        })
+        if (classData.level !== null && classData.combination !== null && classData.label !== null) {
+            props.handleUpdateClass({ id: id, data: classData })
+            handleOpenMsg('success', 'Class Updated Successfully')
+            props.handleFetchClasses(school)
+            setCLASSES(props.state.classes)
+            setData(formatData(CLASSES.list))
+            update()
+            setData(formatData(CLASSES.list))
+            setOpen(false);
+            setUpdating(false)
+            setClassData({
+                school: school,
+                level: null,
+                combination: null,
+                label: null
+            })
         }
     };
     const handleCreate = () => {
-        props.handleAddClass(classData)   
+        props.handleAddClass(classData)
         handleOpenMsg('success', 'Class Created Successfully')
-            props.handleFetchClasses(school)
-            setCLASSES(props.state.classes)
-            setData(formatData(CLASSES.list))
-            update()
-            setData(formatData(CLASSES.list))
-            setClassData({
-                school: school,
-                level: null,
-                combination: null,
-                label: null
-            })
+        props.handleFetchClasses(school)
+        setCLASSES(props.state.classes)
+        setData(formatData(CLASSES.list))
+        update()
+        handleClose()
+        setData(formatData(CLASSES.list))
+        setClassData({
+            school: school,
+            level: null,
+            combination: null,
+            label: null
+        })
     };
 
-    const handleDelete = (i) => {
-        props.handleDeleteClass(i)   
+    const handleDelete = () => {
+        // setShow(false)
+        handleCloseDel()
+        props.handleDeleteClass(id)
         handleOpenMsg('warning', 'Class Deleted')
-            props.handleFetchClasses(school)
-            setCLASSES(props.state.classes)
-            setData(formatData(CLASSES.list))
-            update()
-            setData(formatData(CLASSES.list))
-            setClassData({
-                school: school,
-                level: null,
-                combination: null,
-                label: null
-            })
+        props.handleFetchClasses(school)
+        setCLASSES(props.state.classes)
+        setData(formatData(CLASSES.list))
+        update()
+        setData(formatData(CLASSES.list))
+        setClassData({
+            school: school,
+            level: null,
+            combination: null,
+            label: null
+        })
+
     };
 
     const handleChange = e => {
@@ -203,13 +239,13 @@ export const Index = (props) => {
                 ...classData,
                 label: e.target.value
             })
-            console.log("CLASSES DATA:",classData)
+        console.log("CLASSES DATA:", classData)
     }
 
     const formatData = (unformatted) => {
         let i = 1
         const formatted = []
-        unformatted.forEach(i => formatted.push({ level: i.level ? i.level.name : '', combination: i.combination? i.combination.name: '', label: i.label, id: i._id }))
+        unformatted.forEach(i => formatted.push({ level: i.level ? i.level.name : '', combination: i.combination ? i.combination.name : '', label: i.label, id: i._id }))
         return formatted
     }
     const editRow = (parms) => {
@@ -229,9 +265,10 @@ export const Index = (props) => {
         handleClickOpen()
     }
     const deleteRow = (parms) => {
-        console.log(parms.value,"%%%%%")
+        console.log(parms.value, "%%%%%")
         setId(parms.value)
-        handleDelete(parms.value)
+        handleClickOpenDel()
+        //handleDelete(parms.value)
         setUpdating(false)
         setOpen(false)
     }
@@ -241,9 +278,9 @@ export const Index = (props) => {
     { headerName: 'Label', field: 'label', flex: 1 },
     {
         headerName: "Action", field: "id",
-        cellRendererFramework: (params) => <div style={{display: "flex", justifyContent : "space-evenly"}}>
-            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"35px", paddingRight:"35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => editRow(params)}>Edit</div>
-            <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div>
+        cellRendererFramework: (params) => <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "20px", marginRight: "10px", backgroundColor: "#e8f5ff", textAlign: 'center', paddingLeft: "35px", paddingRight: "35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => editRow(params)}>Edit</div>
+            <div style={{ color: "#ff0000", cursor: "pointer", borderRadius: "20px", backgroundColor: "#ff000d31", textAlign: 'center', paddingLeft: "25px", paddingRight: "25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div>
         </div>
     }]
 
@@ -252,15 +289,15 @@ export const Index = (props) => {
         props.handleFetchCombination()
         props.handleFetchLevels()
         setCLASSES(props.state.classes)
-            setData(formatData(CLASSES.list))
+        setData(formatData(CLASSES.list))
     }
 
     useEffect(() => {
         update()
-        if(props.state.classes.list){
+        if (props.state.classes.list) {
             setCLASSES(props.state.classes)
         }
-    },[CLASSES])
+    }, [CLASSES])
     useEffect(() => {
         update()
     }, [])
@@ -297,9 +334,7 @@ export const Index = (props) => {
                                     </div>
                                 </div>
                             </div> :
-                            // <AGTABLE
-                            //     data={Data}
-                            //     columns={columns} /> :
+                            
                             (<Box className="my-bx">
                                 <div className="skeleton-line-students">
                                     <Skeleton width="20%" />
@@ -470,20 +505,60 @@ export const Index = (props) => {
                 <Snackbar open={openMsg} autoHideDuration={6000} onClose={handleCloseMsg}>
                     <Alert onClose={handleCloseMsg} severity={type}>
                         {msg}
-                                    </Alert>
+                    </Alert>
                 </Snackbar>
             </div>
-
+            {/* <Modal
+        show={show}
+        onHide={handleCloseDelete}
+      >
+        <Modal.Header onHide={handleCloseDelete}>
+          <Modal.Title>Deleting a class</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure, you want to delete this class? you will not be able to recover this class.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDelete}>
+            Cancel
+          </Button>
+          <Button variant="danger" onclick={handleCloseDelete}>
+              Delete
+          </Button>
+        </Modal.Footer>
+      </Modal> */}
+            <Dialog
+                open={openDel}
+                onClose={handleCloseDel}
+                PaperComponent={PaperComponent}
+                aria-labelledby="draggable-dialog-title">
+                <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+                Deleting a class
+        </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                    Are you sure, you want to delete this class? you will not be able to recover this class.
+          </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleCloseDel}>
+                        Cancel
+          </Button>
+                    <Button onClick={handleDelete} color="secondary">
+                        Delete
+          </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     )
 }
 
 const mapStateToProps = (state) => {
-    const {classes} = state
-    const {list} = classes
+    const { classes } = state
+    const { list } = classes
     const levels = state.levels.list
     return {
-        state,list,levels 
+        state, list, levels
     }
 }
 

@@ -43,7 +43,7 @@ export const AddStudent = (props) => {
                             {props.location.state.update && data != null ?
                                 <>
                                     <StudentForm recordForEdit={data} update={props.location.state.update} />
-                                </> : <p>loading........</p>}
+                                </> : <StudentForm recordForEdit={null} update={false} />}
                         </div>
                     </Paper>
                 </div>

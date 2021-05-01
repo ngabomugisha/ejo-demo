@@ -24,8 +24,8 @@ function Main(props) {
 
   const SELECTED = useSelector(state => state.teacherData)
   const dispatch = useDispatch()
-    const teacher = props.auth.user._id;
-    console.log("TEACHER",teacher)
+  const teacher = props.auth.user ? props.auth.user._id:null;
+  console.log("TEACHER",teacher)
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [classs, setClasss] = React.useState("");

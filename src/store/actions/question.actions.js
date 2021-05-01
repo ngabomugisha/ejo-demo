@@ -11,7 +11,7 @@ export const handleFetchQuestion = (subject) => (dispatch) => {
       payload: res.data,
     })
   }).catch( (error) => {
-    alert('what on earth')
+    // alert('what on earth')
     dispatch({
       type: HANDLE_FETCH_QUESTION_FAIL,
       payload: error,

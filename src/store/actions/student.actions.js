@@ -21,7 +21,6 @@ export const handleFetchStudent = (school) => (dispatch) => {
 
 
 export const handleFetchOneStudent = (id) => (dispatch) => {
-  console.log("idddddd of student",id)
   dispatch({
     type: actions.HANDLE_FETCH_STUDENT,
   });
@@ -38,9 +37,25 @@ export const handleFetchOneStudent = (id) => (dispatch) => {
   })
 }
 
+export const handleFetchClassStudent = (clas) => (dispatch) => {
+  dispatch({
+    type: actions.HANDLE_FETCH_CLASS_STUDENTS,
+  });
+  return https.get(`/students/${clas}/class-students`,{ headers: {'Authorization' : `Basic ${localStorage.token}` } }).then((res) => {
+    dispatch({
+      type: actions.HANDLE_FETCH_CLASS_STUDENTS_SUCCESS,
+      payload: res.data,
+    })
+  }).catch( (error) => {
+    dispatch({
+      type: actions.HANDLE_FETCH_CLASS_STUDENTS_FAIL,
+      payload: error,
+    });
+  })
+}
+
 
 export const handleAddStudent = data => dispatch => {
-  console.log("Student TO REGISTER :", data)
   dispatch({
     type: actions.HANDLE_ADD_STUDENTS,
   });

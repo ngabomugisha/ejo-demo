@@ -1,18 +1,37 @@
 import './Login.css';
-import React, { useEffect, useState } from 'react';
+import React, {  } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, connect, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
+import { Button, TextField,InputBase } from '@material-ui/core';
 import HomeLayout from '../../components/Layouts/HomeLayout';
 import { handleLogin } from '../../store/actions/auth.actions';
 import { SCHOOLADMIN, TEACHER, SUPERADMIN, HEADSTUDY } from './Users'
 import logoAfrica from '../../assets/img/white-logo.png';
-import Alert from 'react-bootstrap/Alert';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import InputGroup from 'react-bootstrap/InputGroup'
+
+const styles = makeStyles(theme => ({
+  textField: {
+    border: "1px solid #1F72C6",
+    borderRadius: theme.shape.borderRadius,
+    color: 'green',
+    backgroundColor: 'whitesmoke'
+  },
+  inputBase: {
+      color: 'white',
+      border: "1px solid #1F72C6",
+      borderRadius: theme.shape.borderRadius,
+      height: "7vh",
+      padding: theme.spacing(1),
+      backgroundColor: 'whitesmoke'
+  }
+}));
+
 
 const LoginPage = (props) => {
 
+  const classes = styles();
   const history = useHistory();
   const dispatch = useDispatch();
   // const [fine, setFine] = useState(false);
@@ -66,39 +85,47 @@ const LoginPage = (props) => {
     }
 
   };
-  console.log("%$%$%$%$%$%$%$%", props.state)
   return (
     <HomeLayout>
       <>
+
+      <form className={classes.root} noValidate>
         <div className="login-form">
           <div className="africa">
             <img src={logoAfrica} />
           </div>
           <div className="login-field">
             <TextField
-              label="Email"
-              id="mui-theme-provider-outlined-input"
-              defaultValue=""
-              variant="outlined"
+              className={classes.textField}
               size="small"
               fullWidth
+              variant="outlined"
+              label="Email"
+              placeholder="Email"
               color="primary"
-              type="email"
               onChange={(e) => setEmail(e.target.value)}
               error={!!errMessage}
+              InputProps={{
+                className: classes.input,
+            }}
             />
           </div>
           <div className="login-field">
             <TextField
-              label="Password"
-              id="outlined-size-small"
-              defaultValue=""
-              variant="outlined"
+              className={classes.textField}
+              placeholder="Password"
+              id="custom-css-outlined-input"
               fullWidth
+              variant="outlined"
               size="small"
+              color="primary"
               type="password"
+              label="password"
               onChange={(e) => setPassword(e.target.value)}
               error={!!errMessage}
+              InputProps={{
+                className: classes.input,
+            }}
             />
             <p className="errorMessage">{errMessage}</p>
           </div>
@@ -123,6 +150,7 @@ const LoginPage = (props) => {
         </div>
         <div>
         </div>
+        </form>
       </>
     </HomeLayout>
   )

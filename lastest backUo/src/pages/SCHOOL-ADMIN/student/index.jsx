@@ -1,27 +1,24 @@
 import React, { useState, useEffect,createRef } from 'react'
 import './Index.css'
+import {Link, useHistory} from 'react-router-dom'
 import https from '../../../helpers/https'
 import PanelLayout from '../../../components/Layouts/PanelLayout/Index'
 import { connect } from 'react-redux'
-import { handleFetchStudent } from '../../../store/actions/student.actions'
-import { TextField, Grid, Snackbar, Switch, Select, MenuItem, Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormControlLabel, InputLabel } from '@material-ui/core'
+import { handleFetchStudent, handleFetchOneStudent } from '../../../store/actions/student.actions'
+import  {handleFetchClasses} from '../../../store/actions/classes.actions'
+import {handleFetchVillages} from '../../../store/actions/address/addresses.actions'
+import { TextField, Grid, Snackbar, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import MuiAlert from '@material-ui/lab/Alert';
 import Skeleton from "@material-ui/lab/Skeleton"
 import { Box } from '@material-ui/core'
-import EditorWrapText from 'material-ui/svg-icons/editor/wrap-text'
-import { AgGridReact, AgGridColumn } from 'ag-grid-react';
+import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import 'ag-grid-enterprise'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button } from 'react-bootstrap';
 import StudentForm from '../../../components/schoolAdmin/StudentForm'
-import { FiUpload } from "react-icons/fi";
-import {useDropzone} from 'react-dropzone';
 import { DropzoneArea } from "material-ui-dropzone"
-import EditorFormatListBulleted from 'material-ui/svg-icons/editor/format-list-bulleted'
-import { DeleteForeverTwoTone } from '@material-ui/icons'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -101,6 +98,7 @@ export const Index = (props) => {
         gridApi.setQuickFilter(e.target.value)
     }
     let school = null
+    const history = useHistory()
     let role = null
     let p2 = null
     let edit = null
@@ -109,13 +107,13 @@ export const Index = (props) => {
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [uploadPopup, setUploadPopup] = useState(false)
     const [openMsg, setOpenMsg] = useState(false)
-    const [Data, setData] = useState([])
     const [msg, setMsg] = useState(null)
     const [type, setType] = useState(null)
+    const [ Data, setData] = useState(null)
     const [id, setId] = useState(null)
     const [updating, setUpdating] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [studentsClass, setStudentClass] = useState('')
+    const [studentClass, setStudentClass] = useState('')
     const [file,setFile] = useState(null)
     const classes = useStyles();
     const [classs, setClasss] = useState([])
@@ -164,233 +162,207 @@ export const Index = (props) => {
         setOpenMsg(true)
     }
     const handleCloseMsg = () => {
-        setIsLoading(false)
+        props.handleFetchStudent(school)
+        setData(props.list)
         setOpenMsg(false)
     }
     const handleClose = () => {
-        update()
-        setOpen(false)
         setUploadPopup(false)
     }
 
-    const handleUpdate = async () => {
-        if (studentData) {
-            props.handleUpdateClass({ id: id, data: studentData })
-            handleOpenMsg('success', 'Class Updated')
-            setTimeout(() => {
-                props.handleFetchClasses(school)
-                setSTUDENT(props.state.students)
-                setData(formatData(STUDENT.list))
-                update()
-                setData(formatData(STUDENT.list))
-            }, 0);
-            setOpen(false);
-            setUpdating(false)
-            setStudentData({
-                school: school,
-                firstName: null,
-                lastName: null,
-                email: null,
-                phoneNumber: null,
-                level: null,
-                yearsOfExperience: null,
-                workingStatus: null
-            })
-        }
-    };
-    const handleCreate = () => {
-        props.handleAddStudent(studentData)
-        handleOpenMsg('success', 'Student Updated')
-        setTimeout(() => {
-            props.handleFetchStudents(school)
-            setSTUDENT(props.state.students)
-            setData(formatData(props.list))
-            update()
-            setData(formatData(props.list))
-        }, 0);
-    };
-
 const handleUpload = async () => {
 
-    console.log("button clicked",file)
     const formData = new FormData()
-    
-    formData.append('studentClass', studentsClass._id)
+    formData.append('studentClass', studentClass)
     formData.append('students',file)
-
-    for (var key of formData.entries()) {
-        console.log(key[0] + ', ' + key[1]);
-    }
-
-
+    console.log("******************", file,studentClass)
     const dat = {
-        'studentClass': studentsClass._id,
+        'studentClass': studentClass._id,
         'students':file
     }
-    console.log("DATA READY:" ,dat)
-    console.log("this is formData :",formData)
     await https.post('/students/create-from-csv' , formData,  {  headers : { 'Content-Type' : 'multipart/form-data', 'Authorization': `Basic ${localStorage.token}` } })
     .then((res)=>{
-        alert(res.status)
+        handleOpenMsg("success", 'The students data has imported')
+        handleClose()
+        update()
     }).catch((erro) => {
         console.log("ERROR :",erro)
     })
 }
 
 
-
-const handleupload = (e) => {
-    console.log(e.target.files[0])
-    if((e.target.files[0].name).substring((e.target.files[0].name).indexOf('.')+1)== 'csv'){
-    console.log("YES")
-        setFile(e.target.files[0])
-}
-}
-    // const handleDelete = (i) => {
-    //     props.handleDeleteClass(i)   
-    //     handleOpenMsg('warning', 'Class Deleted')
-    //     setTimeout(() => {
-    //         props.handleFetchClasses(school)
-    //         setCLASSES(props.state.classes)
-    //         setData(formatData(CLASSES.list))
-    //         update()
-    //         setData(formatData(CLASSES.list))
-    //     }, 0);
-    // };
-
-    const handleChange = e => {
-
-        if (e.target.name === 'firstName') setStudentData(
-            {
-                ...studentData,
-                firstName: e.target.value
-            })
-
-        if (e.target.name === 'lastName') setStudentData(
-            {
-                ...studentData,
-                lastName: e.target.value
-            })
-
-        if (e.target.name === 'email') setStudentData(
-            {
-                ...studentData,
-                email: e.target.value
-            })
-
-        if (e.target.name === 'phoneNumber') setStudentData(
-            {
-                ...studentData,
-                phoneNumber: e.target.value
-            })
-
-        if (e.target.name === 'workingStatus') setStudentData(
-            {
-                ...studentData,
-                workingStatus: e.target.value
-            })
-
-        if (e.target.name === 'yearsOfExperience') setStudentData(
-            {
-                ...studentData,
-                yearsOfExperience: parseInt(e.target.value)
-            })
-
-        if (e.target.name === 'level') setStudentData(
-            {
-                ...studentData,
-                level: e.target.value
-            })
-
-
-    }
-
     const formatData = (unformatted) => {
-        let i = 1
+        let count= 0
         const formatted = []
         unformatted.forEach(i => { 
-            formatted.push({ firstName: i.firstName, lastName: i.lastName, studentClass: i.studentClass, registrationNumber: i.registrationNumber, gender: i.gender, studentProgram: i.studentProgram, dateOfBirth: i.dateOfBirth, scholarship: i.scholarship, address: i.address, workingStatus: i.workingStatus, id: i._id }) })
+            formatted.push({
+                No: ++count, 
+                firstName: i.firstName, 
+                lastName: i.lastName, 
+                 registrationNumber: i.registrationNumber, 
+                 gender: i.gender, 
+                 studentProgram: i.studentProgram, 
+                 dateOfBirth: i.dateOfBirth && (i.dateOfBirth).substring(0,10), 
+                 scholarship: i.scholarship, 
+                 allergies : i.allergies,
+                 permanentHealthConditions : i.permanentHealthConditions ? i.permanentHealthConditions.length > 0 ? i.permanentHealthConditions.reduce(
+                     function(res, cond){
+                         return res + cond.condition
+                     },''
+                 ) : '': '',
+                 guardian1Name: i.guardians ? i.guardians.length > 0 ? i.guardians[0].firstName + " " + i.guardians[0].lastName : '':'' ,
+                 guardian1Email: i.guardians ? i.guardians.length > 0 ? i.guardians[0].email  : '':'' ,
+                 guardian1Phone: i.guardians ? i.guardians.length > 0 ? i.guardians[0].phone : '':'' ,
+                 guardian1Status: i.guardians ? i.guardians.length > 0 ? i.guardians[0].maritalStatus : '':'' ,
+                 guardian1Relationship: i.guardians ? i.guardians.length > 0 ? i.guardians[0].relationship : '':'' ,
+                 guardian1Identifation: i.guardians ? i.guardians.length > 0 ? i.guardians[0].identificationNumber : '':'' ,
+                 
+                 guardian2Name: i.guardians ? i.guardians.length > 1 ? i.guardians[1].firstName + " " + i.guardians[1].lastName : '':'' ,
+                 guardian2Email: i.guardians ? i.guardians.length > 1 ? i.guardians[1].email  : '':'' ,
+                 guardian2Phone: i.guardians ? i.guardians.length > 1 ? i.guardians[1].phone : '':'' ,
+                 guardian2Status: i.guardians ? i.guardians.length > 1 ? i.guardians[1].maritalStatus : '':'' ,
+                 guardian2Relationship: i.guardians ? i.guardians.length > 1 ? i.guardians[1].relationship : '':'' ,
+                 guardian2Identifation: i.guardians ? i.guardians.length > 1 ? i.guardians[1].identificationNumber : '':'' ,
+                
+                 class: 
+                    props.classes.reduce(function (match, check){ 
+                    if(check._id == i.class){
+                        let find = check.level.name + " "+ (check.combination ? check.combination.name: "") +check.label 
+                        match =find
+                    }
+                    return match
+                    },'a'),
+
+                 address: 
+                    props.villages.reduce(function (match, check){ 
+                    if(check._id === i.address){
+                        let find = check.name;
+                        match.push(find)
+                    }
+                    return match
+                    },[])[0], 
+                workingStatus: i.workingStatus && i.workingStatus,
+                ngo: i.ngo ? i.ngo.name : '',ngoPName: i.ngo ? i.ngo.contactPerson ? i.ngo.contactPerson.name : '' : '', ngoPTitle: i.ngo ? i.ngo.contactPerson ? i.ngo.contactPerson.title : '' : '', ngoPPhone: i.ngo ? i.ngo.contactPerson ? i.ngo.contactPerson.phone:'':'', 
+                
+
+                id: i._id }) 
+        })
         return formatted
     }
+
+    const getOneStudent =  (id) =>{
+
+            const request =  https.get(`/students/${id}`, { headers: { 'Authorization': `Basic ${localStorage.token}` } }
+            )
+                .then((response) => {
+                    setData(response.data)
+                })
+            return request
+        }
+    
+
     const editRow = (parms) => {
-        p2 = Object.assign({}, parms['data']);
-        // edit = {
-        //     school: school,
-        //     level: (LEVELS.find(item => item.name === p2.level))._id,
-        //     combination: (COMBINATIONS.find(item => item.name === p2.combination))._id,
-        //     label: p2.label,
-        // }
-        // setClassData(edit)
-        setId(parms.value)
-        setUpdating(true)
-        handleClickOpen()
+        console.log("EVEVEEVEVEVEVEVEEVEVEVEV:::::::::", parms)
+        getOneStudent(parms.value)
+
+        
+        history.push({
+            pathname: '/schoolAdmin/students/add',
+                state: {
+                    'data' : parms['value'],
+                    'update' : true
+                }
+        })
+
     }
-    // const deleteRow = (parms) => {
-    //     console.log(parms.value,"%%%%%")
-    //     setId(parms.value)
-    //     handleDelete(parms.value)
-    //     setUpdating(true)
-    // }
     const columns = [
-    { headerName: 'First Name', field: 'firstName', sortable: true, filter: true, checkboxSelection: true, headerCheckboxSelection: true, },
+    { headerName: '#', field: 'No', sortable: true, filter: true, checkboxSelection: true, headerCheckboxSelection: true, },
+    { headerName: 'First Name', field: 'firstName', sortable: true, filter: true, },
     { headerName: 'Last Name', field: 'lastName', sortable: true, filter: true, },
-    { headerName: 'Student Class', field: 'studentClass', },
+    { headerName: 'Class', field: 'class', },
     { headerName: 'registration Number', field: 'registrationNumber', },
     { headerName: 'gender ', field: 'gender', },
     { headerName: 'studentProgram', field: 'studentProgram', },
     { headerName: 'dateOfBirth', field: 'dateOfBirth', width: 150 },
     { headerName: 'address', field: 'address', width: 150 },
-    { headerName: 'scholarship', field: 'scholarship', hide: true, flex: 1 },
+    { headerName: 'allergies', field: 'allergies', width: 150 },
+    { headerName: 'scholarship', field: 'scholarship', },
+    { headerName: 'Permanent Health Conditions ', field: 'permanentHealthConditions', },
+    {headerName: 'Non-Goverment Organization Details', width:200,
+        children: [
+            { headerName : 'NGO Name',field: 'ngo' },
+            { headerName: "Person Name",field: 'ngoPName', columnGroupShow: 'open' },
+            { headerName: "Person Title", field: 'ngoPTitle', columnGroupShow: 'open' },
+            { headerName: "Person Phone", field: 'ngoPPhone', columnGroupShow: 'open' },
+        ]
+    },
+    {headerName: 'Guardian One', width:200,
+        children: [
+            { headerName : 'Names',field: 'guardian1Name' },
+            { headerName: "Phone ",field: 'guardian1Phone', columnGroupShow: 'open' },
+            { headerName: "Email", field: 'guardian1Email', columnGroupShow: 'open' },
+            { headerName: "Martial status", field: 'guardian1Status', columnGroupShow: 'open' },
+            { headerName: "Relationship", field: 'guardian1Relationship', columnGroupShow: 'open' },
+            { headerName: "ID", field: 'guardian1Identifation', columnGroupShow: 'open' },
+        ]
+    },
+    {headerName: 'Guardian Two', width:200,
+        children: [
+            { headerName : 'Names',field: 'guardian2Name' },
+            { headerName: "Phone ",field: 'guardian2Phone', columnGroupShow: 'open' },
+            { headerName: "Email", field: 'guardian2Email', columnGroupShow: 'open' },
+            { headerName: "Martial status", field: 'guardian2Status', columnGroupShow: 'open' },
+            { headerName: "Relationship", field: 'guardian2Relationship', columnGroupShow: 'open' },
+            { headerName: "ID", field: 'guardian2Identifation', columnGroupShow: 'open' },
+        ]
+    },
     { headerName: 'ID', field: 'id', hide: true, flex: 1 },
     {
         headerName: "Action", field: "id",
         cellRendererFramework: (params) => <div style={{ display: "flex" }}>
-            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', padding: "5px",whiteSpace: "nowrap"  }} className="edit-btn-class" onClick={() => alert("edit")}>Edit</div>
-            <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', padding: "3px", whiteSpace: "nowrap" }} className="edit-btn-class" onClick={() => alert("edit")}>Delete</div>
+            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', padding: "5px",whiteSpace: "nowrap"  }} className="check-btn" onClick={() => editRow(params)}>Edit</div>
+            
         </div>
     }]
 
     const update = () => {
         props.handleFetchStudent(school)
-        setSTUDENT(props.state.students)
-        setTimeout(() => {
-            setData(formatData(props.list))
-        }, 0);
+        props.handleFetchClasses(school)
+        setData(props.list)
     }
-
-    useEffect(() => {
-        update()
-        if (props.state.students.list) {
-            setSTUDENT(props.state.students)
-        }
-    }, [STUDENT])
-
+    
     useEffect(() => {
         async function fetchClasses() {
             const req = await https.get(`/classes/602c1e8feeb9ae2820b62120/school-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
                 .then((res) => {
                     setClasss(res.data)
-                    console.log("CLASSES : ", res.data)
                 }).catch(function (err) {
                     console.log(err);
                 });
             return req
         }
         fetchClasses()
-        console.log('CHOOSEN CLASS', studentsClass)
     }, [])
     useEffect(() => {
+        props.handleFetchVillages()
         update()
-        if (props.state.students.list) {
-            setSTUDENT(props.state.students)
-        }
+        setData(props.list)
+        
+    if(!uploadPopup){
+        setTimeout(() => {
+            props.handleFetchStudent(school)
+            setData(props.list)
+        }, 2000); 
+    }
     },[])
     return (
         <div>
             <PanelLayout selected={2} role={role}>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <div className="paper-hd"><h2>Students List</h2></div>
-                    <div style={{display:"flex"}}><Button onClick={() => setUploadPopup(true)} className='check-btn' style={{ wordWrap: "normal" }}>import a list of Student</Button><Button onClick={handleClickOpen} className='check-btn' style={{ wordWrap: "normal" }}>Register a new Student</Button></div>
+                    <div style={{display:"flex"}}><Button onClick={() => setUploadPopup(true)} className='check-btn' style={{ wordWrap: "normal" }}>import a list of Student</Button><Link to={
+                        {pathname :`/schoolAdmin/students/add`, state : {update: false, data: undefined}}
+                        } className='check-btn' style={{ wordWrap: "normal" }}>Register a new Student</Link></div>
                 </div>
                 <div className='classes-cont'>
                     {
@@ -399,7 +371,7 @@ const handleupload = (e) => {
                                 <div style={{ height: '90%', boxSizing: 'border-box' }}>
                                     <div style={searchDivStyle}>
                                         <input type="search" style={searchStyle} onChange={onFilterTextChange} placeholder="search ....." />
-                                        <Button onClick={() => onExportClick()}>export</Button>
+                                        {/* <Button onClick={() => onExportClick()}>export</Button> */}
                                     </div>
                                     <div
                                         id="myGrid"
@@ -413,6 +385,7 @@ const handleupload = (e) => {
                                             rowData={formatData(props.list)}
                                             rowSelection={'multiple'}
                                             onGridReady={onGridReady}
+                                            sideBar={{ toolPanels: ['columns'] }}
                                         />
                                     </div>
                                 </div>
@@ -497,7 +470,8 @@ const handleupload = (e) => {
                     <DialogContent>
                         <DialogContentText>
                             <div className="frm" style={{ minWidth: "100%" }}>
-<StudentForm recordForEdit={recordForEdit} close = {handleClose}/>
+                                
+                                <StudentForm recordForEdit={recordForEdit} update={false}/>
 
 
                             </div>
@@ -526,6 +500,8 @@ const handleupload = (e) => {
                                                     type="text"
                                                     label="student Class"
                                                     select
+                                                    required
+                                                    value={studentClass ? studentClass : ""}
                                                     id="select"
                                                     helperText="Please select studentClass"
                                                     variant="outlined"
@@ -538,14 +514,12 @@ const handleupload = (e) => {
                                                     <MenuItem value="">
                                                         <em>NONE</em>
                                                     </MenuItem>
-                                                    {classs != null ?
-                                                        classs.map(item => (<MenuItem key={item._id} value={item._id}>{item.level.name}</MenuItem>)) : null
+                                                    {props.classes != null & props.classes != undefined ?
+                                                        props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level ? item.level.name : ''} {item.combination ? item.combination.name: ""} {item.label}</MenuItem>)) : null
                                                     }
                                                 </TextField>
-                                                {/* <input type="file" onChange={handleupload}/> */}
-                                                {/* <Accept onChange={(file) => console.log(file)}/> */}
                                                 <DropzoneArea
-                                                    acceptedFiles={['text/csv']}
+                                                    acceptedFiles={[".csv, text/csv, application/vnd.ms-excel, application/csv, text/x-csv, application/x-csv, text/comma-separated-values, text/x-comma-separated-values"]}
                                                     filesLimit={1}
                                                     dropzoneText={"Drag and drop a CSV File here or click to browse"}
                                                     onChange={(files) => setFile(files[0])}
@@ -581,16 +555,29 @@ const handleupload = (e) => {
 }
 
 const mapStateToProps = (state) => {
+
+    const  classes  = state.classes.list
+    const villages = state.villages.list
     const { students } = state
+    const student = state.student && state.student.list
     const { list } = students
     return {
-        state, list
+        state, list, classes, villages
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    handleFetchStudent: async (school) => {
-        await dispatch(handleFetchStudent(school))
+    handleFetchStudent: (school) => {
+         dispatch(handleFetchStudent(school))
+    },
+    handleFetchClasses: (school) => {
+         dispatch(handleFetchClasses(school))
+    },
+    handleFetchVillages: () => {
+         dispatch(handleFetchVillages())
+    },
+    handleFetchOneStudent: (id) => {
+         dispatch(handleFetchOneStudent(id))
     },
 
 })

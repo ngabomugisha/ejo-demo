@@ -166,3 +166,7 @@
 	border-radius: 5px;
 	background-color: aliceblue;
 }
+
+.btn-block+.btn-block{
+	margin-top: 0px !important;
+}

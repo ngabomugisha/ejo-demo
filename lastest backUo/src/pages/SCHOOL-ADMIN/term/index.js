@@ -11,6 +11,8 @@ import { Formik, Field, Form } from 'formik'
 import { handleFetchTerms , handleUpdateTerm } from '../../../store/actions/term.action'
 import { useDispatch, useSelector } from 'react-redux';
 import { MdDateRange } from "react-icons/md";
+import Spinner from 'react-bootstrap/Spinner'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -57,9 +59,7 @@ console.log('this is data to pass',data,typeof(data))
                 try{
                     setIsLoading(true)
                     await dispatch(handleUpdateTerm(id,data));
-                    setTimeout(() => {
                         fetchTermsData()
-                    }, 2000);
                 } catch (error)
                 {
                     console.log(error)
@@ -120,9 +120,9 @@ console.log('this is data to pass',data,typeof(data))
     return (
         <div>
 
-            <PanelLayout selected={5} role={props.state.auth.user.role}>
+            <PanelLayout selected={6} role={props.state.auth.user.role}>
                         <div className="report-hd">
-                            <h3>Discipline settings</h3>
+                            <h3>Terms settings</h3>
                         </div>
                 <div className="term-continer">
                     <Paper elevation={4}>
@@ -144,9 +144,9 @@ console.log('this is data to pass',data,typeof(data))
 
                                     </Grid>
 
-                                    {isLoading ? <p>loading.......</p> :
+                                    {isLoading ? <div className="loading"><Spinner animation="border" variant="primary" /></div> :
                                         ALL_TERMS === null ?
-                                            <p>loading.........</p> :
+                                        <Spinner animation="border" variant="primary" />:
                                             ALL_TERMS.map(item => (
                                                 <>
                                                     <Grid className="grid-bg" item xs={2}>

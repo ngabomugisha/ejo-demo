@@ -1,58 +1,55 @@
-import React from 'react'
-import './Index.css'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import './style.css'
+import https from '../../../helpers/https'
 import PanelLayout from '../../../components/Layouts/PanelLayout/Index'
-import { Pie, Doughnut } from 'react-chartjs-2'
-import Paper from '@material-ui/core/Paper';
+import AttendanceReports from '../../../components/report/AttendanceReports'
+import { Grid, Paper, Button } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Accordion, Card } from 'react-bootstrap'
+
 
 export const Index = (props) => {
-    const state = {
-        labels: ['Male', 'Female'],
-        datasets: [
-            {
-                label: '',
-                backgroundColor: [
-                    '#2ED47A',
-                    '#FFB946'
-                ],
-                hoverBackgroundColor: [
-                    '#2ED4aA',
-                    '#FFB9a6'
-                ],
-                data: [60, 40]
-            }
-        ]
-    }
+    let school = null
+    let role = null
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+
 
     return (
         <div>
-            <PanelLayout selected={4} role={props.state.auth.user.role}>
+
+            <PanelLayout selected={4} role={role}>
                 <div className="report-container">
-                <div className="report-hd">
-                    <h3>Report</h3>
-                </div>
-                <div className="chrt">
-                    <Paper>
-                        <div className='chrt-hd'>
-                            <p>Student Attendance</p>
-                            <p>Class: Grade 1</p>
-                        </div>
-                <Doughnut
-                    data={state}
-                    options={{
-                        title: {
-                            display: false,
-                            text: 'Average Rainfall per month',
-                            fontSize: 20
-                        },
-                        legend: {
-                            display: true,
-                            position: 'right'
-                        }
-                    }}
-                />
-                <div className="chrt-btm"></div></Paper>
-                </div>
+                    <div className="report-hd">
+                        <h3>Report</h3>
+                    </div>
+                    <div className="report-details">
+                        <Accordion defaultActiveKey="0">
+                            <Card>
+                                <Accordion.Toggle as={Card.Header} eventKey="0">
+                                    Attendance reports 
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="0">
+                                    <Card.Body>
+                                        <div>
+                                            <AttendanceReports/>
+                                            <h3>test</h3>
+                                        </div>
+                                    </Card.Body>
+                                </Accordion.Collapse>
+                            </Card>
+                            <Card>
+                                <Accordion.Toggle as={Card.Header} eventKey="1">
+                                    Click me!
+                                </Accordion.Toggle>
+                                <Accordion.Collapse eventKey="1">
+                                    <Card.Body>Hello! I'm another body</Card.Body>
+                                </Accordion.Collapse>
+                            </Card>
+                        </Accordion>
+                    </div>
+
                 </div>
             </PanelLayout>
         </div>
@@ -60,7 +57,7 @@ export const Index = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-
+    state: state
 })
 
 const mapDispatchToProps = {

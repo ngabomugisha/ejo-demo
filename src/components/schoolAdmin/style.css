@@ -166,7 +166,14 @@
 	border-radius: 5px;
 	background-color: aliceblue;
 }
+.label-ngo::before{
+	content: "Non-Government Orgnization information";
+	display: block;
+	margin-bottom: 10px;
+
+}
 
 .btn-block+.btn-block{
 	margin-top: 0px !important;
+
 }

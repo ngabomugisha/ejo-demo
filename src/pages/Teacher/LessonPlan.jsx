@@ -7,6 +7,10 @@ import LessonCards from '../../components/feedCards/LessonCards';
 import { handleFetchLessonPlanSubject } from '../../store/actions/lessonPlans.actions'
 
 export const LessonPlan = (props) => {
+    let school = null
+    let role = null
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+
     const dataSelected = JSON.parse(localStorage.getItem('DATA'))
     const dispatch = useDispatch()
     const SELECTED = useSelector(state => state.teacherData)
@@ -26,7 +30,7 @@ export const LessonPlan = (props) => {
 
 
     return (
-        <PanelLayout selected={3} role={props.state.auth.user.role}>
+        <PanelLayout selected={3} role={role}>
         <div className="assignment-container">
                 <Feed>
                     <LessonCards/>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import './style.css'
 import https from '../../helpers/https'
@@ -17,7 +17,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { KeyboardTimePicker } from '@material-ui/pickers'
 import * as Yup from "yup";
 import { isSameOrBeforeTime, isSameOrAfterTime } from "./util";
-
+import {handleFetchClasses} from '../../store/actions/classes.actions'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -49,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const TimetableForm = (props) => {
+    let school = null
+    let role = null
+    if (props.state.auth != undefined){if(props.state.auth.user != undefined) {school = props.state.auth.user.school; role = props.state.auth.user.role}}
+  
     const [open, setOpen] = React.useState(false);
     const [openformMsg, setOpenformMsg] = React.useState(false);
     const [msg, setMsg] = useState('')
@@ -126,14 +130,17 @@ export const TimetableForm = (props) => {
 
         https.post('/timetables', convertedData, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
             if (res.status == 200)
-                return setOpen(true)
+                {
+                    props.close()
+                    setOpen(true)
+                }
             else
                 return alert("something went wrong")
         })
         }
     }
     const validations1 = (value) => {
-
+        console.log("$$$$$$$$$$$$$$$$$:::::",props.classes)
     }
     const SignupSchema = Yup.object().shape({
         // (end_time, screma, self)
@@ -155,6 +162,10 @@ export const TimetableForm = (props) => {
         )
     });
 
+    console.log("$$$$$$$$$$$$$$$$$:::::",props.classes)
+    useEffect(() => {
+        props.handleFetchClasses(school)
+    }, [])
 
     return (
         <>
@@ -188,8 +199,8 @@ export const TimetableForm = (props) => {
                                                 <MenuItem value="">
                                                     <em>None</em>
                                                 </MenuItem>
-                                                {props.class != null ?
-                                                    props.class.map(item => (<MenuItem key={item._id} value={item._id}>{item.label}</MenuItem>)) : null
+                                                {props.classes ?
+                                                    props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level ? item.level.name : ''} {item.combination ? item.combination.name : ''} {item.label}</MenuItem>)) : null
                                                 }
 
                                             </Field>
@@ -270,6 +281,9 @@ export const TimetableForm = (props) => {
                                                 </MenuItem>
                                                 <MenuItem value="5">
                                                     Friday
+                                                </MenuItem>
+                                                <MenuItem value="6">
+                                                    Saturday
                                                 </MenuItem>
 
                                             </Field>
@@ -368,12 +382,17 @@ export const TimetableForm = (props) => {
 
 }
 
-const mapStateToProps = (state) => ({
-    state: state
-})
-
-const mapDispatchToProps = {
-
+const mapStateToProps = (state) => {
+    const classes = state.classes.list
+    return {
+        state,classes
+    }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimetableForm)
+const mapDispatchToProps = dispatch => ({
+    handleFetchClasses : (school) => {
+        dispatch(handleFetchClasses(school))
+    }
+})
+
+    export default connect(mapStateToProps, mapDispatchToProps)(TimetableForm)

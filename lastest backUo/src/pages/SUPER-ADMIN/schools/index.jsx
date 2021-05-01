@@ -130,14 +130,13 @@ export const Index = (props) => {
 
     useEffect(() => {
         fetchData();
-    }, []);
-
-
-    {
         ALL_SCHOOLS.map((school) => (
             ar.push({ id: count++, '#': count, 'School Name': school.name, 'Created On': school.createdAt })
         ))
-    }
+    }, []);
+
+
+   
     return (
         <>
             <PanelLayout selected={2} role={props.state.auth.user.role}>

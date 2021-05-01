@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { AgGridReact, AgGridColumn } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import 'ag-grid-enterprise'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button } from 'react-bootstrap';
 import { useEffect } from 'react';
@@ -56,7 +55,7 @@ const onExportClick=()=>{
 
       <div style={searchDivStyle}>
       <input type="search" style={searchStyle} onChange={onFilterTextChange} placeholder="search ....."/>
-      <Button onClick={()=>onExportClick()}>export</Button>
+      {/* <Button onClick={()=>onExportClick()}>export</Button> */}
       </div>
                 <div
                     id="myGrid"

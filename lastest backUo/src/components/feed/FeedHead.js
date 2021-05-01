@@ -14,12 +14,11 @@ import {
 } from '../../store/actions/data/teacher.data.actions'
 
 
-
 function FeedHead(props) {
   const teacher = props.state.auth.user._id;
   const dispatch = useDispatch()
   const history = useHistory();
-  let DATA = null
+  const [DATA, setDATA] = useState(null)
   const [open, setOpen] = React.useState(false);
   const [classs, setClasss] = React.useState(null);
   const [clas, setClas] = React.useState(null)
@@ -31,7 +30,8 @@ function FeedHead(props) {
   const [subTop, setSubTop] = React.useState(null);
   const [unit, setUnit] = useState(null)
   const [uni, setUni] = useState(null)
-  const {list : SELECTED} = useSelector(state => state.teacherData)
+  const [page, setPage] = useState(null);
+  const [SELECTED, setSELECTED] = useState(null)
   const initValue = {
     class: "",
     subject: "",
@@ -41,46 +41,38 @@ function FeedHead(props) {
   };
 
 
-  let classSelected = null
-  let subjectSelected = null
-  let topicSelected = null
-  let subTopSelected = null
-  let unitSelected = null
-
-  if (SELECTED != undefined) {
-    if(SELECTED.data != undefined){
-    classSelected = (SELECTED.data.class)
-    subjectSelected = (SELECTED.data.subject)
-    topicSelected = (SELECTED.data.topic)
-    subTopSelected = (SELECTED.data.subtopic)
-    unitSelected = (SELECTED.data.unit)
-  }
-}
-
+    // let classSelected = (SELECTED.data.class)
+    // let subjectSelected = (SELECTED.data.subject)
+    // let topicSelected = (SELECTED.data.topic)
+    // let subTopSelected = (SELECTED.data.subtopic)
+    // let unitSelected = (SELECTED.data.unit)
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-
-    DATA = {
+    const done = {
       "class": clas,
       "subject": sub,
       "topic": top,
       "subtopic": subTop,
       "unit": uni}
-      
-    props.handleSetTeacherData(DATA)
-    setOpen(false);
+    localStorage.setItem('DATA', JSON.stringify(done))
+    //   if(DATA.class && DATA.subject)   
+    // props.handleSetTeacherData(DATA)
+    // setOpen(false);
+    console.log("UPDATED DATA", JSON.parse(localStorage.getItem('DATA')))
+    setOpen(false)
   };
 
   const fetchClasses = async () => {
+    console.log(teacher)
     const req = await https.get(`/class-teachers/${teacher}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
       .then((res) => {
         setClasss(res.data)
       }).catch(function (err) {
-        console.log(err);
+        console.log(err, '***********ERRRORR***********');
       });
     return req
   }
@@ -88,12 +80,12 @@ function FeedHead(props) {
     alert(JSON.stringify(values));
   };
 
-  const [page, setPage] = useState(null);
 
   const handleChange = (e) => {
 
-    if (e.target.name === "class")
+    if (e.target.name === "class"){
       setClas(e.target.value)
+    }
 
     if (e.target.name === "subject")
       setSub(e.target.value)
@@ -106,7 +98,6 @@ function FeedHead(props) {
 
     if (e.target.name === "unit") {
       setUni(e.target.value)
-    console.log("DATA:",DATA)
 
     }
 
@@ -154,16 +145,23 @@ function FeedHead(props) {
   useEffect(() => {
     props.handleFetchTeacherData()
     fetchClasses()
-    setSubject()
-    setClas(classSelected)
-    setSub(subjectSelected)
-    setTop(topicSelected)
-    setSubTop(subTopSelected)
-    setUni(unitSelected)
+   
+    // if(props.teacherData != null){
+    //   setSELECTED(props.teacherData.data)
+    // }
+    if (JSON.parse(localStorage.getItem('data')) === undefined) {
+
+      // props.handleFetchTeacherData()
+        setOpen(true)
+      }
+setClas((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).class : null)
+setSub((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).subject : null)
+setTop((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).topic : null)
+setSubTop((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).subtopic : null)
+setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).unit : null)
+
 
   },[])
-    if (!SELECTED) setOpen(true)
-
   return (
     <>
       <div className="hd">
@@ -186,169 +184,25 @@ function FeedHead(props) {
           </Link>
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "center", color: "red" }}>
-        <button className="check-btn" onClick={handleClickOpen}>
-          Select Subject Topic Sub-topic Unit
-            </button>
-        <Dialog fullWidth maxWidth="md" open={open} onClose={handleClose}>
-          <DialogTitle>select All</DialogTitle>
-          <DialogContent>
-            {/* <Formik initialValues={initValue} onSubmit={onSubmit}>
-                  {(formik) => ( */}
-            <form>
-              <div className="form-field">
-                <TextField
-                  label="Class"
-                  value={clas}
-                  name="class"
-                  variant="outlined"
-                  type="text"
-                  fullWidth="true"
-                  onChange={handleChange}
-                  select
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {classs &&
-                    classs.map(item => (
-                      <MenuItem key={item.subject} value={item.subject}>{item.class.level.name}&nbsp;{item.class.combination.name}&nbsp;{item.class.label}</MenuItem>
-                    ))
-                  }
-                </TextField>
-
-
-                <TextField
-                  label="Subject"
-                  value={sub}
-                  name="subject"
-                  variant="outlined"
-                  type="text"
-                  fullWidth="true"
-                  onChange={handleChange}
-                  select
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>{clas &&
-                    <MenuItem key={clas._id} value={clas._id}>{clas.name}</MenuItem>}
-                </TextField>
-
-
-
-
-                <TextField
-                  label="Topic"
-                  variant="outlined"
-                  type="text"
-                  value={top}
-                  name="topic"
-                  fullWidth="true"
-                  onChange={handleChange}
-                  select
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-
-                  {topic &&
-                    topic.map(item => (
-                      <MenuItem key={item._id} value={item._id}>{item.name}</MenuItem>
-                    ))
-                  }
-                </TextField>
-
-
-
-
-                <TextField
-                  label="Sub-topic"
-                  variant="outlined"
-                  type="text"
-                  name="subTopic"
-                  fullWidth="true"
-                  onChange={handleChange}
-                  minWidth="xl"
-                  value={subTop}
-                  select
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {subTopic &&
-                    subTopic.map(item => (
-                      <MenuItem key={item._id} value={item._id}>{item.name}</MenuItem>
-                    ))
-                  }
-                </TextField>
-
-
-
-
-                <TextField
-                  label="Unit"
-                  variant="outlined"
-                  type="text"
-                  fullWidth="true"
-                  name="unit"
-                  value={uni}
-                  minWidth="xl"
-                  onChange={handleChange}
-                  select
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {unit &&
-                    unit.map(item => (
-                      <MenuItem key={item._id} value={item._id}>{item.name}</MenuItem>
-                    ))
-                  }
-                </TextField>
-              </div>
-            </form>
-            {/* )}
-                </Formik> */}
-          </DialogContent>
-          <DialogActions>
-            {/* <Button onClick={handleClose} color="primary">
-              Cancel
-                </Button> */}
-            <Button onClick={handleClose} color="primary">
-              Ok
-                </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+     
     </>
   )
 }
 
-const mapStateToProps = (state) => ({
-  state: state,
-});
+const mapStateToProps = (state) => {
+  const teacherData = state.teacherData
+  const teacherClass = state.classes.list
+  return{
+    state, teacherData
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   handleFetchTeacherData : () => {
     dispatch(handleFetchTeacherData())
   },
-  handleSetTeacherData : () => {
-    dispatch(handleSetTeacherData())
+  handleSetTeacherData : (data) => {
+    dispatch(handleSetTeacherData(data))
   }
   
   })

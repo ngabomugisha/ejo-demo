@@ -23,6 +23,12 @@ import { Button } from 'react-bootstrap';
 import EditorFormatListBulleted from 'material-ui/svg-icons/editor/format-list-bulleted'
 import { DeleteForeverTwoTone } from '@material-ui/icons'
 import * as users from '../../Auth/Users'
+import ReactExport from 'react-data-export';
+
+
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -89,11 +95,12 @@ export const Index = (props) => {
     }
     const onExportClick = () => { gridApi.exportDataAsExcel({ allColumns: false }); }
     const searchDivStyle = { backgroundColor: "#dedede", padding: 10, display: "flex" }
-    const searchStyle = { width: "100%", padding: "10px 20px", borderRadius: 20, outline: 0, border: "2px #1F72C6 solid", fontSize: "100%" }
+    const searchStyle = { width: "100%", padding: "10px 20px", borderRadius: 20,marginRight:"10px", outline: 0, border: "2px #1F72C6 solid", fontSize: "100%" }
     const onFilterTextChange = (e) => { gridApi.setQuickFilter(e.target.value) }
     const [TEACHER, setTEACHER] = useState(props.state.teachers)
     const [openMsg, setOpenMsg] = useState(false)
     const [Data, setData] = useState([])
+    const [ dataSet, setDataSet] = useState([])
     const [msg, setMsg] = useState(null)
     const [updateData, setUpdateData] = useState(null)
     const [type, setType] = useState(null)
@@ -161,6 +168,8 @@ export const Index = (props) => {
             })
         }
     };
+
+    // create a teacher
     const handleCreate = async () => {
 
         https.post('/auth/signup', teacherData, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
@@ -181,7 +190,6 @@ export const Index = (props) => {
     };
 
     const handleCreateClass = async () => {
-        // alert(JSON.stringify(classData))
         handleOpenMsg('success', 'processing.....')
         await https.post('/class-teachers/', classData, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
             if (res.status == 200) { handleOpenMsg('success', 'class is assigned successfully'); handleClose() }
@@ -270,12 +278,14 @@ export const Index = (props) => {
         })
         setOpenClass(true)
     }
+    
     // const deleteRow = (parms) => {
     //     console.log(parms.value,"%%%%%")
-    //     setId(parms.value)
-    //     handleDelete(parms.value)
+    //     //setId(parms.value)
+    //    //handleDelete(parms.value)
     //     setUpdating(true)
     // }
+
     const columns = [{ headerName: 'Frist Name', field: 'firstName', sortable: true, filter: true, checkboxSelection: true, headerCheckboxSelection: true, },
     { headerName: 'Last Name', field: 'lastName', sortable: true, filter: true, },
     { headerName: 'Email', field: 'email', },
@@ -286,11 +296,10 @@ export const Index = (props) => {
     { headerName: 'Role', field: 'role', width: 150 },
     { headerName: 'School', field: 'school', hide: true, flex: 1 },
     { headerName: 'ID', field: 'id', hide: true, flex: 1 },
-    {
-        headerName: "Action", field: "id",
-        cellRendererFramework: (params) => <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft: "35px", paddingRight: "35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => editRow(params)}>Assigned Classes</div>
-            {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "4px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
+    { headerName: "Action", field: "id",
+        cellRendererFramework: (params) => <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "20px", backgroundColor: "#e8f5ff" , marginRight: "10px", textAlign: 'center', paddingLeft: "35px", paddingRight: "35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => editRow(params)}>Assigned Classes</div>
+            {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "14px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
         </div>
     }]
 
@@ -312,6 +321,31 @@ export const Index = (props) => {
             props.handleFetchClassTeacher(id)
     }, [id])
     useEffect(() => {
+
+        const fmt = formatData(props.list)
+        setDataSet([
+            {
+                columns: [
+                    { title: "First Name" },
+                    { title: "Last Name" },
+                    { title: "Email" },
+                    { title: "phone" },
+                    { title: "working Status" },
+                    { title: "Experience" },
+                    { title: "Level" }
+                ],
+                data:
+                    fmt && fmt.map(teacher => [
+                        { value: teacher.firstName },
+                        { value: teacher.lastName },
+                        { value: teacher.email },
+                        { value: teacher.workingStatus },
+                        { value: teacher.yearsOfExperience },
+                        { value: teacher.level }
+                    ])
+
+            }
+        ])
     }, [])
     return (
         <div>
@@ -327,7 +361,13 @@ export const Index = (props) => {
                                 <div style={{ height: '90%', boxSizing: 'border-box' }}>
                                     <div style={searchDivStyle}>
                                         <input type="search" style={searchStyle} onChange={onFilterTextChange} placeholder="search ....." />
-                                        <Button style={{ borderRadius: "15px" }} onClick={() => onExportClick()}>export</Button>
+                                        <ExcelFile
+                                            filename="Teachers List"
+                                            element={<Button style={{ margin: "0 auto",padding:"10px", borderRadius: "15px" }} >Export</Button>}>
+                                            <ExcelSheet dataSet={dataSet} name="Teachers" />
+                                        </ExcelFile>
+                                       
+                                        {/* <Button style={{marginLeft : "10px", borderRadius: "15px" }} onClick={() => onExportClick()}>export</Button> */}
                                     </div>
                                     <div
                                         id="myGrid"
