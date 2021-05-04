@@ -24,6 +24,7 @@ import districts from './address/districts.reducers'
 import sectors from './address/sectors.reducers'
 import cells from './address/cells.reducers'
 import villages from './address/villages.reducers'
+import assignments from './assignments.reducers'
 
 const reducers = combineReducers({
   auth,
@@ -41,6 +42,7 @@ const reducers = combineReducers({
   lessonPlans,
   teacherData,
   subjects,
+  assignments,
   topics,
   subtopics,
   units,

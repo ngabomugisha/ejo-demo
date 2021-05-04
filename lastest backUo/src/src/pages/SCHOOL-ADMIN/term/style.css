@@ -1,0 +1,50 @@
+.term-continer{
+    padding: 20px;
+}
+.paper-div{
+    
+}
+.update-btn{
+    margin-top: 30px;
+}
+.term-hd > h3 {
+    color: #1F72C6;
+    font-size: 2rem;
+}
+.terms-hd{
+    color: #1F72C6;
+    
+}
+.check-btn-1 {
+    background-color: #ffffff;
+    border-radius: 8px;
+    color: #1f72c8;
+    border: 0px;
+    padding: 10px 15px 10px;
+    margin-top: 5px;
+    width: 100%;
+    align-self: center;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+    border: 1px solid #1f72c8;
+}
+.check-btn-1:hover{
+    border: 1px solid white;
+    background-color: #1F72C6;
+    color: white;
+}
+
+.grid-bg{
+    background-color: #eef6ff;
+    display: flex;
+    justify-content: center;
+    border: 1px solid whitesmoke;
+}
+Paper{
+    margin-top: 20px;
+}
+.loading{
+    padding:50px;
+    margin-left: -10px;
+}

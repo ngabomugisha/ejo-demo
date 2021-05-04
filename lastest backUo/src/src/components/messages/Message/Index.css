@@ -1,0 +1,47 @@
+.card-hd > h3{
+    color: white;
+    background-color: orange;
+    border-radius: 90px;
+    width: min-content;
+    padding: 5px;
+    font-size: 1rem;
+}
+.card-hd{
+    padding: 0px 3px;
+}
+.card-body{
+    margin: 0;
+    padding: 10px 0px 10px;
+}
+
+.card-body > h3{
+    color: #0B393C;
+    word-wrap: unset;
+    white-space: nowrap;
+}
+.card-body > p{
+    font-size: smaller;
+    color: #0b393ca8;
+    margin: 0 auto;
+}
+.time{
+    color: #0b393ca8;
+    font-size: x-small;
+}
+.msg-container{
+    display: flex;
+    max-height: 40vh;
+    padding: 5px 20px 0px 0px;
+    border: 1px solid #0B393C;
+    border-radius: 20px;
+    margin: 3px 0px 3px;
+}
+.time{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+.msg-container:hover{
+    border-radius: 20px;
+    background-color: #0025f80c;
+}

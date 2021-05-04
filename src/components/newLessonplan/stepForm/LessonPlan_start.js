@@ -90,6 +90,17 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
       }
     }
   };
+ useEffect(() => {
+  setKeyUnitComp(
+    units.reduce(function (fit, condition) {
+      if (condition._id == uni) {
+        let keyUnit = condition.keyCompetency;
+        fit = keyUnit;
+      }
+      return fit;
+    }, "")
+  );
+ }, [uni])
 
   //END OF HANDLE SUBJ............................
 
@@ -678,7 +689,6 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
           <TextField
             label="Key Unit Competency"
             name="keyUnitCompetency"
-            defaultValue="Key Unit Competency"
             value={keyUnitComp}
             multiline
             margin="normal"

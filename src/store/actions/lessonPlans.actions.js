@@ -25,11 +25,12 @@ export const handleFetchLessonPlanTopic = (topic) => (dispatch) => {
   });
 };
 
-export const handleFetchLessonPlanSubject = (subject) => (dispatch) => {
+export const handleFetchLessonPlanSubject = (subject, classs) => (dispatch) => {
+  console.log(':WHAT IS THIS ******************',subject,"AND :",classs)
   dispatch({
     type: HANDLE_FETCH_LESSONPLANS,
   });
-  return https.get(`/lessons/plans/${subject}/subject-plan`,{ headers: {'Authorization' : `Basic ${localStorage.token}` } }).then((res) => {
+  return https.get(`/lessons/plans/${subject}/${classs}/subject-plan`,{ headers: {'Authorization' : `Basic ${localStorage.token}` } }).then((res) => {
     dispatch({
       type: HANDLE_FETCH_LESSONPLANS_SUCCESS,
       payload: res.data,

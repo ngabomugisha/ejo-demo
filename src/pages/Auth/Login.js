@@ -132,6 +132,7 @@ const LoginPage = (props) => {
           <p className="forget-password"><Link to="/passwords">Forgot Password?</Link>
           </p>
           <Button
+           type="submit"
             className="login-btn"
             disabled={isLoading}
             style={{

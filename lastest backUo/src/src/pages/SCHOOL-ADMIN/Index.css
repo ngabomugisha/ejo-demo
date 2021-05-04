@@ -1,0 +1,25 @@
+.number-student{
+    color: #1F72C6;
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+    padding-bottom: 10px;
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+.dashboard-container-1{
+    display: flex;
+    flex-direction: row;
+}
+
+.first-row{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.chrt{
+    width: 100% !important;
+    height: 100% !important
+}

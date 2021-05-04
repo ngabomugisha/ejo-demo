@@ -1,0 +1,7 @@
+.form-field{
+    display: flex;
+    padding: 20px;
+}
+.field{
+    min-width: 100%;
+}

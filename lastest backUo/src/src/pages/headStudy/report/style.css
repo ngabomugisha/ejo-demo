@@ -1,0 +1,52 @@
+.report-hd{
+    padding: 10px 20px 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.212);
+}
+.report-hd > h3{
+    color: #1F72C6;
+    font-size: 2rem;
+}
+.chrt{
+    margin-top: 20px;
+    width: 40%;
+    height: 40%;
+    margin-left: 50px;
+}
+Paper{
+    margin-left: 40px;
+}
+.chrt-hd{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 20px 5px;
+    border-bottom: 1px solid #EBEFF2;
+    margin-bottom: 10px;
+}
+.chrt-btm{
+    height:10px
+}
+
+.report-details{
+    max-width: 90%;
+    margin: 0 auto;
+}
+.report-1{
+    max-width: 50%;
+    border: 1px solid whitesmoke;
+    border-radius: 10px;
+}
+.attendanceReport-container{
+    display: flex;
+    justify-content: space-around;
+}
+.report-field{
+    margin: 15px;
+}
+.details-time{
+    color: red;
+    font-weight: 200;
+    font-size: 12px;
+    word-spacing: normal;
+    margin: 0 auto;
+    
+}

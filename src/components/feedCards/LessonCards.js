@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import './FeedCards.css'
 import https from '../../helpers/https'
 import { connect } from 'react-redux'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { handleFetchLessonPlanSubject } from '../../store/actions/lessonPlans.actions'
-import {handleFetchTeacherData} from '../../store/actions/data/teacher.data.actions'
+import { handleFetchTeacherData } from '../../store/actions/data/teacher.data.actions'
 import { useDispatch } from 'react-redux';
 import LessonCard from '../feedCard/LessonCard'
 import { makeStyles } from '@material-ui/core/styles';
@@ -45,28 +45,14 @@ function LessonCards(props) {
 
     setOpenAlert(false);
   };
+
   const [fetchedPlans, setFetchedPlans] = useState(props.lesss)
   const dispatch = useDispatch();
   const [subjects, setSubjects] = React.useState('');
+  const [ sublist, setSublist] = useState(null)
   const [plans, setPlans] = useState(null)
   let expected = 0
   let covered = 0
-
-
-
-  // console.log("SUBJECTTTTT:", subject)
-  useEffect(() => {
-    props.handleFetchTeacherData()
-    if((JSON.parse(localStorage.getItem('DATA')))){
-      if((JSON.parse(localStorage.getItem('DATA'))).subject !== null)
-    {setSubject((JSON.parse(localStorage.getItem('DATA'))).subject)
-      props.handleFetchLessonPlan(subject)}
-    else{
-      handleClick()
-    }
-  }
-  }, [])
-
   const teacher = props.state.auth && props.state.auth.user && props.state.auth.user._id;
   const history = useHistory();
   const [DATA, setDATA] = useState(null)
@@ -91,12 +77,6 @@ function LessonCards(props) {
   };
 
 
-    // let classSelected = (SELECTED.data.class)
-    // let subjectSelected = (SELECTED.data.subject)
-    // let topicSelected = (SELECTED.data.topic)
-    // let subTopSelected = (SELECTED.data.subtopic)
-    // let unitSelected = (SELECTED.data.unit)
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -107,12 +87,14 @@ function LessonCards(props) {
       "subject": sub,
       "topic": top,
       "subtopic": subTop,
-      "unit": uni}
+      "unit": uni
+    }
     localStorage.setItem('DATA', JSON.stringify(done))
     //   if(DATA.class && DATA.subject)   
     // props.handleSetTeacherData(DATA)
     // setOpen(false);
     setOpen(false)
+    props.handleFetchLessonPlanSubject(sub,clas)
   };
 
   const fetchClasses = async () => {
@@ -128,15 +110,20 @@ function LessonCards(props) {
     alert(JSON.stringify(values));
   };
 
-
+  
   const handleChange = (e) => {
 
-    if (e.target.name === "class"){
+    if (e.target.name === "class") {
       setClas(e.target.value)
+      setSublist(classs.filter(el => el.class._id === clas));
     }
 
-    if (e.target.name === "subject")
+    if (e.target.name === "subject"){
       setSub(e.target.value)
+      console.log("{{{{{{{{{{{{",sub,"&&&&&",clas,"}}}}}}}}}}}}}}}}}}}")
+      if(sub && clas)
+      props.handleFetchLessonPlanSubject(sub,clas)
+    }
 
     if (e.target.name === "topic")
       setTop(e.target.value)
@@ -193,26 +180,39 @@ function LessonCards(props) {
   useEffect(() => {
     props.handleFetchTeacherData()
     fetchClasses()
-   
+
     // if(props.teacherData != null){
     //   setSELECTED(props.teacherData.data)
     // }
     if (JSON.parse(localStorage.getItem('data')) === undefined) {
 
       // props.handleFetchTeacherData()
-        setOpen(true)
+      setOpen(true)
+    }
+    setClas((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).class : null)
+    setSub((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).subject : null)
+    setTop((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).topic : null)
+    setSubTop((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).subtopic : null)
+    setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).unit : null)
+
+    props.handleFetchTeacherData()
+    if ((JSON.parse(localStorage.getItem('DATA')))) {
+      if ((JSON.parse(localStorage.getItem('DATA'))).subject !== null) {
+        setSubject((JSON.parse(localStorage.getItem('DATA'))).subject)
+        console.log("%%%%%%%%%%%%%%%%%%", clas, "$$$$$$$$$$", sub)
+        // props.handleFetchLessonPlan(sub,clas)
       }
-setClas((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).class : null)
-setSub((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).subject : null)
-setTop((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).topic : null)
-setSubTop((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).subtopic : null)
-setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.getItem('DATA'))).unit : null)
+      else {
+        handleClick()
+      }
+    }
+    setFetchedPlans(props.lesss)
 
+  }, [])
 
-  },[])
   return (
     <div className='cards'>
-       <div style={{ display: "flex", justifyContent: "center", color: "red" }}>
+      <div style={{ display: "flex", justifyContent: "center", color: "red" }}>
         <button className="check-btn" onClick={handleClickOpen}>
           Select Subject Topic Sub-topic Unit
             </button>
@@ -241,7 +241,7 @@ setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.get
                   </MenuItem>
                   {classs &&
                     classs.map(item => (
-                      <MenuItem key={item.subject} value={item.subject}>{!item ? '' : !item.class!=null && !item.class!=undefined ? '' : !item.class.level ? '' :item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
+                      <MenuItem key={item.class._id} value={item.class._id}>{!item ? '' : !item.class != null && !item.class != undefined ? '' : !item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
                     ))
                   }
                 </TextField>
@@ -262,8 +262,13 @@ setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.get
                 >
                   <MenuItem value={null}>
                     <em>None</em>
-                  </MenuItem>{clas &&
-                    <MenuItem key={clas._id} value={clas._id}>{clas.name}</MenuItem>}
+                  </MenuItem>
+                  { sublist
+                     &&
+                     sublist.map(item => (
+                      <MenuItem key={item.subject._id} value={item.subject._id}>{item.subject.name}</MenuItem>
+                    ))
+                  }
                 </TextField>
 
 
@@ -373,7 +378,7 @@ setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.get
                 link={{ txt: 'View More Details', link: 'google.com' }}
                 size={7}
                 covered={4}
-                time={item.time && (item.time.day).substring(0, 10)}
+                time={item.time.day && (item.time.day).substring(0, 10)}
                 data={item}
               />
             </div>
@@ -381,12 +386,12 @@ setUni((JSON.parse(localStorage.getItem('DATA'))) ? (JSON.parse(localStorage.get
         )
       }
 
-    <div className={classes.root}>
- <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
-        <Alert onClose={handleCloseAlert} severity="info">
-           select a 'subject' to get Lesson plans
+      <div className={classes.root}>
+        <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+          <Alert onClose={handleCloseAlert} severity="info">
+            select a 'subject' to get Lesson plans
         </Alert>
-      </Snackbar>
+        </Snackbar>
       </div>
     </div>
   )
@@ -395,15 +400,15 @@ function mapStateToProps(state) {
   const lesss = state.lessonPlans
   // const selected = state.teacherstate.teacherData.data ? state.teacherData.data.class : null
 
-  return {lesss,state}
+  return { lesss, state }
 }
 
-const mapDispatchToProps = dispatch =>({
-  handleFetchTeacherData : () => {
+const mapDispatchToProps = dispatch => ({
+  handleFetchTeacherData: () => {
     dispatch(handleFetchTeacherData())
   },
-  handleFetchLessonPlan: (data) => {
-    dispatch(handleFetchLessonPlanSubject(data))
+  handleFetchLessonPlanSubject: (sub, classs) => {
+    dispatch(handleFetchLessonPlanSubject(sub, classs))
   }
 })
 

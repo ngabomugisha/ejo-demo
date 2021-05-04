@@ -1,0 +1,66 @@
+.container {
+  display: flex;
+  max-height: 100%;
+  max-width: 100%;
+  align-items: stretch;
+}
+
+.left_side {
+  background-color: #ebeffa;
+  flex-grow: 7;
+  min-height: 100px;
+}
+
+.right_side {
+  background-color: #1f89c6;
+  height: 100vh;
+  flex-grow: 1.5;
+  color: #fff;
+  max-width: 380px;
+}
+
+.right_side > .home {
+  position: absolute;
+  right: 0%;
+  top: 20%;
+  width: 530px;
+  height: 490px;
+}
+
+.logo {
+  position: absolute;
+  top: 2%;
+  left: 5%;
+}
+
+.btn-auth {
+  display: flex;
+  justify-content: center;
+}
+.btn-auth > h3 {
+  padding: 20px 20px;
+  cursor: pointer;
+}
+
+.content-text {
+  color: #0b393c;
+  position: absolute;
+  top: 30%;
+  left: 10%;
+}
+
+.btn-join-us {
+  padding: 20px;
+}
+.content-text > .home-future:after{
+  content: "";
+  display: block;
+  width: 105px;
+  background-color: #FEBD45;
+  height: 15px;
+  margin-top: -15px;
+}
+
+.home-future{
+  font-weight: 800;
+}

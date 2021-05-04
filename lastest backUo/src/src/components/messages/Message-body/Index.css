@@ -1,0 +1,77 @@
+.body-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px 60px;
+    position: fixed;
+    width: 50%
+}
+.select-field{
+    min-width: 100%;
+}
+.select-field > .MuiFormControl-root{
+    width: 100%;
+}
+
+.text-field > .MuiFormControl-root{
+    width: 100%;
+}
+
+
+.msg-field > .MuiFormControl-root{
+    width: 100%;
+}
+
+.msgs{
+    border-right: 1px solid #c1d9fa;
+}
+.msg-field > .MuiInputBase-root, .msg-field .MuiOutlinedInput-root {
+    width: 100%;
+    min-height: fit-content !important;
+
+}
+
+.send-btn{
+    align-self: flex-end;
+    padding: 30px 0px;
+}
+.reply{
+    display: flex;
+    justify-content: flex-end;
+}
+.reply > a{
+    align-self:flex-end;
+    color: #2F80ED;
+    text-decoration: none;
+    background-color: #c1d9fa;
+    padding: 10px 20px 10px;
+    border-radius: 5px;
+}
+
+.msg-body-container{
+    border: 1px solid rgba(0, 0, 0, 0.123);
+    padding: 20px 40px;
+    margin: 30px 40px;
+    color: #0B393C;
+    border-radius: 5px;
+    position: absolute;
+}
+
+.body > p{
+    font-weight: 300;
+}
+
+.read-body-container{
+    width: 55%;
+    position: fixed;
+    padding: 30px;
+
+}
+
+.MuiGridList-root > .body{
+    min-width: 100%;
+}
+
+.time{
+    min-width: 100%;
+}

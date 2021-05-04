@@ -1,0 +1,26 @@
+
+.cards{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 85%;
+    align-self: center;
+}
+.card{
+    align-self: center;
+    margin: 20px 20px 20px;
+    border-radius: 10px;
+  box-shadow:
+  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+  0 12.5px 10px rgba(0, 0, 0, 0.06),
+  0 10.3px 7.9px rgba(0, 0, 0, 0.072),
+  0 10.8px 13.4px rgba(0, 0, 0, 0.022),
+  0 10px 10px rgba(0, 0, 0, 0.02)
+;
+
+}
+.subject-select{
+  display: flex;
+  justify-content: center;
+}

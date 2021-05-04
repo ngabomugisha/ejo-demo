@@ -1,0 +1,54 @@
+.card2-container{
+    background-color: white;
+    border-radius: 5px;
+    align-self: center;
+    padding: 20px;
+}
+.card2-hd{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: min-content;
+}
+.card2-hd > h4 {
+
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+
+.card2-ft{
+    display: flex;
+    justify-content: space-between;
+}
+.card2-tag{
+    background-color: #daf0ef;
+    color: #079992;
+    padding: 8px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+.card2-title{
+    color: #1F72C6;
+    font-weight: bold;
+}
+.card2-details{
+    color:#0c393c;
+}
+.card2-time{
+    color: #0c393c;
+    font-size: smaller;
+}
+.card2-size{
+    color: #1f72c7;
+    font-size:small
+}
+.card2-covered{
+    color: #f29493;
+    font-size: small;
+}
+.card2-link{
+    color: #1f72c7;
+    font-size: small;
+    text-decoration: underline;
+    cursor: pointer;
+}

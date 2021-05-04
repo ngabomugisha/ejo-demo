@@ -1,0 +1,34 @@
+.login-form{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: center;
+}
+
+.login-field{
+    padding: 20px;
+    max-width: 250px;
+    align-self: center;
+}
+.login-btn{
+    align-self: center;
+    margin-top: 100px;
+}
+.forget-password{
+    align-self: center;
+    font-size: small;
+    text-transform: capitalize;
+
+}
+.forget-password > a{
+    text-decoration: none;
+    color: white;
+}
+.africa{
+    display: flex;
+    justify-content: center;
+}
+
+.africa > img{
+    max-height : 110px;
+}

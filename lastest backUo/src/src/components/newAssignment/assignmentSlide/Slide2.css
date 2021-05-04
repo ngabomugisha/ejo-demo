@@ -1,0 +1,30 @@
+.option{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0px 10px;
+}
+.option > label{
+    color: #0b393c;
+    font-weight: 500;
+}
+
+.radio-group{
+    min-width: 200px;
+    background-color: #F4F8FC;
+    padding: 20px;
+    border: 1px solid #1F72c6;
+    border-radius: 3px;
+    margin-bottom: 30px;
+}
+.slide1-container > h3{
+    color: #1F72c6
+}
+
+fieldset {
+    border: 0;
+}
+input [type=radio]{
+    color:red
+}
+

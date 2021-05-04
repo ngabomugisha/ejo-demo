@@ -262,12 +262,12 @@ export function Index(props) {
       const permanent = students.reduce(function(res, con){
         if(true)
         {
-          let a = con.permanentHealthConditions.map(i => i.condition)
+          let a = con.permanentHealthConditions && con.permanentHealthConditions.map(i => i.condition)
           res.push(a)
         }
         return(res)
       },[])
-        const flatList = permanent.map(item => item.map(i => {
+        const flatList = permanent && permanent.map(item => item.map(i => {
                 f.push(i)
             }))
     }

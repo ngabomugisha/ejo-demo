@@ -1,0 +1,24 @@
+.report-details{
+    max-width: 90%;
+    margin: 0 auto;
+}
+.report-1{
+    max-width: 50%;
+    border: 1px solid whitesmoke;
+    border-radius: 10px;
+}
+.attendanceReport-container{
+    display: flex;
+    justify-content: space-around;
+}
+.report-field{
+    margin: 15px;
+}
+.details-time{
+    color: red;
+    font-weight: 200;
+    font-size: 12px;
+    word-spacing: normal;
+    margin: 0 auto;
+    
+}

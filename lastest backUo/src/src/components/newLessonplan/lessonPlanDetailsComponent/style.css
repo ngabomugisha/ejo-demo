@@ -1,0 +1,62 @@
+.plan-container{
+    background-color: white;
+    max-width: 75%;
+    min-width: 75%;
+    align-self: center;
+    margin-top: 30px;
+    min-height: 100vh;
+    padding: 10px 70px 10px;
+}
+
+.in-card-title > h4{
+    color: black;
+}
+
+.in-card-title > h5{
+    color: black;
+    font-weight: 300;
+    font-size: 1rem;
+}
+.titl > h1{
+    color:#1F72C6
+}
+
+.titl2 > h4{
+
+}
+
+.titl2 > h5{
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.select-subject{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.print-lessonPlan-container{
+    margin: 10px;
+}
+
+.print-lp-hd{
+    display: flex;
+    justify-content: space-evenly;
+}
+.ls-table{
+    min-width: 100px
+}
+table{
+    width: 100%;
+}
+th{
+    background-color: rgb(211, 211, 211);
+}
+td{
+    padding: 10px 10px 10px;
+}
+.print-btn-2{
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+}
