@@ -19,12 +19,12 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Button } from 'react-bootstrap';
 import StudentForm from '../../../components/schoolAdmin/StudentForm'
 import { DropzoneArea } from "material-ui-dropzone"
-import ReactExport from 'react-data-export';
+// import ReactExport from 'react-data-export';
 
 
 
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+// const ExcelFile = ReactExport.ExcelFile;
+// const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -403,11 +403,11 @@ export const Index = (props) => {
                                 <div style={{ height: '90%', boxSizing: 'border-box' }}>
                                     <div style={searchDivStyle}>
                                         <input type="search" style={searchStyle} onChange={onFilterTextChange} placeholder="search ....." />
-                                        <ExcelFile
+                                        {/* <ExcelFile
                                             filename="Students List"
                                             element={<Button style={{ margin: "0 auto",padding:"10px", borderRadius: "15px" }} >Export</Button>}>
                                             <ExcelSheet dataSet={dataSet} name="Students" />
-                                        </ExcelFile>
+                                        </ExcelFile> */}
                                         {/* <Button style={{ marginLeft: "10px", borderRadius: "15px" }} onClick={() => onExportClick()}>export</Button> */}
                                     </div>
                                     <div

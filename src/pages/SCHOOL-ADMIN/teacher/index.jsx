@@ -23,12 +23,13 @@ import { Button } from 'react-bootstrap';
 import EditorFormatListBulleted from 'material-ui/svg-icons/editor/format-list-bulleted'
 import { DeleteForeverTwoTone } from '@material-ui/icons'
 import * as users from '../../Auth/Users'
-import ReactExport from 'react-data-export';
+// import ReactExport from 'react-data-export';
+// import { CSVLink } from "react-csv";
 
 
 
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+// const ExcelFile = ReactExport.ExcelFile;
+// const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -84,7 +85,7 @@ export const Index = (props) => {
     let school = null
     let role = null
     if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
-
+    let csvReport = {}
     const [gridApi, setGridApi] = useState(null);
     const [gridColumnApi, setGridColumnApi] = useState(null);
     const [rowData, setRowData] = useState(null);
@@ -143,7 +144,6 @@ export const Index = (props) => {
         setOpen(false)
         setOpenClass(false)
     }
-
     const handleUpdate = async () => {
         if (teacherData) {
             props.handleUpdateClass({ id: id, data: teacherData })
@@ -188,7 +188,6 @@ export const Index = (props) => {
             })
 
     };
-
     const handleCreateClass = async () => {
         handleOpenMsg('success', 'processing.....')
         await https.post('/class-teachers/', classData, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
@@ -208,7 +207,6 @@ export const Index = (props) => {
     //         setData(formatData(CLASSES.list))
     //     }, 0);
     // };
-
     const handleChange = e => {
 
         if (e.target.name === 'firstName') setTeacherData(
@@ -286,6 +284,39 @@ export const Index = (props) => {
     //     setUpdating(true)
     // }
 
+    // const headers = [
+    //     { label: "First Name", key: "firstName" },
+    //     { label: "Last Name", key: "lastName" },
+    //     { label: "Email", key: "email" },
+    //     { label: "Age", key: "age" }
+    //   ];
+
+
+// const data = [
+//     { firstName: "Warren", lastName: "Morrow", email: "sokyt@mailinator.com", age: "36" },
+//     { firstName: "Gwendolyn", lastName: "Galloway", email: "weciz@mailinator.com", age: "76" },
+//     { firstName: "Astra", lastName: "Wyatt", email: "quvyn@mailinator.com", age: "57" },
+//     { firstName: "Jasmine", lastName: "Wong", email: "toxazoc@mailinator.com", age: "42" },
+//     { firstName: "Brooke", lastName: "Mcconnell", email: "vyry@mailinator.com", age: "56" },
+//     { firstName: "Christen", lastName: "Haney", email: "pagevolal@mailinator.com", age: "23" },
+//     { firstName: "Tate", lastName: "Vega", email: "dycubo@mailinator.com", age: "87" },
+//     { firstName: "Amber", lastName: "Brady", email: "vyconixy@mailinator.com", age: "78" },
+//     { firstName: "Philip", lastName: "Whitfield", email: "velyfi@mailinator.com", age: "22" },
+//     { firstName: "Kitra", lastName: "Hammond", email: "fiwiloqu@mailinator.com", age: "35" },
+//     { firstName: "Charity", lastName: "Mathews", email: "fubigonero@mailinator.com", age: "63" }
+//   ];
+
+      const headers = [
+        { label: "First Name", key: "firstName"},
+        { label: "Last Name", key: "LastName" },
+        { label: "Email", key: "email" },
+        { label: "phone", key: "phone" },
+        { label: "working Status" , key: "workingStatus"},
+        { label: "Experience" , key: "experience"},
+        { label: "Level", key: "level" }
+    ]
+
+
     const columns = [{ headerName: 'Frist Name', field: 'firstName', sortable: true, filter: true, checkboxSelection: true, headerCheckboxSelection: true, },
     { headerName: 'Last Name', field: 'lastName', sortable: true, filter: true, },
     { headerName: 'Email', field: 'email', },
@@ -302,7 +333,7 @@ export const Index = (props) => {
             {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "14px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
         </div>
     }]
-
+let data2 = {}
     const update = () => {
         props.handleFetchSubject()
         props.handleFetchTeachers(school)
@@ -322,30 +353,44 @@ export const Index = (props) => {
     }, [id])
     useEffect(() => {
 
-        const fmt = formatData(props.list)
-        setDataSet([
-            {
-                columns: [
-                    { title: "First Name" },
-                    { title: "Last Name" },
-                    { title: "Email" },
-                    { title: "phone" },
-                    { title: "working Status" },
-                    { title: "Experience" },
-                    { title: "Level" }
-                ],
-                data:
-                    fmt && fmt.map(teacher => [
-                        { value: teacher.firstName },
-                        { value: teacher.lastName },
-                        { value: teacher.email },
-                        { value: teacher.workingStatus },
-                        { value: teacher.yearsOfExperience },
-                        { value: teacher.level }
-                    ])
+        // const fmt = formatData(props.list)
+        // setDataSet([
+        //     {
+        //         columns: [
+        //             { title: "First Name" },
+        //             { title: "Last Name" },
+        //             { title: "Email" },
+        //             { title: "phone" },
+        //             { title: "working Status" },
+        //             { title: "Experience" },
+        //             { title: "Level" }
+        //         ],
+        //         data:
+        //             fmt && fmt.map(teacher => [
+        //                 { value: teacher.firstName },
+        //                 { value: teacher.lastName },
+        //                 { value: teacher.email },
+        //                 { value: teacher.workingStatus },
+        //                 { value: teacher.yearsOfExperience },
+        //                 { value: teacher.level }
+        //             ])
 
-            }
-        ])
+        //     }
+        // ])
+        //  data2 = [fmt && fmt.map(teacher => ({
+        //      firstName: teacher.firstName,
+        //      lastName: teacher.lastName ,
+        //      email: teacher.email ,
+        //      workingStatus: teacher.workingStatus ,
+        //      experience: teacher.yearsOfExperience,
+        //      level: teacher.level 
+        // }))]
+
+//  csvReport = {
+//     data: data2,
+//     headers: headers,
+//     filename: 'Teachers.csv'
+//   };
     }, [])
     return (
         <div>
@@ -361,12 +406,14 @@ export const Index = (props) => {
                                 <div style={{ height: '90%', boxSizing: 'border-box' }}>
                                     <div style={searchDivStyle}>
                                         <input type="search" style={searchStyle} onChange={onFilterTextChange} placeholder="search ....." />
-                                        <ExcelFile
+                                        {/* <ExcelFile
                                             filename="Teachers List"
                                             element={<Button style={{ margin: "0 auto",padding:"10px", borderRadius: "15px" }} >Export</Button>}>
                                             <ExcelSheet dataSet={dataSet} name="Teachers" />
-                                        </ExcelFile>
-                                       
+                                        </ExcelFile> */}
+                                        {/* <CSVLink {...csvReport} style={{ margin: "0 auto",padding:"10px", borderRadius: "15px" }}  >Export to CSV</CSVLink> */}
+                                        {/* <h3>Export data to CSV in React</h3> */}
+      {/* <CSVLink {...csvReport}>Export to CSV</CSVLink> */}
                                         {/* <Button style={{marginLeft : "10px", borderRadius: "15px" }} onClick={() => onExportClick()}>export</Button> */}
                                     </div>
                                     <div
