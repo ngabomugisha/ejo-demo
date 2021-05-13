@@ -15,6 +15,7 @@ import NewAssignmentPage from './components/newAssignment/NewAssignment'
 import NewLessonPlanPage from './components/newLessonplan/NewLessonPlan'
 import LessonPlanDetailsPage from './pages/Teacher/LessonPlanDetails'
 import TeacherPrintsPage from './pages/Teacher/Prints'
+import workschemePage from './pages/Teacher/Scheme_of_work'
 
 //headStudy
 import headStudyDashboard from './pages/headStudy/Index';
@@ -66,6 +67,7 @@ export default () => {
           <Route exact path="/teacher/newAssignment" component={NewAssignmentPage} />
           <Route exact path="/teacher" component={TeacherDashboard} />
           <Route exact path="/teacher/prints" component={TeacherPrintsPage} />
+          <Route exact path="/teacher/workscheme" component={workschemePage} />
 
 
           {/* headStudy routes */}

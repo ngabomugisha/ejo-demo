@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import './style.css'
 import https from '../../../helpers/https'
 import PanelLayout from '../../../components/Layouts/PanelLayout/Index'
+import Leave from '../../../components/report/Leave'
 import AttendanceReports from '../../../components/report/AttendanceReports'
 import { Grid, Paper, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
@@ -41,10 +42,14 @@ export const Index = (props) => {
                             </Card>
                             <Card>
                                 <Accordion.Toggle as={Card.Header} eventKey="1">
-                                    Click me!
+                                    Leave History
                                 </Accordion.Toggle>
                                 <Accordion.Collapse eventKey="1">
-                                    <Card.Body>Hello! I'm another body</Card.Body>
+                                    <Card.Body>
+                                    <div style={{maxWidth: "95%", margin: "0 auto"}}>
+                                    <Leave/>
+                                    </div>    
+                                    </Card.Body>
                                 </Accordion.Collapse>
                             </Card>
                         </Accordion>

@@ -2,3 +2,10 @@
     color: black;
     padding: 20px;
 }
+
+.btn.active{
+    border: 2px solid rgb(255, 255, 255) !important;
+    padding: 3px !important;
+    text-decoration: underline !important;
+    text-shadow: 2px;
+}

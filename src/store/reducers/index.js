@@ -8,6 +8,7 @@ import classes from './classes.reducers'
 import combinations from './combinations.reducers'
 import levels from './levels.reducers'
 import teachers from './teachers.reducers'
+import leaves from './leaves.reducers'
 import terms from './terms.reducers'
 import questions from './question.reduces'
 import lessonPlans from './lessonPlans.reducers'
@@ -42,6 +43,7 @@ const reducers = combineReducers({
   lessonPlans,
   teacherData,
   subjects,
+  leaves,
   assignments,
   topics,
   subtopics,

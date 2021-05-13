@@ -5,3 +5,12 @@
 .field{
     min-width: 100%;
 }
+.scheme-container{
+    margin: 0 auto;
+    width: 90%;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #1F72C6;
+    padding: 5px;
+    margin-top:20px;
+}

@@ -113,6 +113,7 @@ export const Discipline = (props) => {
 
   useEffect(() => {
     props.handleFetchDisciplines()
+    console.log("{{{{{{{{{{{{",props.list,"}}}}}}}}}}}}}}}}}}}")
 }, [])
   return (
     <>
@@ -2024,7 +2025,7 @@ export const Discipline = (props) => {
               {
                 props.list &&
                 props.list.map(item => {
-                  if(item.firstLevel == "indiscipline and rudeness" && item.secondLevel == "vandalism" && item.forthLevel == 'reduction of discipline marks' && item.thirdLevel == "infraction")
+                  if(item.firstLevel == "indiscipline and rudeness" && item.secondLevel == "vandalism"  && item.thirdLevel == "infraction")
                   { 
                     return(
                 <div className="itemUpdate"><p>{item.forthLevel}</p>

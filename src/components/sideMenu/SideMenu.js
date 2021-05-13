@@ -12,6 +12,7 @@ import { IoSettingsOutline } from 'react-icons/io5'
 import { MdPeopleOutline, MdDateRange, MdPermDeviceInformation } from "react-icons/md";
 import AssignmentTurnedInOutlinedIcon from '@material-ui/icons/AssignmentTurnedInOutlined';
 import { HiOutlineDocumentReport, HiOutlineCollection } from "react-icons/hi";
+import { GrWorkshop } from "react-icons/gr";
 
 const renderOptions = (active) => {
   switch (active) {
@@ -33,33 +34,45 @@ function renderSwitch(role, selected) {
             1:
               <><Link to="/teacher"><SideOption Icon={BiHome} text="Home" active /></Link>
                 <Link to="/teacher/assignment"><SideOption Icon={AssignmentTurnedInOutlinedIcon} text="Assignment" /></Link>
+                <Link to="/teacher/workscheme"><SideOption Icon={GrWorkshop} text="Scheme Of Work" /></Link>
                 <Link to="/teacher/lessonPlan"><SideOption Icon={RiBookletLine} text="Lesson Plan" /></Link>
                 <Link to="/teacher/prints"><SideOption Icon={MdPermDeviceInformation} text="Prints" /></Link>
                 <SideOption Icon={IoSettingsOutline} text="Settings" /></>,
             2:
               <><Link to="/teacher"><SideOption Icon={BiHome} text="Home" /></Link>
                 <Link to="/teacher/assignment"><SideOption Icon={AssignmentTurnedInOutlinedIcon} text="Assignment" active /></Link>
+                <Link to="/teacher/workscheme"><SideOption Icon={GrWorkshop} text="Scheme Of Work" /></Link>
                 <Link to="/teacher/lessonPlan"><SideOption Icon={RiBookletLine} text="Lesson Plan" /></Link>
                 <Link to="/teacher/prints"><SideOption Icon={MdPermDeviceInformation} text="Prints" /></Link>
                 <SideOption Icon={IoSettingsOutline} text="Settings" /></>,
             3:
               <><Link to="/teacher"><SideOption Icon={BiHome} text="Home" /></Link>
                 <Link to="/teacher/assignment"><SideOption Icon={AssignmentTurnedInOutlinedIcon} text="Assignment" /></Link>
-                <Link to="/teacher/lessonPlan"><SideOption Icon={RiBookletLine} text="Lesson Plan" active /></Link>
+                <Link to="/teacher/workscheme"><SideOption Icon={GrWorkshop} text="Scheme Of Work" active/></Link>
+                <Link to="/teacher/lessonPlan"><SideOption Icon={RiBookletLine} text="Lesson Plan"  /></Link>
                 <Link to="/teacher/prints"><SideOption Icon={MdPermDeviceInformation} text="Prints" /></Link>
                 <SideOption Icon={IoSettingsOutline} text="Settings" /></>,
             4:
               <><Link to="/teacher"><SideOption Icon={BiHome} text="Home"  /></Link>
                 <Link to="/teacher/assignment"><SideOption Icon={AssignmentTurnedInOutlinedIcon} text="Assignment" /></Link>
-                <Link to="/teacher/lessonPlan"><SideOption Icon={RiBookletLine} text="Lesson Plan" /></Link>
-                <Link to="/teacher/prints"><SideOption Icon={MdPermDeviceInformation} text="Prints" active /></Link>
+                <Link to="/teacher/workscheme"><SideOption Icon={GrWorkshop} text="Scheme Of Work" /></Link>
+                <Link to="/teacher/lessonPlan"><SideOption Icon={RiBookletLine} text="Lesson Plan" active/></Link>
+                <Link to="/teacher/prints"><SideOption Icon={MdPermDeviceInformation} text="Prints"  /></Link>
                 <SideOption Icon={IoSettingsOutline} text="Settings" /></>,
             5:
               <><Link to="/teacher"><SideOption Icon={BiHome} text="Home"  /></Link>
                 <Link to="/teacher/assignment"><SideOption Icon={AssignmentTurnedInOutlinedIcon} text="Assignment" /></Link>
+                <Link to="/teacher/workscheme"><SideOption Icon={GrWorkshop} text="Scheme Of Work" /></Link>
                 <Link to="/teacher/lessonPlan"><SideOption Icon={RiBookletLine} text="Lesson Plan" /></Link>
-                <Link to="/teacher/prints"><SideOption Icon={MdPermDeviceInformation} text="Prints" /></Link>
-                <SideOption Icon={IoSettingsOutline} text="Settings" active /></>
+                <Link to="/teacher/prints"><SideOption Icon={MdPermDeviceInformation} text="Prints" active /></Link>
+                <SideOption Icon={IoSettingsOutline} text="Settings"  /></>,
+            6:
+            <><Link to="/teacher"><SideOption Icon={BiHome} text="Home"  /></Link>
+              <Link to="/teacher/assignment"><SideOption Icon={AssignmentTurnedInOutlinedIcon} text="Assignment" /></Link>
+              <Link to="/teacher/workscheme"><SideOption Icon={GrWorkshop} text="Scheme Of Work" /></Link>
+              <Link to="/teacher/lessonPlan"><SideOption Icon={RiBookletLine} text="Lesson Plan" /></Link>
+              <Link to="/teacher/prints"><SideOption Icon={MdPermDeviceInformation} text="Prints"  /></Link>
+              <SideOption Icon={IoSettingsOutline} text="Settings" active /></>
           }[selected]
         }
       </>

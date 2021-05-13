@@ -30,7 +30,7 @@ export const LessonPlan = (props) => {
 
 
     return (
-        <PanelLayout selected={3} role={role}>
+        <PanelLayout selected={4} role={role}>
         <div className="assignment-container">
                 <Feed>
                     <LessonCards/>
