@@ -366,7 +366,13 @@ useEffect(() => {
                                 unitPlans && unitPlans.map(i => (
                                     <tr key={i._id}>
                                         <td>{count++}</td>
-                                        <td style={{ minWidth: "maxContent" }}>{i.subject}</td>
+                                        <td style={{ minWidth: "250px" }}>{props.subjectList.reduce(function (fit, condition) {
+    if (condition._id == i.subject) {
+      let keyUnit = condition.name;
+      fit = keyUnit;
+    }
+    return fit;
+  }, "")}</td>
                                         <td style={{ minWidth: "250px" }}>{i.name}</td>
                                         <td style={{ minWidth: "250px" }}>
                                         <TextField
@@ -581,9 +587,6 @@ useEffect(() => {
                 </Button>
           </DialogActions>
         </Dialog>
-
-
-
 
 
       <Snackbar open={openMsg} autoHideDuration={6000} onClose={handleCloseMsg}>
