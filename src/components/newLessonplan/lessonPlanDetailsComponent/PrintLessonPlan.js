@@ -89,20 +89,8 @@ class ComponentToPrint extends React.Component {
             <tr>
               <td>1</td>
               <td>{!less ? "" : !less.time ? "" : (less.time.day).substring(0, (less.time.day).indexOf('T'))}</td>
-              <td>{!less ? "" : !less.subject ? "" : this.props.subjects.reduce(function (fit, condition) {
-                if (condition._id == less.subject) {
-                  let keyUnit = condition.name;
-                  fit = keyUnit;
-                }
-                return fit;
-              }, "")}</td>
-              <td>{this.props.classes && this.props.classes.reduce(function (fit, condition) {
-                if (condition._id == less.class) {
-                  let keyUnit = `${condition.level && condition.level.name} ${condition.combination && condition.combination.name} ${condition.label}`;
-                  fit = keyUnit;
-                }
-                return fit;
-              }, "")}</td>
+              <td>{!less ? "" : !less.subject ? "" : less.subject.name}</td>
+              <td>{less.class.level.name} {less.class.label}</td>
               <td>{`1`}</td>
               <td>{`1 of 4`}</td>
               <td>{less.teachingTechniques.introduction.duration + less.teachingTechniques.development.duration + less.teachingTechniques.conclusion.duration} Minutes</td>
