@@ -110,14 +110,55 @@ class ComponentToPrint extends React.Component {
             <tr>
               <td colSpan="8">
                 <h4 style={{ fontWeight: "bold" }}>Learning Objectives</h4>
-                <h6>knowledge :</h6>
-                <p>{less.knowledge.topics.map(item => (<li>{item.topic}</li>))}</p>
+                <h6><b>- knowledge :</b></h6>
+                <p>{less.knowledge.topics.map(item => (
+                 <div>
+                 <li>
+                   {item.topic}
+                   <ul className="list">
+                     <li>
+                       <b>bloomTaxonomy:</b> {item.bloomTaxonomy}
+                     </li>
+                     <li>
+                       <b>Standard Creteria:</b> {item.standardCriteriaPerfomance}%
+                     </li>
+                   </ul>
+                 </li>
+                 </div>))}</p>
 
-                <h6>Skills :</h6>
-                <p>{less.skills.topics.map(item => (<li>{item.topic}</li>))}</p>
+                <h6><b>- Skills :</b></h6>
+                <p>{less.skills.topics.map(item => (<div>
+                  
+                  <li>
+                    {item.topic}
+                    <ul className="list">
+                      <li>
+                        <b>bloomTaxonomy:</b> {item.bloomTaxonomy}
+                      </li>
+                      <li>
+                        <b>Standard Creteria:</b> {item.standardCriteriaPerfomance}%
+                      </li>
+                    </ul>
+                  </li>
+                  
+                </div>))}</p>
 
-                <h6>attitudes And Values :</h6>
-                <p>{less.attitudesAndValues.topics.map(item => (<li>{item.topic}</li>))}</p>
+                <h6><b>- Attitudes And Values :</b></h6>
+                <p>{less.attitudesAndValues.topics.map(item => (
+                <div>
+                  <li>
+                    {item.topic}
+                    <ul className="list">
+                      <li>
+                        <b>bloomTaxonomy:</b> {item.bloomTaxonomy}
+                      </li>
+                      <li>
+                        <b>Standard Creteria:</b> {item.standardCriteriaPerfomance}%
+                      </li>
+                    </ul>
+                  </li>
+                  </div>
+                  ))}</p>
 
               </td>
             </tr>
@@ -189,12 +230,12 @@ class ComponentToPrint extends React.Component {
             </tr>
             <tr>
               <td><h4>Teacher self-evaluation:</h4><p></p></td>
-              <td colSpan={3}>{ !less.teacherSelfAssessment ? " Not done yet " :less.teacherSelfAssessment.assessment ? less.teacherSelfAssessment.assessment : "not done yet" }</td>
+              <td colSpan={3}>{ !less.teacherSelfAssessment ? "" :less.teacherSelfAssessment.assessment ? less.teacherSelfAssessment.assessment : "" }</td>
 
             </tr>
             <tr>
               <td><h4>Students Feedback:</h4><p></p></td>
-              <td colSpan={3}></td>
+              <td colSpan={3}>{ !less.teacherSelfAssessment ? " Not done yet " :less.studentSelfAssessment ? less.studentSelfAssessment : "" }</td>
 
             </tr>
 

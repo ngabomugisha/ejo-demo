@@ -60,3 +60,7 @@ td{
     justify-self: center;
     justify-content: center;
 }
+
+.list{
+    list-style-type:circle;
+}
