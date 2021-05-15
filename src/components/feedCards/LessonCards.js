@@ -117,7 +117,7 @@ function LessonCards(props) {
 
     if (e.target.name === "class") {
       setClas(e.target.value)
-      setSublist(classs.filter(el => el.class._id === clas));
+      setSublist(classs.filter(el => el.class._id === e.target.value));
     }
 
     if (e.target.name === "subject"){
