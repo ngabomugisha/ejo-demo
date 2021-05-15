@@ -170,7 +170,13 @@ class ComponentToPrint extends React.Component {
 
             <tr>
               <td colSpan="2">Learning Materials</td>
-              <td colSpan="6">{less.knowledge.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}{less.skills.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))} {less.attitudesAndValues.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}</td>
+              <td colSpan="6">
+                <div>
+                  <b>Knowledge : </b>{less.knowledge.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}<br/>
+                  <b>Skills : </b>{less.skills.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}<br/>
+                  <b>Attitudes And Values : </b> {less.attitudesAndValues.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}
+                </div>
+              </td>
             </tr>
 
             <tr>
