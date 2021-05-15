@@ -370,8 +370,8 @@ function LessonCards(props) {
         </Dialog>
       </div>
       {JSON.parse(localStorage.getItem('DATA')) && JSON.parse(localStorage.getItem('DATA')).subject !== null && JSON.parse(localStorage.getItem('DATA')) && sub &&
-        fetchedPlans.list &&
-        fetchedPlans.list.map(
+        props.lesss.list &&
+        props.lesss.list.map(
           item => (
             <div className='card'>
               <LessonCard
