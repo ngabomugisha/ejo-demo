@@ -94,13 +94,14 @@ function LessonCards(props) {
     // props.handleSetTeacherData(DATA)
     // setOpen(false);
     setOpen(false)
-    props.handleFetchLessonPlanSubject(sub,clas)
+    props.handleFetchLessonPlanSubject(sub,"607fe41e72bcd50036b72ea2")
   };
 
   const fetchClasses = async () => {
     const req = await https.get(`/class-teachers/${teacher}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
       .then((res) => {
         setClasss(res.data)
+        console.log("CLASS :", res.data)
       }).catch(function (err) {
         console.log(err, '***********ERRRORR***********');
       });
@@ -209,7 +210,7 @@ function LessonCards(props) {
       }
     }
     setFetchedPlans(props.lesss)
-
+    console.log("FETCHED LESSON PLAN :", fetchedPlans.list )
   }, [])
 
   return (
@@ -268,7 +269,7 @@ function LessonCards(props) {
                   { sublist
                      &&
                      sublist.map(item => (
-                      <MenuItem key={item.subject._id} value={item.subject._id}>{item.subject.name}</MenuItem>
+                      <MenuItem key={item.subject && item.subject._id} value={ item.subject && item.subject._id}>{item.subject && item.subject.name}</MenuItem>
                     ))
                   }
                 </TextField>

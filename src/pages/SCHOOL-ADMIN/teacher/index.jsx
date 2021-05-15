@@ -678,8 +678,8 @@ let data2 = {}
                                                 <tbody>
                                                     {props.classTeacher.map(i => (
                                                         <tr>
-                                                            <td>{i.class.level.name} {i.class.label}</td>
-                                                            <td>{i.subject.name}</td>
+                                                            <td>{i. class && i.class.level.name} {i.class && i.class.label}</td>
+                                                            <td>{i. subject && i.subject.name}</td>
                                                         </tr>
                                                     ))}
                                                 </tbody>

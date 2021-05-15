@@ -267,9 +267,9 @@ export function Index(props) {
         }
         return(res)
       },[])
-        const flatList = permanent && permanent.map(item => item.map(i => {
+        const flatList = permanent !== null ? permanent.map(item => item.map(i => {
                 f.push(i)
-            }))
+            })): null
     }
     // const finalList = f.filter((value,index)=> f.indexOf(value) === index)
   return (
