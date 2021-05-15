@@ -177,7 +177,7 @@ class ComponentToPrint extends React.Component {
 
             </tr>
             <tr>
-              <td><h4>Conclusion:</h4><p>Summary and assessment {less.teachingTechniques.conclusion.duration} Min</p></td>
+              <td><h4>Conclusion:</h4><p>{less.teachingTechniques.conclusion.duration} Min</p></td>
               <td>{forRender(concKeys, concValues)}{teac && teac.map(i => (<p>{i}</p>))}</td>
               <td>{less.activities.conclusion.content.activities.map(i => i.activity)}</td>
               <td>
