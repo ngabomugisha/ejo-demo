@@ -129,7 +129,7 @@ class ComponentToPrint extends React.Component {
 
             <tr>
               <td colSpan="2">Learning Materials</td>
-              <td colSpan="6">{less.knowledge.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}</td>
+              <td colSpan="6">{less.knowledge.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}{less.skills.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))} {less.attitudesAndValues.instructionalMaterial.map(i => i.items.map(item => (item.item + " ,")))}</td>
             </tr>
 
             <tr>
@@ -255,9 +255,10 @@ export function Index(props) {
         }
         return(res)
       },[])
-        const flatList = permanent !== null ? permanent.map(item => item.map(i => {
-                f.push(i)
-            })): null
+    //     const flatList = permanent !== null ? permanent.map(item => item.map(i => {
+    //             f.push(i)
+    //         })): null
+    // }
     }
     // const finalList = f.filter((value,index)=> f.indexOf(value) === index)
   return (
