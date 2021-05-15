@@ -189,7 +189,7 @@ class ComponentToPrint extends React.Component {
             </tr>
             <tr>
               <td><h4>Teacher self-evaluation:</h4><p></p></td>
-              <td colSpan={3}></td>
+              <td colSpan={3}>{ !less.teacherSelfAssessment ? " Not done yet " :less.teacherSelfAssessment.assessment ? less.teacherSelfAssessment.assessment : "not done yet" }</td>
 
             </tr>
             <tr>
