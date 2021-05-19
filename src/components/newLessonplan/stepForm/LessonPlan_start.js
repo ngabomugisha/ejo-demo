@@ -22,8 +22,15 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import TimeTable from "../../../pages/SCHOOL-ADMIN/timeTable/TimeTable";
 
-export const LessonPlan_start = ({ formData, setForm, navigation }) => {
-  const teacherId = useSelector((state) => state.auth.user._id);
+export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
+  let school = null
+  let role = null
+  let teacherId
+  // const teacher = props.state.auth.user._id;
+  if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user.school; role = props.state.auth.user._id } }
+  if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+
+  // const  = useSelector((state) => state.auth.user._id);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState("paper");
@@ -417,7 +424,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
 
   function fetchSlots() {
     const req = https
-      .get(`/timetables/602b9cfc49ce7a0be4a35fc7/teacher`, {
+      .get(`/timetables/${teacherId}/teacher`, {
         headers: { Authorization: `Basic ${localStorage.token}` },
       })
       .then((res) => {
@@ -456,7 +463,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation }) => {
 
     async function fetchClasses() {
       const req = await https
-        .get(`/classes/602c1e8feeb9ae2820b62120/school-classes`, {
+        .get(`/classes/${school}/school-classes`, {
           headers: { Authorization: `Basic ${localStorage.token}` },
         })
         .then((res) => {

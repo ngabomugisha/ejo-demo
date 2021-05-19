@@ -48,6 +48,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const QuestionForm = (props) => {
+    let school = null
+    let role = null
+    let teacherId = null
+    
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user.school; role = props.state.auth.user._id } }
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+   
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -58,8 +65,7 @@ export const QuestionForm = (props) => {
 
     const history = useHistory();
 
-    const school = props.state.auth.user.school;
-    const [tags, setTags] = React.useState(['rob', 'ngabo']);
+    const [tags, setTags] = React.useState([]);
     const classes = useStyles();
     const selectedTags = tags => {
         console.log(tags);
@@ -127,12 +133,9 @@ export const QuestionForm = (props) => {
         https.post(options.url, options.headers, options.data).then(() => {
             return alert("data recorded")
         })
-
     }
     let iniData = null
     const data = props.recordForEdit
-
-
 
     const initialValue = {
         "subject": null,
@@ -150,7 +153,6 @@ export const QuestionForm = (props) => {
     }
 
     const handleclick = (vals) => {
-
         if (vals != null) {
             const setDataS = {
                 "subject": sub,
@@ -172,15 +174,18 @@ export const QuestionForm = (props) => {
                     return data;
                 }, [])
             }
-            https.post('/question-banks/', setDataS, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
-                if (res.status == 200)
-                    return (setOpen(true), history.go(0) )
+            https.post('/question-banks/', setDataS, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+            .then((res) => {
+                if (res.status == 200){
+                    setOpen(true)
+                    setTimeout(() => {
+                        props.setOpenPopup(false)
+                    }, 500); 
+                }
                 else
                     return alert("something went wrong")
             })
         }
-
-
     }
 
 
@@ -412,8 +417,8 @@ export const QuestionForm = (props) => {
 
                                                 <MenuItem value="MULTI-CHOICE">Multi choice</MenuItem>
                                                 <MenuItem value="TRUE/FALSE">True/False</MenuItem>
-                                                <MenuItem value="MATCHING">Matching</MenuItem>
-                                                <MenuItem value="FILL-IN-THE-BANK">Fill in the Blank</MenuItem>
+                                                {/* <MenuItem value="MATCHING">Matching</MenuItem> */}
+                                                {/* <MenuItem value="FILL-IN-THE-BANK">Fill in the Blank</MenuItem> */}
                                                 <MenuItem value="SHORT-ANSWER">Short Answer</MenuItem>
                                                 <MenuItem value="LONG-ANSWER">Long answer</MenuItem>
 
@@ -502,7 +507,7 @@ export const QuestionForm = (props) => {
             </Container>
             <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
-                    THE question is saved!
+                     Question is saved!
                 </Alert>
             </Snackbar>
         </>

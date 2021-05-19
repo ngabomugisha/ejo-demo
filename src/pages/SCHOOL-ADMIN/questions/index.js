@@ -11,16 +11,23 @@ import { Box } from '@material-ui/core'
 
 
 export const Index = (props) => {
+    let school = null
+    let role = null
+    let teacherId = null
+    
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user.school; role = props.state.auth.user._id } }
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+   
 
-    const school = props.state.auth.user.school;
+    // const school = props.state.auth.user.school;
     const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch();
-    const { list: ALL_QUESTION } = useSelector((state) => state.questions);
+    // const { list: ALL_QUESTION } = useSelector((state) => state.questions);
     const [subject, setSubject] = React.useState([])
     const [topic, setTopic] = useState([])
     const [subtopic, setSubtopic] = useState([])
     const [unit, setUnit] = useState([])
-
+    let ALL_QUESTION = []
     const [sub, setSub] = useState("")
     const [top, setTop] = useState("")
     const [subT, setSubT] = useState('')
@@ -66,9 +73,11 @@ export const Index = (props) => {
 console.log('data from localstorage',JSON.parse(localStorage.getItem("students")))
     return (
         <>
-            <PanelLayout selected={8} role={props.state.auth.user.role}>
+            <PanelLayout selected={8} role={role}>
 
-        {ALL_QUESTION.length > 0 ?
+            <QuestionTable data={ALL_QUESTION} head={headCells}/>
+
+        {/* {ALL_QUESTION.length > 0 ?
             <QuestionTable data={ALL_QUESTION} head={headCells}/>:
             (<Box className="my-bx">
             <div className="skeleton-line-students">
@@ -133,7 +142,7 @@ console.log('data from localstorage',JSON.parse(localStorage.getItem("students")
                 <Skeleton width="20%" />
                 <Skeleton width="20%" />
             </div>
-        </Box>)}   
+        </Box>)}    */}
 
             </PanelLayout>
         </>
