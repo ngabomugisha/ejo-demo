@@ -9,3 +9,7 @@
     text-decoration: underline !important;
     text-shadow: 2px;
 }
+
+.reportOne{
+    min-width: 90px;
+}

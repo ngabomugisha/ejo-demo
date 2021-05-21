@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
 import moment from "moment";
 import ReactToPrint from "react-to-print";
-// import Button from 'react-bootstrap/Button'
+import { Table } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import {
     CircularProgress,
@@ -24,22 +24,25 @@ import { handleFetchStudent } from '../../store/actions/student.actions'
 import { handleFetchClasses } from '../../store/actions/classes.actions'
 import { handleFetchSubject } from '../../store/actions/subjects.actions'
 import { handleFetchTeachers } from '../../store/actions/teachers.actions'
+import { handleFetchClassStudent } from '../../store/actions/student.actions'
 import TimeTable from '../../pages/SCHOOL-ADMIN/timeTable/TimeTable'
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 export const AttendanceReports = (props) => {
     let school = null
     let role = null
     let teacherId = null
-    
+
+    let count = 1
     if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user.school; role = props.state.auth.user._id } }
     if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
     const descriptionElementRef = React.useRef(null);
     const [enabled, setEnabled] = useState(false)
-    const [ absent, setAbsent ] = useState([])
-    const [ present, setPresent] = useState([])
+    const [absent, setAbsent] = useState([])
+    const [present, setPresent] = useState([])
     const [open, setOpen] = useState(false)
     const [classOne, setClassOne] = useState(null)
-    const [ teacher] = useState(props.teachersList)
+    const [teacher] = useState(props.teachersList)
     const [classTwo, setClassTwo] = useState(null)
     const [grph1Date, setGrph1Date] = useState(null)
     const [grph2Date, setGrph2Date] = useState(null)
@@ -73,8 +76,9 @@ export const AttendanceReports = (props) => {
     const [keyUnitComp, setKeyUnitComp] = useState(null);
     const [subj, setSubj] = React.useState([]);
     const [sub, setSub] = useState("");
-    const [ attendanceList_class, setAttendanceList_class] = useState([])
-    const [ attendanceList_slot, setAttendanceList_slot] = useState([])
+    const [attendanceList_class, setAttendanceList_class] = useState([])
+    const [attendanceList_slot, setAttendanceList_slot] = useState([])
+    const [ timeMade, setTimeMade] = useState(null)
 
 
     const handleClickOpen = () => {
@@ -442,9 +446,10 @@ export const AttendanceReports = (props) => {
         const req = await https.get(`attendances/class-attendances/${slot}/timetable-slot`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
             .then((res) => {
                 console.log("DATA FrOM timetableslot : ", res.data)
-                if((res.data.time).substring(0,10) == grph1Date)
-                console.log("&&&&&&&&&&&&&&",(res.data.time).substring(0,10), "YESSSS", grph1Date)
+                if ((res.data.time).substring(0, 10) == grph1Date)
+                    console.log("&&&&&&&&&&&&&&", (res.data.time).substring(0, 10), "YESSSS", grph1Date)
                 setAttendanceList_slot(res.data.students)
+                setTimeMade(res.data.updatedAt)
             }).catch(function (err) {
                 console.log(err);
             });
@@ -455,72 +460,71 @@ export const AttendanceReports = (props) => {
         fetchSlots()
     }, [classOne])
     useEffect(() => {
-
+        props.handleFetchStudent(school)
         setSubj(props.subjectsList)
         props.handleFetchClasses(school)
         fetchSlots()
         // console.log("{{{{{{{{{{{{{{{{{{{{{",timetabledata, "}}}}}}}}}}}}}}}}}}}}}}}")
     }, [])
 
-useEffect(() => {
-    fetchTimeTableSlotAttendance(timeTableslot)
-    // console.log("%%%%%%%%%%%%%%%%%%", timeTableslot)
-    setOpen(false)
-}, [timeTableslot])
+    useEffect(() => {
+        fetchTimeTableSlotAttendance(timeTableslot)
+        // console.log("%%%%%%%%%%%%%%%%%%", timeTableslot)
+        setOpen(false)
+    }, [timeTableslot])
 
-useEffect(() => {
-    console.log("WWWHHHHHHAAAATTTT  ::", attendanceList_slot)
-    if(attendanceList_slot){
-        setAbsent(
-            attendanceList_slot.filter(i => i.present == false)
-        )
-        setPresent(
-            attendanceList_slot.filter(i => i.present == true)
-        )
-    
-        setGraph({
-            labels: ['Absent', 'Present'],
-            datasets: [
-                {
-                    label: '',
-                    backgroundColor: [
-                        '#2ED47A',
-                        '#FFB946'
-                    ],
-                    hoverBackgroundColor: [
-                        '#2ED4aA',
-                        '#FFB9a6'
-                    ],
-                    data: [absent.length, present.length]
-                }
-            ]
-        })
-    
-    }
-}, [attendanceList_slot])
+    useEffect(() => {
+        console.log("WWWHHHHHHAAAATTTT  ::", attendanceList_slot)
+        if (attendanceList_slot) {
+            setAbsent(
+                attendanceList_slot.filter(i => i.present == false)
+            )
+            setPresent(
+                attendanceList_slot.filter(i => i.present == true)
+            )
 
-useEffect(() => {
-    console.log("^^^^^^^^^^^^^^^^^^ ABSENT",absent)
-}, [absent])
+            setGraph({
+                labels: ['Absent', 'Present'],
+                datasets: [
+                    {
+                        label: '',
+                        backgroundColor: [
+                            '#2ED47A',
+                            '#FFB946'
+                        ],
+                        hoverBackgroundColor: [
+                            '#2ED4aA',
+                            '#FFB9a6'
+                        ],
+                        data: [absent.length, present.length]
+                    }
+                ]
+            })
 
-useEffect(() => {
-    console.log("^^^^^^^^^^^^^^^^^^ PRESENT",present)
-}, [present])
+        }
+    }, [attendanceList_slot])
 
+    useEffect(() => {
+        console.log("^^^^^^^^^^^^^^^^^^ ABSENT", absent)
+    }, [absent])
+
+    useEffect(() => {
+        console.log("^^^^^^^^^^^^^^^^^^ PRESENT", present)
+    }, [present])
 
     // console.log("[[[[[[[[[[[[[[[[[[[[",subj,']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]')
     // console.log("{{{{{{{{{{{{{{{{{{{{{",timetabledata, "}}}}}}}}}}}}}}}}}}}}}}}")
     return (
         <div className="attendanceReport-container">
-            <div className="report-1">
-                <div className="report-field">
+            <div className="">
+                <div className="">
                     <TextField
                         label="Class"
                         value={classOne}
                         name="classOne"
                         variant="outlined"
                         type="text"
-                        fullWidth="true"
+                        fullWidth
                         onChange={handleChanges}
                         select
                         InputLabelProps={{
@@ -551,6 +555,74 @@ useEffect(() => {
                         }}
                     />
                 </div>
+
+                <div>
+                    {/* <button className="check-btn">Print report</button> */}
+                    <ReactHTMLTableToExcel
+                        id="test-table-xls-button"
+                        className="check-btn"
+                        table="table-to-xls-attendance-1"
+                        filename="tablexls"
+                        sheet="tablexls"
+                        buttonText="Download as XLS" />
+                    <Table striped bordered hover id="table-to-xls-attendance-1">
+                        <thead>
+                            <tr>
+                                <th colSpan="2">{props.classList.reduce(function(res,opt){
+                                    if(opt._id == classOne){
+                                        let level = opt.level ? opt.level.name : ""
+                                        let combination = opt.combination ? opt.combination.name : ""
+                                        let label = opt.label
+                                        res= level + " " + combination + " " + label
+                                    }
+                                    return res
+                                },"")}</th>
+                                <th colSpan="2">Date: {timeMade && (timeMade).substring(0,10)} Time: {timeMade && (timeMade).substring(12,16)}</th>
+                            </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Names</th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                attendanceList_slot &&
+                                attendanceList_slot.map(item => (
+                                    <tr>
+                                        <td>{count++}</td>
+                                        <td>{
+                                            props.studentsList.reduce(function (res, opt) {
+                                                if (opt._id == item.student) {
+                                                    let finded = opt.firstName + " " + opt.lastName
+                                                    res = finded
+                                                }
+                                                return res
+                                            }, "")
+                                        }</td>
+                                        {
+                                            item.present ?
+                                                <td style={{ backgroundColor: "#eef6ff", color: "#3194f6" }}>
+                                                    Present
+                                            </td> :
+                                                <td style={{ backgroundColor: "#ffece7", color: "#f1967e" }}>
+                                                    Absent
+                                            </td>
+                                        }
+                                        {/* <td>{
+                                            item.present ? "Present" : "Absent"
+                                            }</td> */}
+                                        <td>{item.absenceReason}</td>
+
+                                    </tr>
+                                ))
+                            }
+
+                        </tbody>
+                    </Table>
+                </div>
+
                 <div className="report-field">
                     {/* <TextField
                         label="Class"
@@ -601,7 +673,7 @@ useEffect(() => {
                     </TextField> */}
                 </div>
 
-                <Doughnut
+                {/* <Doughnut
                     data={graph}
                     options={{
                         title: {
@@ -614,12 +686,12 @@ useEffect(() => {
                             position: 'right'
                         }
                     }}
-                />
+                /> */}
             </div>
-            {
+            {/* {
                 absent &&
                 <h5>{JSON.stringify(absent.length)}|||{JSON.stringify(present.length)}</h5>
-            }
+            } */}
             {/* <div className="report-1">
                 <div className="report-field">
                     <TextField
@@ -753,7 +825,7 @@ const mapStateToProps = (state) => {
     const { subjects } = state
     const subjectsList = subjects.list
 
-    const {teachers} = state
+    const { teachers } = state
     const teachersList = teachers.list
     return {
         state, classList, studentsList, subjectsList, teachersList
