@@ -63,6 +63,7 @@ export const Scheme_of_work = (props) => {
 
   const teacher = props.state.auth && props.state.auth.user && props.state.auth.user._id;
   const [classs, setClasss] = React.useState(null);
+  const [unique, setUnique] = React.useState(null);
   const [clas, setClas] = React.useState(null)
   const [subject, setSubject] = React.useState(null);
   const [sub, setSub] = React.useState(null);
@@ -151,6 +152,9 @@ export const Scheme_of_work = (props) => {
     const req = https.get(`/class-teachers/${teacher}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
       .then((res) => {
         setClasss(res.data)
+        if(classs)
+        setUnique(...unique, classs.map(i => i.class))
+        console.log("=====>", classs.map(i => i.class) , "&&&&", unique)
       }).catch(function (err) {
         console.log(err, '***********ERRRORR***********');
       });
@@ -289,6 +293,7 @@ export const Scheme_of_work = (props) => {
     props.handleFetchSubject()
     fetchClasses()
   }, [])
+  console.log(" ------> ",classs)
   return (
     <div>
       <PanelLayout selected={3} role={role}>
@@ -346,7 +351,7 @@ export const Scheme_of_work = (props) => {
               </TextField>
             </div>
             <div style={{ padding: "5px" }}>
-              <Button style={{ padding: "5px", margin: "0 auto" }} onClick={handleOpen}> Create a new Unit Plan Time</Button>
+              <Button style={{ padding: "5px", margin: "0 auto" }} onClick={handleOpen}> Create a new scheme of work</Button>
             </div>
           </div>
           {/* <p>{unitPlans && JSON.stringify(unitPlans.length)}</p> */}
@@ -386,6 +391,9 @@ export const Scheme_of_work = (props) => {
                           type="date"
                           defaultValue={(i.time.start).substring(0, 10)}
                           className={classes.textField}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                         />
                       </td>
                       <td style={{ minWidth: "250px" }}>
@@ -397,6 +405,9 @@ export const Scheme_of_work = (props) => {
                           type="date"
                           defaultValue={(i.time.end).substring(0, 10)}
                           className={classes.textField}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
                         />
                       </td>
                       <td>7</td>

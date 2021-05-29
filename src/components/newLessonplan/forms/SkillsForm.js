@@ -275,8 +275,7 @@ export const SkillsForm = (props) => {
                                         shrink: true,
                                     }}
                                 >
-                                    <MenuItem value="REMEMBERING">Remembering</MenuItem>
-                                    <MenuItem value="UNDERSTANDING">Understanding</MenuItem>
+                                    <MenuItem value="Skills">Skills</MenuItem>
                                 </TextField>
                             </div>
                             <div className="field">

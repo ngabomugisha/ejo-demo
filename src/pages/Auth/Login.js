@@ -103,7 +103,7 @@ const LoginPage = (props) => {
               label="Email"
               placeholder="Email"
               color="primary"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(((e.target.value).replace(/\s/g, '')).toLowerCase())}
               error={!!errMessage}
               InputProps={{
                 className: classes.input,

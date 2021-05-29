@@ -275,8 +275,9 @@ export const AttitudeForm = (props) => {
                                         shrink: true,
                                     }}
                                 >
-                                    <MenuItem value="REMEMBERING">Remembering</MenuItem>
-                                    <MenuItem value="UNDERSTANDING">Understanding</MenuItem>
+                                    <MenuItem value="ANALYZING">Analyzing</MenuItem>
+                                    <MenuItem value="EVALUATING">Evaluating</MenuItem>
+                                    <MenuItem value="CREATING">Creating</MenuItem>
                                 </TextField>
                             </div>
                             <div className="field">
