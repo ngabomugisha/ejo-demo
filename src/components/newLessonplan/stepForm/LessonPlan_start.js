@@ -6,7 +6,6 @@ import https from "../../../helpers/https";
 import {
   Container,
   TextField,
-  Button,
   Dialog,
   Grid,
   DialogActions,
@@ -21,41 +20,28 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import TimeTable from "../../../pages/SCHOOL-ADMIN/timeTable/TimeTable";
+import "bootstrap/dist/css/bootstrap.min.css";
+import {Button} from 'react-bootstrap'
 
-export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
+
+export const LessonPlan_start = (props) => {
+  const { auth } = useSelector((state) => state);
   let school = null
   let role = null
   let teacherId
-  // const teacher = props.state.auth.user._id;
-  if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user.school; role = props.state.auth.user._id } }
-  if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+  
+  if (auth != undefined) {
+    if (auth.user != undefined) {
+      teacherId = auth.user._id;
+    }
+  }
+  if (auth != undefined) { if (auth.user != undefined) { school = auth.user.school; role = auth.user.role } }
 
-  // const  = useSelector((state) => state.auth.user._id);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState("paper");
   const [slot, setSlot] = useState(null);
-  const [lessonNum,setLessonNum] = useState(null)
-  const handleClickOpen = () => {
-    setOpen(true);
-    setScroll("paper");
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const descriptionElementRef = React.useRef(null);
-  useEffect(() => {
-    if (open) {
-      const { current: descriptionElement } = descriptionElementRef;
-      if (descriptionElement !== null) {
-        descriptionElement.focus();
-      }
-    }
-  }, [open]);
-
-  // HANDLE THE SUBJECT, TOPIC, SUBTOPIC, UNIT
+  const [lessonNum, setLessonNum] = useState(null)
 
   const [teacher, setTeacher] = React.useState([]);
   const [subj, setSubj] = React.useState([]);
@@ -68,54 +54,6 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
   const [subT, setSubT] = useState("");
   const [uni, setUni] = useState("");
 
-  const handlesubject = (event) => {
-    setSub(event.target.value);
-    formData.subject = event.target.value;
-  };
-  const handletopic = (event) => {
-    setTop(event.target.value);
-  };
-  const handlesubtopic = (event) => {
-    setSubT(event.target.value);
-  };
-  const handleunit = (event) => {
-    setUni(event.target.value);
-    formData.unit = event.target.value;
-    // formData.keyUnitCompetency = event.target.value
-    setKeyUnitComp(
-      units.reduce(function (fit, condition) {
-        if (condition._id == uni) {
-          let keyUnit = condition.keyCompetency;
-          fit = keyUnit;
-        }
-        return fit;
-      }, "")
-    );
-    {
-      if (keyUnitComp) {
-        formData.keyUnitCompetency = keyUnitComp;
-      }
-    }
-  };
- useEffect(() => {
-  setKeyUnitComp(
-    units.reduce(function (fit, condition) {
-      if (condition._id == uni) {
-        let keyUnit = condition.keyCompetency;
-        fit = keyUnit;
-      }
-      return fit;
-    }, "")
-  );
- }, [uni])
-
-  //END OF HANDLE SUBJ............................
-
-  const handleChange = (e) => {
-    if(e.target.name == 'lessonNum') setLessonNum(e.target.value)
-  }
-
-
   const [classs, setClasss] = React.useState([]);
   const [selectedDate, setSelectedDate] = React.useState(
     new Date("2014-08-18T21:11:54")
@@ -127,22 +65,8 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
   const [fri, setFri] = useState([]);
   const [keyUnitComp, setKeyUnitComp] = useState(null);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    time.day = date;
-    handleClickOpen();
-  };
-  const {
-    unit,
-    unitPlanId,
-    lessonNumber,
-    keyUnitCompetency,
-    lessonName,
-    time,
-    subject,
-  } = formData;
-  // const { firstName, lastName, nickName } = formData;
-  console.log("FORM DATA, ", formData);
+  const descriptionElementRef = React.useRef(null);
+
   let timetabledata = {
     events: {
       monday: mon,
@@ -152,6 +76,83 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
       friday: fri,
     },
   };
+
+  const {
+    unit,
+    unitPlanId,
+    lessonNumber,
+    keyUnitCompetency,
+    lessonName,
+    time,
+    subject,
+  } = props.formData;
+  console.log("FORM DATA, ", props.formData);
+  //END of assignment and declaration
+
+// // dialog for timetable
+//   const handleClickOpen = () => {
+//     setOpen(true);
+//     setScroll("paper");
+//   };
+//   const handleClose = () => {
+//     setOpen(false);
+//   };
+// //end of dialog functions
+
+
+//My functions
+  const handleClickOpen = () => {
+    setOpen(true);
+    setScroll("paper");
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handlesubject = (event) => {
+    setSub(event.target.value);
+    props.formData.subject = event.target.value;
+  };
+
+  const handletopic = (event) => {
+    setTop(event.target.value);
+  };
+
+  const handlesubtopic = (event) => {
+    setSubT(event.target.value);
+  };
+
+  const handleunit = (event) => {
+    setUni(event.target.value);
+    props.formData.unit = event.target.value;
+    // props.formData.keyUnitCompetency = event.target.value
+    setKeyUnitComp(
+      units.reduce(function (fit, condition) {
+        if (condition._id == uni) {
+          let keyUnit = condition.keyCompetency;
+          fit = keyUnit;
+        }
+        return fit;
+      }, "")
+    );
+    {
+      if (keyUnitComp) {
+        props.formData.keyUnitCompetency = keyUnitComp;
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    if (e.target.name == 'lessonNum') setLessonNum(e.target.value)
+  }
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    time.day = date;
+    handleClickOpen();
+  };
+
   const putMon = (dt) => {
     //this is for monday events
     let sub = null;
@@ -182,17 +183,17 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-                opt.time.starts.substring(0, 2) +
-                ":" +
-                opt.time.starts.substring(2, 4) +
-                ":00"
+              opt.time.starts.substring(0, 2) +
+              ":" +
+              opt.time.starts.substring(2, 4) +
+              ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-                opt.time.ends.substring(0, 2) +
-                ":" +
-                opt.time.ends.substring(2, 4) +
-                ":00"
+              opt.time.ends.substring(0, 2) +
+              ":" +
+              opt.time.ends.substring(2, 4) +
+              ":00"
             ),
           };
           fit.push(sm);
@@ -227,17 +228,17 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-                opt.time.starts.substring(0, 2) +
-                ":" +
-                opt.time.starts.substring(2, 4) +
-                ":00"
+              opt.time.starts.substring(0, 2) +
+              ":" +
+              opt.time.starts.substring(2, 4) +
+              ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-                opt.time.ends.substring(0, 2) +
-                ":" +
-                opt.time.ends.substring(2, 4) +
-                ":00"
+              opt.time.ends.substring(0, 2) +
+              ":" +
+              opt.time.ends.substring(2, 4) +
+              ":00"
             ),
           };
           fit.push(sm);
@@ -273,17 +274,17 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-                opt.time.starts.substring(0, 2) +
-                ":" +
-                opt.time.starts.substring(2, 4) +
-                ":00"
+              opt.time.starts.substring(0, 2) +
+              ":" +
+              opt.time.starts.substring(2, 4) +
+              ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-                opt.time.ends.substring(0, 2) +
-                ":" +
-                opt.time.ends.substring(2, 4) +
-                ":00"
+              opt.time.ends.substring(0, 2) +
+              ":" +
+              opt.time.ends.substring(2, 4) +
+              ":00"
             ),
           };
           fit.push(sm);
@@ -319,17 +320,17 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-                opt.time.starts.substring(0, 2) +
-                ":" +
-                opt.time.starts.substring(2, 4) +
-                ":00"
+              opt.time.starts.substring(0, 2) +
+              ":" +
+              opt.time.starts.substring(2, 4) +
+              ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-                opt.time.ends.substring(0, 2) +
-                ":" +
-                opt.time.ends.substring(2, 4) +
-                ":00"
+              opt.time.ends.substring(0, 2) +
+              ":" +
+              opt.time.ends.substring(2, 4) +
+              ":00"
             ),
           };
           fit.push(sm);
@@ -365,17 +366,17 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-                opt.time.starts.substring(0, 2) +
-                ":" +
-                opt.time.starts.substring(2, 4) +
-                ":00"
+              opt.time.starts.substring(0, 2) +
+              ":" +
+              opt.time.starts.substring(2, 4) +
+              ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-                opt.time.ends.substring(0, 2) +
-                ":" +
-                opt.time.ends.substring(2, 4) +
-                ":00"
+              opt.time.ends.substring(0, 2) +
+              ":" +
+              opt.time.ends.substring(2, 4) +
+              ":00"
             ),
           };
           fit.push(sm);
@@ -436,9 +437,37 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
       });
     return req;
   }
+//END of functions
+
+//UseEffects
+  useEffect(() => {
+    if (open) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
+  }, [open]);
 
   useEffect(() => {
-    formData.time.slotOnTimetable = slot;
+    setKeyUnitComp(
+      units.reduce(function (fit, condition) {
+        if (condition._id == uni) {
+          let keyUnit = condition.keyCompetency;
+          fit = keyUnit;
+        }
+        return fit;
+      }, "")
+    );
+
+
+
+
+
+  }, [uni])
+
+  useEffect(() => {
+    props.formData.time.slotOnTimetable = slot;
     setOpen(false);
   }, [slot]);
 
@@ -531,7 +560,11 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
     }
     fetchUnit();
   }, [subT]);
+// END of useEffects
 
+  useEffect(() => {
+    console.log("THIS IS WHAT WE HAVE NOW", props.formData)
+  }, [])
   return (
     <Container maxWidth="xs">
       {/* subject */}
@@ -540,7 +573,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
           <TextField
             label="Subject"
             variant="outlined"
-            value={formData.subject}
+            value={props.formData.subject}
             onChange={handlesubject}
             type="text"
             fullWidth
@@ -587,7 +620,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             aria-labelledby="scroll-dialog-title"
             aria-describedby="scroll-dialog-description"
           >
-            <DialogTitle id="scroll-dialog-title">Subscribe</DialogTitle>
+            <DialogTitle id="scroll-dialog-title">Select a slot on timetable</DialogTitle>
             <DialogContent dividers={scroll === "paper"}>
               <DialogContentText
                 id="scroll-dialog-description"
@@ -629,10 +662,10 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             {!topics
               ? ""
               : topics.map((item) => (
-                  <MenuItem key={item._id} value={item._id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
+                <MenuItem key={item._id} value={item._id}>
+                  {item.name}
+                </MenuItem>
+              ))}
           </TextField>
         </Grid>
 
@@ -657,10 +690,10 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             {!subtopic
               ? ""
               : subtopic.map((item) => (
-                  <MenuItem key={item._id} value={item._id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
+                <MenuItem key={item._id} value={item._id}>
+                  {item.name}
+                </MenuItem>
+              ))}
           </TextField>
         </Grid>
 
@@ -669,11 +702,11 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
 
           <TextField
             label="Unit"
-            variant="outlined"
             value={uni}
             onChange={handleunit}
             type="text"
             fullWidth
+            variant="outlined"
             select
             InputLabelProps={{
               shrink: true,
@@ -685,10 +718,10 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             {!units
               ? ""
               : units.map((item) => (
-                  <MenuItem key={item._id} value={item._id}>
-                    {item.name}
-                  </MenuItem>
-                ))}
+                <MenuItem key={item._id} value={item._id}>
+                  {item.name}
+                </MenuItem>
+              ))}
           </TextField>
         </Grid>
 
@@ -696,12 +729,24 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
           <TextField
             label="Key Unit Competency"
             name="keyUnitCompetency"
-            value={keyUnitComp}
+            value={
+              uni &&
+              units.reduce(function (fit, condition) {
+                if (condition._id == uni) {
+                  let keyUnit = condition.keyCompetency;
+                  fit = keyUnit;
+                }
+                return fit;
+              }, "")
+            }
             multiline
             margin="normal"
             variant="outlined"
             disabled
             fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </Grid>
 
@@ -721,7 +766,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
               shrink: true,
             }}
           >
-            <MenuItem key= '1' value="1">1</MenuItem>
+            <MenuItem key='1' value="1">1</MenuItem>
           </TextField>
         </Grid>
 
@@ -731,7 +776,7 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
             label="Lesson Name"
             name="lessonName"
             value={lessonName}
-            onChange={setForm}
+            onChange={props.setForm}
             margin="normal"
             variant="outlined"
             autoComplete="off"
@@ -741,11 +786,9 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
 
         <Grid item xs={12}>
           <Button
-            variant="contained"
-            fullWidth
-            color="primary"
+            block
             style={{ marginTop: "1rem" }}
-            onClick={() => navigation.next()}
+            onClick={() => props.navigation.next()}
           >
             Next
           </Button>
@@ -755,10 +798,22 @@ export const LessonPlan_start = ({ formData, setForm, navigation },props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  state: state,
-});
+const mapStateToProps = (state, OwnProps) => {
+  // const { navigation } = OwnProps
+  // const { formData } = OwnProps
+  // const { setForm } = OwnProps
+  // return {
+  //   state, navigation, formData, setForm
+  // }
+}
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = dispatch => ({
+  // handleFetchTeacherData: () => {
+  //   dispatch(handleFetchTeacherData())
+  // },
+  // handleFetchLessonPlanSubject: (sub, classs) => {
+  //   dispatch(handleFetchLessonPlanSubject(sub, classs))
+  // }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(LessonPlan_start);

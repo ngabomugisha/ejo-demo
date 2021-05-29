@@ -3,7 +3,7 @@ import "../NewLessonPlan.css";
 import https from '../../../helpers/https'
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -16,87 +16,39 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Button } from 'react-bootstrap'
+import { ActivitiesIntro } from '../forms/ActivitiesIntro'
+import { ActivitiesDev } from '../forms/ActivitiesDev'
+import { ActivitiesConc } from '../forms/ActivitiesConc'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap",
-    "& > *": {
-      margin: theme.spacing(1),
-    },
+      display: "flex",
+      flexWrap: "wrap",
+      "& > *": {
+          margin: theme.spacing(1),
+      },
   },
   margin: {
-    margin: theme.spacing(1),
+      margin: theme.spacing(1),
   },
   withoutLabel: {
-    marginTop: theme.spacing(3),
+      marginTop: theme.spacing(3),
   },
   textField: {
-    width: "25ch",
+      width: "25ch",
   },
   input: {
-    display: "none",
+      display: "none",
   },
 }));
 
 
-const crossCuttingIssuesArrInto = [
-    {issue: 'GENOCIDE-STUDIES'},
-    {issue: 'ENVIRONMENT-AND-SUSTAINABILITY'},
-    {issue: 'GENDER'},
-    {issue: 'COMPREHENSIVE-SEXUALITY-EDUCATION'},
-    {issue: 'PEACE-AND-VALUES-EDUCATION'},
-    {issue: 'FINANCIAL-EDUCATION'},
-    {issue: 'STANDARDISATION-CULTURE'},
-    {issue: 'INCLUSIVE-EDUCATION'}
-]
-const crossCuttingIssuesArrDeve = [
-    {issue: 'GENOCIDE-STUDIES'},
-    {issue: 'ENVIRONMENT-AND-SUSTAINABILITY'},
-    {issue: 'GENDER'},
-    {issue: 'COMPREHENSIVE-SEXUALITY-EDUCATION'},
-    {issue: 'PEACE-AND-VALUES-EDUCATION'},
-    {issue: 'FINANCIAL-EDUCATION'},
-    {issue: 'STANDARDISATION-CULTURE'},
-    {issue: 'INCLUSIVE-EDUCATION'}
-]
-const crossCuttingIssuesArrConc = [
-    {issue: 'GENOCIDE-STUDIES'},
-    {issue: 'ENVIRONMENT-AND-SUSTAINABILITY'},
-    {issue: 'GENDER'},
-    {issue: 'COMPREHENSIVE-SEXUALITY-EDUCATION'},
-    {issue: 'PEACE-AND-VALUES-EDUCATION'},
-    {issue: 'FINANCIAL-EDUCATION'},
-    {issue: 'STANDARDISATION-CULTURE'},
-    {issue: 'INCLUSIVE-EDUCATION'}
-]
-const competenceArrInto = [
-    {competency: 'CRITICAL-THINKING'},
-    {competency: 'RESEARCH-AND-PROBLEM-SOLVING'},
-    {competency: 'CREATIVITY-AND-INNOVATION'},
-    {competency: 'COMMUNICATION'},
-    {competency: 'COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS'},
-    {competency: 'LIFELONG-LEARNING'},
-]
-const competenceArrDeve = [
-    {competency: 'CRITICAL-THINKING'},
-    {competency: 'RESEARCH-AND-PROBLEM-SOLVING'},
-    {competency: 'CREATIVITY-AND-INNOVATION'},
-    {competency: 'COMMUNICATION'},
-    {competency: 'COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS'},
-    {competency: 'LIFELONG-LEARNING'},
-]
-const competenceArrConc = [
-    {competency: 'CRITICAL-THINKING'},
-    {competency: 'RESEARCH-AND-PROBLEM-SOLVING'},
-    {competency: 'CREATIVITY-AND-INNOVATION'},
-    {competency: 'COMMUNICATION'},
-    {competency: 'COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS'},
-    {competency: 'LIFELONG-LEARNING'},
-]
-
 export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
-    const [contentData , setContentData] = useState(null)
+  const [contentData, setContentData] = useState(null)
+  const [contentDevelopmentData, setContentDevelopmentData] = useState(null)
   const [key, setKey] = React.useState("home");
   const [term, setTerm] = React.useState("");
   const classes = useStyles();
@@ -130,20 +82,21 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
 
   useEffect(() => {
     async function fetchUnit() {
-        if(formData.unit){
-      const req = await https
-        .get(`/lessons/units/${formData.unit}`, {
-          headers: { Authorization: `Basic ${localStorage.token}` },
-        })
-        .then((res) => {
-          setContentData(res.data.activities);
-          console.log("UNITS : ", res.data);
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-      return req;
-    }
+      if (formData.unit) {
+        const req = await https
+          .get(`/lessons/units/${formData.unit}`, {
+            headers: { Authorization: `Basic ${localStorage.token}` },
+          })
+          .then((res) => {
+            setContentData(res.data.activities);
+            setContentDevelopmentData(res.data.activities)
+            console.log("UNITS : ", res.data);
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+        return req;
+      }
     }
     fetchUnit();
   }, []);
@@ -160,397 +113,19 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
           onSelect={(k) => setKey(k)}
         >
           <Tab eventKey="home" title="Introduction" fill={true}>
-            <div className="knowledge-container">
-              <h5>Introduction</h5>
-
-              <div className="topic">
-              
-                <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Content</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-{!contentData? "" : contentData.map((val) => {
-        return(
-            <FormControlLabel
-                          value={val._id}
-                          control={<Checkbox color="primary" />}
-                          label={val.activity}
-                          labelPlacement="start"
-                        />
-        )
-    })
-
-}
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Other Activities"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-              </div>
-
-              <div className={classes.root}>
-                <input
-                  accept="image/*"
-                  className={classes.input}
-                  id="contained-button-file"
-                  multiple
-                  type="file"
-                />
-                <label htmlFor="contained-button-file">
-                  <h7>Upload Exercises</h7>
-                </label>
-              </div>
-
-              <div className="topic">
-                <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Cross Cutting Issues</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-{
-    crossCuttingIssuesArrInto.map((val) => {
-        return(
-            <FormControlLabel
-                          value={val.issue}
-                          control={<Checkbox color="primary" />}
-                          label={val.issue}
-                          labelPlacement="start"
-                        />
-        )
-    })
-
-}
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Comment"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-              </div>
-
-              <div className="topic">
-                <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Competency</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-                      
-{
-    competenceArrInto.map((val) => {
-        return(
-            <FormControlLabel
-                          value={val.competency}
-                          control={<Checkbox color="primary" />}
-                          label={val.competency}
-                          labelPlacement="start"
-                        />
-        )
-    })
-
-}
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Comment"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-              </div>
-            </div>
+            <ActivitiesIntro formData={formData} />
           </Tab>
           <Tab eventKey="profile" title="Development" fill={true}>
-            <div className="knowledge-container">
-              <h5>Development</h5>
-
-              <div className="topic">
-                <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Content</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-                        <FormControlLabel
-                          value="start"
-                          control={<Checkbox color="primary" />}
-                          label="Start this on my own"
-                          labelPlacement="start"
-                        />
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Other Activities"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-                <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Cross Cutting Issues</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-                        <FormControlLabel
-                          value="start"
-                          control={<Checkbox color="primary" />}
-                          label="Start this on my own"
-                          labelPlacement="start"
-                        />
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Comment"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-              </div>
-
-              <div className="topic">
-                <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Competency</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-                        <FormControlLabel
-                          value="start"
-                          control={<Checkbox color="primary" />}
-                          label="Start this on my own"
-                          labelPlacement="start"
-                        />
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Comment"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-              </div>
-            </div>
+          <ActivitiesDev formData={formData} />
           </Tab>
           <Tab eventKey="contact" title="Conclusion" fill={true}>
-            <div className="knowledge-container">
-              <h5>Introduction</h5>
-
-              <div className="topic">
-              <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Content</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-                        <FormControlLabel
-                          value="start"
-                          control={<Checkbox color="primary" />}
-                          label="Start this on my own"
-                          labelPlacement="start"
-                        />
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Other Activities"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-                <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Cross Cutting Issues</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-                        <FormControlLabel
-                          value="start"
-                          control={<Checkbox color="primary" />}
-                          label="Start this on my own"
-                          labelPlacement="start"
-                        />
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Comment"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-              </div>
-
-              <div className="topic">
-                <Accordion defaultActiveKey="">
-                  <Card>
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <div className="accordion-title">
-                        <h3>Competency</h3>
-                        <h3>
-                          <MdKeyboardArrowDown />
-                        </h3>
-                      </div>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-                        <FormControlLabel
-                          value="start"
-                          control={<Checkbox color="primary" />}
-                          label="Start this on my own"
-                          labelPlacement="start"
-                        />
-
-                        <div className="msg-field">
-                          <TextField
-                            id="outlined-basic"
-                            variant="outlined"
-                            label="Comment"
-                            type="text"
-                            fullWidth
-                            color="primary"
-                            multiline={true}
-                            rowsMax="8"
-                          />
-                        </div>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </Accordion>
-            </div>
-            </div>
+            <ActivitiesDev formData={formData} />
           </Tab>
         </Tabs>
       </div>
 
       <Button
-        color="primary"
-        variant="contained"
+        block
         onClick={() => navigation.next()}
       >
         Next

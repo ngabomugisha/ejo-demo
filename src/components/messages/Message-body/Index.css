@@ -16,7 +16,9 @@
 .text-field > .MuiFormControl-root{
     width: 100%;
 }
-
+.msg-field{
+    padding: 5px;
+}
 
 .msg-field > .MuiFormControl-root{
     width: 100%;

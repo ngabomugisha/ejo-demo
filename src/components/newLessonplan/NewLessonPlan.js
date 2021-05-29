@@ -32,13 +32,7 @@ const defaultData = {
   "lessonName": null,
   "knowledge": {
     "topics": [],
-    "instructionalMaterial": [
-      {
-        "materialType": "",
-        "items": [],
-        "uploads": []
-      }
-    ],
+    "instructionalMaterial": [],
     "otherMaterialsAndReferences": null
   },
   "skills": {
