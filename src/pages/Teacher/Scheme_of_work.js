@@ -70,6 +70,7 @@ export const Scheme_of_work = (props) => {
   const [unit, setUnit] = useState(null)
   const [uni, setUni] = useState(null)
   const [unitPlans, setUnitPlans] = useState([])
+  const [uniqueId, setUniqueId] = useState([])
 
 
   const [topic, setTopic] = React.useState(null);
@@ -152,9 +153,8 @@ export const Scheme_of_work = (props) => {
     const req = https.get(`/class-teachers/${teacher}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
       .then((res) => {
         setClasss(res.data)
-        if(classs)
-        setUnique(...unique, classs.map(i => i.class))
-        console.log("=====>", classs.map(i => i.class) , "&&&&", unique)
+        res.data && setUnique([...new Set(res.data.map(i => i.class))])
+        res.data && console.log("=====>", res.data.map(i => i.class), "&&&&", unique)
       }).catch(function (err) {
         console.log(err, '***********ERRRORR***********');
       });
@@ -288,12 +288,23 @@ export const Scheme_of_work = (props) => {
 
   }, [sub])
 
+  useEffect(() => {
+    classs != null &&
+      setUnique(classs.reduce((acc, current) => {
+        const x = acc.find(item => item.class._id === current.class._id);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          return acc;
+        }
+      }, []))
+  }, [classs])
 
   useEffect(() => {
     props.handleFetchSubject()
     fetchClasses()
   }, [])
-  console.log(" ------> ",classs)
+
   return (
     <div>
       <PanelLayout selected={3} role={role}>
@@ -316,11 +327,13 @@ export const Scheme_of_work = (props) => {
                 <MenuItem value={null}>
                   <em>None</em>
                 </MenuItem>
-                {classs &&
-                  classs.map(item => (
+                {unique &&
+                  unique.map(item => (
+
                     <MenuItem key={item.class._id} value={item.class._id}>{!item ? '' : !item.class != null && !item.class == undefined ? '' : !item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
                   ))
                 }
+
               </TextField>
             </div>
             <div style={{ padding: "5px" }}>

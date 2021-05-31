@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
+import https  from '../../helpers/https'
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import AppBar from '@material-ui/core/AppBar';
@@ -36,6 +37,8 @@ function LessonCard(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [subjects, setSubjects] = useState([])
+    const [covered, setCovered] = useState(null)
+    const [expected, setExpected] = useState(null)
     const handleClickOpen = () => {
       if(props.data)
       setOpen(true);
@@ -43,7 +46,47 @@ function LessonCard(props) {
     const handleClose = () => {
       setOpen(false);
     };
+
+
+    const countExpected  = (value)=>{
+      let knowledge = value.content.knowledgeAndUnderstanding.length
+      let skills = value.content.skills.length
+      let attitude = value.content.attitudesAndValues.length
+      return knowledge + skills + attitude
+  }
+  
+  const countCovered = (value)=>{
+      let knowledge = value.content.knowledgeAndUnderstanding.filter(val=>{
+          return val.numberOftimesTaught !== 0
+      })
+  
+      let skills = value.content.skills.filter(val=>{
+          return val.numberOftimesTaught !== 0
+      })
+  
+      let attitude = value.content.attitudesAndValues.filter(val=>{
+          return val.numberOftimesTaught !== 0
+      })
+      // setCover(knowledge.length+skills.length+attitude.length)
+      return 12
+  }
+   
+    const fetchUintPlan = unitPlanId => {
+      https.get(`/lessons/unit-plans/${unitPlanId}`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+      .then((res) => {
+        console.log("---------", res.data, "-----------")
+        setCovered(countCovered(res.data))
+        setExpected(countExpected(res.data))
+      }).catch(function (err) {
+        console.log(err, '***********ERRRORR***********');
+      });
+    }
+    
+
+
+
   useEffect(() => {
+    fetchUintPlan(props.covered)
   }, [])
     return (<>
         <div className='card-container'>
@@ -61,10 +104,10 @@ function LessonCard(props) {
                     {props.time}
                 </p>
                 <p className='card2-size'>
-                    Expected: {props.size}
+                    Expected: {expected}
                 </p>
                 <p className='card2-covered'>
-                    Covered: {props.covered}
+                    Covered: {covered}
                 </p>
                 {/* <Link to={{
                     pathname: '/teacher/lessonPlan/details',
