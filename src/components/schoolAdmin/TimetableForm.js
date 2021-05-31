@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import './style.css'
 import https from '../../helpers/https'
-import Button from '@material-ui/core/Button';
+import Button from 'react-bootstrap/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -117,26 +117,30 @@ export const TimetableForm = (props) => {
                 ends: (values.ends).substring(0, 2) + (values.ends).substring(3)
             }
         }
-        // alert(JSON.stringify(convertedData, null, 2))
-        console.log(convertedData)
-        const options = {
-            method: 'POST',
-            url: '/timetables',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem("token")}`
-            },
-            data: convertedData
-        };
 
-        https.post('/timetables', convertedData, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
-            if (res.status == 200)
-                {
-                    props.close()
-                    setOpen(true)
-                }
-            else
-                return alert("something went wrong")
+        https.post('/timetables' , convertedData,  {  headers : { 'Authorization': `Basic ${localStorage.token}` } })
+        .then((res)=>{
+            setMsg('Timetable slot has been created')
+            setMsgtype('success')
+            setOpenformMsg(true)
+            setTimeout(() => {
+                props.close()
+            }, 1000);
+        }).catch((erro) => {
+            setMsg(erro.message)
+            setMsgtype('warning')
+            setOpenformMsg(true)
         })
+
+        // https.post('/timetables', convertedData, { headers: { 'Authorization': `Basic ${localStorage.token}` } }).then((res) => {
+        //     if (res.status == 200)
+        //         {
+        //             props.close()
+        //             setOpen(true)
+        //         }
+        //     else
+        //         return alert("something went wrong")
+        // })
         }
     }
     const validations1 = (value) => {
@@ -352,9 +356,9 @@ export const TimetableForm = (props) => {
                                         </Grid>
                                     </Grid>
                                     <Button
-                                        variant="contained"
-                                        color="primary"
+                                        variant="primary"
                                         type="submit"
+                                        block
                                     >
                                         create
                                     </Button>

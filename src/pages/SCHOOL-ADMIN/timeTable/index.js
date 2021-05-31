@@ -9,7 +9,7 @@ import TimeTable from '../timeTable/TimeTable'
 import Popup from '../../../components/popup/index'
 import moment from 'moment'
 import MenuItem from '@material-ui/core/MenuItem';
-import {  Grid, TextField, Box } from '@material-ui/core'
+import { Grid, TextField, Box } from '@material-ui/core'
 import { Formik, Field, Form } from 'formik'
 import Skeleton from "@material-ui/lab/Skeleton"
 import Modal from 'react-bootstrap/Modal'
@@ -21,6 +21,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SCHOOLADMIN } from '../../../pages/Auth/Users'
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import Switch from '@material-ui/core/Switch';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -56,7 +67,10 @@ export const Index = (props) => {
     const [openPopup, setOpenPopup] = useState(false)
     const [slot, setSlot] = useState(null)
     const [show, setShow] = useState(false)
-    const [ open , setOpen ]= useState(false)
+    const [open, setOpen] = useState(false)
+    const [openNewSlotForm, setOpennewslotForm] = useState(false)
+    const [fullWidth, setFullWidth] = React.useState(true);
+    const [maxWidth, setMaxWidth] = React.useState('sm');
 
     const [mon, setMon] = useState([])
     const [tue, setTue] = useState([])
@@ -397,6 +411,14 @@ export const Index = (props) => {
         setOpenPopup(false)
     }
 
+    const handleOpenNewSlotForm = () => {
+        setOpennewslotForm(true)
+    }
+
+    const handleCloseNewSlotForm = () => {
+        setOpennewslotForm(false)
+    }
+
     const handleCloseFeedBack = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -404,7 +426,7 @@ export const Index = (props) => {
         setOpen(false);
     };
     const handleSave = () => {
-        setOpenPopup(true)
+        handleOpenNewSlotForm()
     }
     const fetchTermsData = async () => {
         try {
@@ -416,14 +438,15 @@ export const Index = (props) => {
 
     const deleteSlot = async () => {
         // alert("slot to delete : "+ slot._id)
-        await https.delete(`/timetables/${slot._id}`, { headers: { 'content-type' : 'application/json', 'Authorization': `Basic ${localStorage.token}` } })
-        .then((res) => {
-            console.log("DELETING : ", res.data)
-            setOpen(true)
-            setShow(false)
-        }).catch(function (err) {
-            console.log(err);
-        });
+        await https.delete(`/timetables/${slot._id}`, { headers: { 'content-type': 'application/json', 'Authorization': `Basic ${localStorage.token}` } })
+            .then((res) => {
+                console.log("DELETING : ", res.data)
+                setOpen(true)
+                setShow(false)
+
+            }).catch(function (err) {
+                console.log(err);
+            });
     }
 
     const onSubmit = values => {
@@ -499,7 +522,6 @@ export const Index = (props) => {
     }
 
     useEffect(() => {
-        console.log("+++++++", slot, "+++++++")
         if (slot != null)
             setShow(true)
     }, [slot])
@@ -636,7 +658,7 @@ export const Index = (props) => {
                                                 </Field>
                                             </Grid>
                                             <Grid item xs={3} justify="center">
-                                                <button name="check" type="submit" className="check-btn">check TimeTable</button>
+                                                <button name="check" type="submit" className="check-btn">Load TimeTable</button>
                                             </Grid>
                                             <Grid item xs={2} justify="center">
                                                 <button name="save" onClick={() => handleSave()} className="check-btn">New Slot</button>
@@ -681,13 +703,41 @@ export const Index = (props) => {
                 </div>
             </PanelLayout>
 
+
+
+
+            <Dialog
+                fullWidth={fullWidth}
+                maxWidth={maxWidth}
+                open={openNewSlotForm}
+                onClose={handleCloseNewSlotForm}
+                aria-labelledby="max-width-dialog-title"
+            >
+                {/* <DialogTitle id="max-width-dialog-title">Optional sizes</DialogTitle> */}
+                <DialogContent>
+                    <DialogContentText>
+                        Create a new timetable Slot
+          </DialogContentText>
+                    <TimetableForm class={classs} subject={subject} teachers={teacher} terms={ALL_TERMS} close={handleCloseNewSlotForm} />
+                </DialogContent>
+                {/* <DialogActions> */}
+                    {/* <Button onClick={handleCloseNewSlotForm} color="primary">
+                        Close
+          </Button> */}
+                {/* </DialogActions> */}
+            </Dialog>
+
+
+
+
+            {/* 
             <Popup
                 title="Create new timetable slot"
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}>
                 <TimetableForm class={classs} subject={subject} teachers={teacher} terms={ALL_TERMS} close={handleClose} />
 
-            </Popup>
+            </Popup> */}
 
             <Modal
                 show={show}
@@ -704,14 +754,14 @@ export const Index = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <p>
-                        {slot && (slot.name).substring(0,(slot.name).indexOf("&"))}
+                        {slot && (slot.name).substring(0, (slot.name).indexOf("&"))}
                     </p>
 
                     <p>
-                        Starts: {slot && (JSON.stringify(slot.startTime)).substring(12,17)}
+                        Starts: {slot && (JSON.stringify(slot.startTime)).substring(12, 17)}
                     </p>
                     <p>
-                        Ends: {slot && (JSON.stringify(slot.endTime)).substring(12,17)}
+                        Ends: {slot && (JSON.stringify(slot.endTime)).substring(12, 17)}
                     </p>
                 </Modal.Body>
                 <Modal.Footer>
@@ -722,7 +772,7 @@ export const Index = (props) => {
 
             <Snackbar open={open} autoHideDuration={4000} onClose={handleCloseFeedBack}>
                 <Alert onClose={handleCloseFeedBack} severity="success">
-                     Timetable slot is Deleted!
+                    Timetable slot is Deleted!
                 </Alert>
             </Snackbar>
 
