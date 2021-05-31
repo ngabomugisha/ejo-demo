@@ -17,6 +17,15 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import ModalFooter from 'react-bootstrap/ModalFooter'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalTitle from 'react-bootstrap/ModalTitle'
+import ModalHeader from 'react-bootstrap/ModalHeader'
+import ModalDialog from 'react-bootstrap/ModalDialog'
+import Modal from 'react-bootstrap/Modal'
+
+
+
 import { handleFetchSubject} from '../../store/actions/subjects.actions'
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -36,6 +45,7 @@ function LessonCard(props) {
   
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [ show, setShow] = useState(false)
     const [subjects, setSubjects] = useState([])
     const [covered, setCovered] = useState(null)
     const [expected, setExpected] = useState(null)
@@ -47,6 +57,9 @@ function LessonCard(props) {
       setOpen(false);
     };
 
+    const handleClose2 = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
 
     const countExpected  = (value)=>{
       let knowledge = value.content.knowledgeAndUnderstanding.length
@@ -106,7 +119,7 @@ function LessonCard(props) {
                 <p className='card2-size'>
                     Expected: {expected}
                 </p>
-                <p className='card2-covered'>
+                <p onClick={() => setShow(true)} className='card2-covered' style = {{cursor: "pointer"}}>
                     Covered: {covered}
                 </p>
                 {/* <Link to={{
@@ -137,6 +150,28 @@ function LessonCard(props) {
         </AppBar>
        <PrintDetail lessonPlan = {props.data} subjects={subjects}/>
       </Dialog>
+
+
+      <Modal show={show} onHide={handleClose2}>
+        <Modal.Header closeButton>
+          <Modal.Title>Covered</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          
+            <p>details of covered</p>
+
+
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose2}>
+            Close
+          </Button>
+          {/* <Button variant="primary" onClick={handleClose2}>
+            Save Changes
+          </Button> */}
+        </Modal.Footer>
+      </Modal>
+
 
         </>
     )

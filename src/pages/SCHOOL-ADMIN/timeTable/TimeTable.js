@@ -9,6 +9,7 @@ import TimeTable from '../../../components/react-timetable-events'
 
 export function App(props) {
 
+
   const renderHour = (hour, defaultAttributes, styles) => {
     return (
       <div {...defaultAttributes}
@@ -25,7 +26,10 @@ export function App(props) {
     return (
       <div {...defaultAttributes}
            title={name}
-           key={event.id} onClick= {() => {props.onChange && props.onChange(event._id)}}>
+           key={event.id} onClick= {() => {
+             props.onChange && props.onChange(event._id)
+             props.getDetails && props.getDetails(event)
+             }}>
         <span className={styles.event_info}>
            {name.includes('&')? name.substring(0,name.indexOf('&')):name}<br/>{name.includes('&')? name.substring(name.indexOf('&')+1):""} 
         </span>

@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { Button, Dialog, TextField, MenuItem } from "@material-ui/core";
+import "bootstrap/dist/css/bootstrap.min.css";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -33,6 +34,7 @@ function LessonCards(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [openAlert, setOpenAlert] = React.useState(false);
+  const [ show, setShow] = useState(false)
 
   const handleClick = () => {
     setOpenAlert(true);
@@ -350,12 +352,12 @@ function LessonCards(props) {
       {
         props.lesss &&
         props.lesss.sort(function(a, b) {
-          var nameA = a.time.day.toUpperCase(); // ignore upper and lowercase
-          var nameB = b.time.day.toUpperCase(); // ignore upper and lowercase
-          if (nameA > nameB) {
+          var timeA = a.time.day.toUpperCase(); // ignore upper and lowercase
+          var timeB = b.time.day.toUpperCase(); // ignore upper and lowercase
+          if (timeA > timeB) {
             return -1;
           }
-          if (nameA < nameB) {
+          if (timeA < timeB) {
             return 1;
           }
         

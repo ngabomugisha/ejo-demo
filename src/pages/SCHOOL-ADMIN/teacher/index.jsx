@@ -196,6 +196,20 @@ export const Index = (props) => {
         })
     };
 
+    const handleDeleteAssignedClass = async (id) => {
+        await https.delete(`/class-teachers/${id}`, { headers: { 'content-type' : 'application/json', 'Authorization': `Basic ${localStorage.token}` } })
+        .then((res) => {
+            console.log("DELETING : ", res.data)
+            handleOpenMsg('success', 'Subject has unassigned to a Teacher')
+            setOpen(false)
+            handleClose()
+        }).catch(function (err) {
+            console.log(err);
+        });
+    }
+
+
+
     // const handleDelete = (i) => {
     //     props.handleDeleteClass(i)   
     //     handleOpenMsg('warning', 'Class Deleted')
@@ -660,7 +674,7 @@ let data2 = {}
                     onClose={handleClose}
                     aria-labelledby="max-width-dialog-title"
                 >
-                    <DialogTitle id="max-width-dialog-title">Assign Teacher a class and subject</DialogTitle>
+                    <DialogTitle id="max-width-dialog-title">Assign Teacher class and subject</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             <div className="frm" style={{ minWidth: "100%" }}>
@@ -668,18 +682,20 @@ let data2 = {}
                                     <Grid item xs={12} sm={12}>
 
                                         {props.classTeacher !== null ?
-                                            <Table striped bordered hover>
+                                            <Table striped bordered hover responsive size="sm">
                                                 <thead>
                                                     <tr>
                                                         <th>Class</th>
                                                         <th> Subject</th>
+                                                        <th width="20">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {props.classTeacher.map(i => (
-                                                        <tr>
+                                                        <tr key={i._id}>
                                                             <td>{i. class && i.class.level.name} {i.class && i.class.label}</td>
                                                             <td>{i. subject && i.subject.name}</td>
+                                                            <td width="20"><Button variant="danger" onClick ={() => handleDeleteAssignedClass(i._id)}>Delete</Button></td>
                                                         </tr>
                                                     ))}
                                                 </tbody>

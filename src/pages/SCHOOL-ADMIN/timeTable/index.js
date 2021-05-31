@@ -7,16 +7,26 @@ import https from '../../../helpers/https'
 import TimetableForm from '../../../components/schoolAdmin/TimetableForm'
 import TimeTable from '../timeTable/TimeTable'
 import Popup from '../../../components/popup/index'
+import moment from 'moment'
 import MenuItem from '@material-ui/core/MenuItem';
-import { Button, Grid, TextField, Box } from '@material-ui/core'
+import {  Grid, TextField, Box } from '@material-ui/core'
 import { Formik, Field, Form } from 'formik'
 import Skeleton from "@material-ui/lab/Skeleton"
-import moment from 'moment';
+import Modal from 'react-bootstrap/Modal'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import Button from 'react-bootstrap/Button'
 import { handleFetchTerms, handleUpdateTerm } from '../../../store/actions/term.action'
-import {handleFetchClasses} from '../../../store/actions/classes.actions'
+import { handleFetchClasses } from '../../../store/actions/classes.actions'
 import { useDispatch, useSelector } from 'react-redux';
-import {SCHOOLADMIN} from '../../../pages/Auth/Users'
+import { SCHOOLADMIN } from '../../../pages/Auth/Users'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +45,7 @@ export const Index = (props) => {
     let p2 = null
     let edit = null
     if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
-  
+
     const classes = useStyles();
     const [classs, setClasss] = React.useState([]);
     const { list: ALL_TERMS } = useSelector((state) => state.terms);
@@ -44,6 +54,9 @@ export const Index = (props) => {
     const [loadTimetable, setLoadTimetable] = useState(false)
     const [data, setData] = useState([])
     const [openPopup, setOpenPopup] = useState(false)
+    const [slot, setSlot] = useState(null)
+    const [show, setShow] = useState(false)
+    const [ open , setOpen ]= useState(false)
 
     const [mon, setMon] = useState([])
     const [tue, setTue] = useState([])
@@ -293,47 +306,47 @@ export const Index = (props) => {
             return fit;
         }, []))
 
-                //this is for saturday
-                setSat(dt.reduce(function (fit, opt) {
+        //this is for saturday
+        setSat(dt.reduce(function (fit, opt) {
 
-                    if (opt.time.dayOfWeek == 6) {
-                        var sm = {
-                            'id': 6,
-                            "_id": opt._id,
-                            'name': subject.reduce(function (done, cond) {
-                                if (cond._id === opt.subject) {
-                                    var yes = cond.name
-                                    done = yes
-                                }
-                                return done;
-                            }, []) + "& Teacher :" +
-                                teacher.reduce(function (done2, cond2) {
-                                    if (cond2._id === opt.teacher) {
-                                        var yes2 = cond2.firstName + " " + "" + cond2.lastName;
-                                        done2 = yes2;
-                                    }
-                                    return done2;
-                                }, [])
-                            ,
-                            'type': "custom",
-                            'startTime':
-                                moment("2018-02-23T" +
-                                    opt.time.starts.substring(0, 2) +
-                                    ":" +
-                                    opt.time.starts.substring(2, 4) +
-                                    ":00"),
-                            'endTime':
-                                moment("2018-02-23T" +
-                                    opt.time.ends.substring(0, 2) +
-                                    ":" +
-                                    opt.time.ends.substring(2, 4) +
-                                    ":00")
-                        };
-                        fit.push(sm);
-                    }
-                    console.log("RETURNED OBJECT:", fit)
-                    return fit;
-                }, []))
+            if (opt.time.dayOfWeek == 6) {
+                var sm = {
+                    'id': 6,
+                    "_id": opt._id,
+                    'name': subject.reduce(function (done, cond) {
+                        if (cond._id === opt.subject) {
+                            var yes = cond.name
+                            done = yes
+                        }
+                        return done;
+                    }, []) + "& Teacher :" +
+                        teacher.reduce(function (done2, cond2) {
+                            if (cond2._id === opt.teacher) {
+                                var yes2 = cond2.firstName + " " + "" + cond2.lastName;
+                                done2 = yes2;
+                            }
+                            return done2;
+                        }, [])
+                    ,
+                    'type': "custom",
+                    'startTime':
+                        moment("2018-02-23T" +
+                            opt.time.starts.substring(0, 2) +
+                            ":" +
+                            opt.time.starts.substring(2, 4) +
+                            ":00"),
+                    'endTime':
+                        moment("2018-02-23T" +
+                            opt.time.ends.substring(0, 2) +
+                            ":" +
+                            opt.time.ends.substring(2, 4) +
+                            ":00")
+                };
+                fit.push(sm);
+            }
+            console.log("RETURNED OBJECT:", fit)
+            return fit;
+        }, []))
 
         if (mon.length > 0) {
             timetabledata = {
@@ -380,10 +393,16 @@ export const Index = (props) => {
             }
         }
     }
-    const handleClose =()=>{
+    const handleClose = () => {
         setOpenPopup(false)
     }
 
+    const handleCloseFeedBack = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
     const handleSave = () => {
         setOpenPopup(true)
     }
@@ -395,6 +414,17 @@ export const Index = (props) => {
         }
     };
 
+    const deleteSlot = async () => {
+        // alert("slot to delete : "+ slot._id)
+        await https.delete(`/timetables/${slot._id}`, { headers: { 'content-type' : 'application/json', 'Authorization': `Basic ${localStorage.token}` } })
+        .then((res) => {
+            console.log("DELETING : ", res.data)
+            setOpen(true)
+            setShow(false)
+        }).catch(function (err) {
+            console.log(err);
+        });
+    }
 
     const onSubmit = values => {
         //  alert(JSON.stringify(window.event.name, null, 2))
@@ -467,6 +497,12 @@ export const Index = (props) => {
         }
 
     }
+
+    useEffect(() => {
+        console.log("+++++++", slot, "+++++++")
+        if (slot != null)
+            setShow(true)
+    }, [slot])
 
     useEffect(() => {
         fetchTermsData()
@@ -551,7 +587,7 @@ export const Index = (props) => {
                                                         <em>All</em>
                                                     </MenuItem>
                                                     {props.classes ?
-                                                        props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level? item.level.name: ''} {item.combination? item.combination.name : ""} {item.label}</MenuItem>)) : ""
+                                                        props.classes.map(item => (<MenuItem key={item._id} value={item._id}>{item.level ? item.level.name : ''} {item.combination ? item.combination.name : ""} {item.label}</MenuItem>)) : ""
                                                     }
                                                 </Field>
                                             </Grid>
@@ -613,7 +649,9 @@ export const Index = (props) => {
                     <div className='TimeTable-co'>
                         {
                             loadTimetable ?
-                                <TimeTable data={timetabledata} /> : (
+                                <TimeTable data={timetabledata}
+                                    getDetails={value => setSlot(value)}
+                                /> : (
                                     <Box>
                                         <div className="skeleton-line">
                                             <Skeleton width="20%" />
@@ -647,9 +685,47 @@ export const Index = (props) => {
                 title="Create new timetable slot"
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}>
-                <TimetableForm class={classs} subject={subject} teachers={teacher} terms={ALL_TERMS} close={handleClose}/>
+                <TimetableForm class={classs} subject={subject} teachers={teacher} terms={ALL_TERMS} close={handleClose} />
 
             </Popup>
+
+            <Modal
+                show={show}
+                onHide={() => setShow(false)}
+                {...props}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Timetable Slot Details
+        </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>
+                        {slot && (slot.name).substring(0,(slot.name).indexOf("&"))}
+                    </p>
+
+                    <p>
+                        Starts: {slot && (JSON.stringify(slot.startTime)).substring(12,17)}
+                    </p>
+                    <p>
+                        Ends: {slot && (JSON.stringify(slot.endTime)).substring(12,17)}
+                    </p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={deleteSlot} variant="danger" >Delete timetable slot</Button>
+                    <Button onClick={() => setShow(false)}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Snackbar open={open} autoHideDuration={4000} onClose={handleCloseFeedBack}>
+                <Alert onClose={handleCloseFeedBack} severity="success">
+                     Timetable slot is Deleted!
+                </Alert>
+            </Snackbar>
+
         </div>
     )
 }
@@ -657,12 +733,12 @@ export const Index = (props) => {
 const mapStateToProps = (state) => {
     const classes = state.classes.list
     return {
-        state,classes
+        state, classes
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    handleFetchClasses : (school) => {
+    handleFetchClasses: (school) => {
         dispatch(handleFetchClasses(school))
     }
 })
