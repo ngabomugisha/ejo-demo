@@ -28,37 +28,20 @@ export const StudentsMarks = (props) => {
     const [assignment, setAssignment] = useState(null)
     const [timeTable, setTimeTable] = useState(null)
     const [assignmentMarks, setAssignmentMarks] = useState(null)
+    const [unique, setUnique] = React.useState(null);
 
-    // const handleChanges = e => {
-    //     if (e.target.name === 'class') {
-    //         console.log(e.target.value)
-    //         setClassOne(e.target.value)
-    //        fetchSubjects(e.target.value)
-    //        setEnabled(true)
-    //     }
-    //     if (e.target.name === 'subject') {
-    //         setSubject(e.target.value)
-    //         props.handleFetchAssignment(e.target.value)
-
-    //     }
-    //     if(e.target.name ===' assignment')setAssignment(e.target.value)
-
-    // }
+    
 
     const handleChanges = (e) => {
 
         if (e.target.name === "class") {
             setClas(e.target.value)
-            setSublist(classs.filter(el => el._id === clas));
+            setSublist(classs.filter(el => el.class._id === e.target.value));
         }
 
         if (e.target.name === "subject") {
             setSub(e.target.value)
-            //   console.log("{{{{{{{{{{{{",sub,"&&&&&",clas,"}}}}}}}}}}}}}}}}}}}")
-            //   props.handleFetchLessonPlanSubject(sub,clas)
             props.handleFetchAssignment(e.target.value)
-
-            //   console.log("{{{{{{{{{{{{",props.assignmentsList,"}}}}}}}}}}}}}}}}}}}")
         }
         if (e.target.name === 'assignment') {
             setAssignment(e.target.value)
@@ -88,6 +71,18 @@ export const StudentsMarks = (props) => {
     }
 
     useEffect(() => {
+        classs != null &&
+            setUnique(classs.reduce((acc, current) => {
+                const x = acc.find(item => item.class._id === current.class._id);
+                if (!x) {
+                    return acc.concat([current]);
+                } else {
+                    return acc;
+                }
+            }, []))
+    }, [classs])
+
+    useEffect(() => {
         props.handleFetchClasses(school)
         fetchClasses()
         // console.log("{{{{{{{{{{",classs,"}}}}}}}}}}}}}}}")
@@ -111,9 +106,9 @@ export const StudentsMarks = (props) => {
                     <MenuItem value={null}>
                         <em>None</em>
                     </MenuItem>
-                    {classs &&
-                        classs.map(item => (
-                            <MenuItem key={item._id} value={item._id}>{!item ? '' : !item.class != null && !item.class != undefined ? '' : !item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
+                    {unique &&
+                        unique.map(item => (
+                            <MenuItem key={item.class._id} value={item.class._id}>{item.class.level && item.class.level.name} {item.class.combination && item.class.combination.name} {item.class.label && item.class.label}</MenuItem>
                         ))
                     }
                 </TextField>
@@ -174,17 +169,17 @@ export const StudentsMarks = (props) => {
                 <Button style={{ minWidth: "95%", margin: "0 auto" }}
                     className="mx-sm-3">Print list</Button>
             </div> */}
-            <div style={{maxWidth:"90%", margin: "0 auto"}}>
-                <div style={{marginBottom: "5px"}}>
-                <ReactHTMLTableToExcel
-                    id="test-table-xls-button"
-                    className="check-btn"
-                    table="table-to-xls"
-                    filename="tablexls"
-                    sheet="tablexls"
-                    buttonText="Download as XLS"/>
-                    </div>
-                <Table striped bordered hover  id="table-to-xls">
+            <div style={{ maxWidth: "90%", margin: "0 auto" }}>
+                <div style={{ marginBottom: "5px" }}>
+                    <ReactHTMLTableToExcel
+                        id="test-table-xls-button"
+                        className="check-btn"
+                        table="table-to-xls"
+                        filename="tablexls"
+                        sheet="tablexls"
+                        buttonText="Download as XLS" />
+                </div>
+                <Table striped bordered hover id="table-to-xls">
                     <thead>
                         <tr>
                             <th>#</th>

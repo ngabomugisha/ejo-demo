@@ -534,7 +534,7 @@ export const AttendanceReports = (props) => {
             }
           }, []))
       }, [classs])
-    console.log("THIS IS THE CLASSES : ", unique)
+      
     return (
         <div className="attendanceReport-container">
             <div className="">
