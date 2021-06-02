@@ -71,15 +71,15 @@ function LessonCard(props) {
   const displayCovered = () => {
     setTitle("Covered Units")
 
-    setKnowledge(unitData.content.knowledgeAndUnderstanding.filter(val => {
+    unitData && setKnowledge(unitData.content.knowledgeAndUnderstanding.filter(val => {
       return val.numberOftimesTaught !== 0
     })) 
 
-    setSkills(unitData.content.skills.filter(val => {
+    unitData && setSkills(unitData.content.skills.filter(val => {
       return val.numberOftimesTaught !== 0
     })) 
 
-    setAttitude(unitData.content.attitudesAndValues.filter(val => {
+    unitData && setAttitude(unitData.content.attitudesAndValues.filter(val => {
       return val.numberOftimesTaught !== 0
     }))
 
@@ -220,12 +220,9 @@ function LessonCard(props) {
 </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose2}>
+        <Button variant="primary" onClick={handleClose2}>
           Close
           </Button>
-        {/* <Button variant="primary" onClick={handleClose2}>
-            Save Changes
-          </Button> */}
       </Modal.Footer>
     </Modal>
 
