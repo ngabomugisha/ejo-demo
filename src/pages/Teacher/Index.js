@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import Mixed from "../../components/feedCards/Mixed";
 import { makeStyles } from "@material-ui/core/styles";
 import {handleFetchTeacherData, handleSetTeacherData} from '../../store/actions/data/teacher.data.actions'
+import LessonCard from '../../components/feedCard/LessonCard'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -21,11 +22,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Main(props) {
+  let school = null
+  let role = null
+  let teacherId = null
+  if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+  if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user._id; role = props.state.auth.user._id } }
+ 
 
   const SELECTED = useSelector(state => state.teacherData)
   const dispatch = useDispatch()
-  const teacher = props.auth.user ? props.auth.user._id:null;
-  console.log("TEACHER",teacher)
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [classs, setClasss] = React.useState("");
@@ -38,6 +44,7 @@ function Main(props) {
   const [subTop, setSubTop] = React.useState("");
   const [unit, setUnit] = useState("")
   const [uni, setUni] = useState("")
+  const [lesson,setLesson]= useState([])
  
   const history = useHistory();
   const [page, setPage] = useState(null);
@@ -58,7 +65,7 @@ function Main(props) {
   }
 
   const fetchClasses = async () => {
-    const req = await https.get(`/class-teachers/${teacher}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+    const req = await https.get(`/class-teachers/${teacherId}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
         .then((res) => {
             console.log("CLASSES",res.data)
             setClasss(res.data)
@@ -66,6 +73,16 @@ function Main(props) {
             console.log(err);
         });
     return req
+}
+
+const fetchlatestLessonPlan = async () => {
+  const req = await https.get(`/lessons/plans/${teacherId}/teacher-latest`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+      .then((res) => {
+          setLesson(res.data)
+      }).catch(function (err) {
+          console.log(err);
+      });
+  return req
 }
 
   useEffect(() => {
@@ -78,15 +95,35 @@ function Main(props) {
     if(topicSelected) setTop(topicSelected)
     if(subTopSelected) setSubTop(subTopSelected)
     if(unitSelected) setUni(unitSelected)
-}, [])
+    fetchlatestLessonPlan()
 
+
+}, [])
+  console.log("FETCHED LESSON PLAN :", lesson)
   return (
     <>
       {sessionStorage.getItem("isloggedin") ? (
-        <PanelLayout selected={1} role={props.auth.user.role}>
+        <PanelLayout selected={1} role={role}>
          
           <Feed>
-            <Mixed DATA={uni}/>
+            
+          <div className='card'>
+            {
+              lesson &&
+              lesson.map(item => (
+              <LessonCard
+                title={item && item.lessonName}
+                details={item && item.keyUnitCompetency}
+                tag='Lesson plan'
+                link={{ txt: 'View More Details', link: 'google.com' }}
+                size={7}
+                covered={item.unit._id}
+                time={item.time.day && (item.time.day).substring(0, 10)}
+                data={item}
+              />
+              ))
+              }
+            </div>
           </Feed>
         </PanelLayout>
       ) : (
@@ -96,18 +133,11 @@ function Main(props) {
   );
 }
 
-function mapStateToProps(state){
-  const {auth} = state
-  const {teacherData} = state
-  return{
-      auth : auth,
-      teacherData : teacherData
-  }
+function mapStateToProps(state) {
+  return {  state }
 }
 
 const mapDispatchToProps =  ({
-  handleFetchTeacherData,
-  handleSetTeacherData
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

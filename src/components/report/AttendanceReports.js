@@ -538,7 +538,7 @@ export const AttendanceReports = (props) => {
     return (
         <div className="attendanceReport-container">
             <div className="">
-                <div className="">
+                <div className="report-field">
                     <TextField
                         label="Class"
                         value={classOne}
@@ -605,7 +605,7 @@ export const AttendanceReports = (props) => {
                                     }
                                     return res
                                 },"")}</th>
-                                <th colSpan="2">Date: {timeMade && (timeMade).substring(0,10)} Time: {timeMade && (timeMade).substring(12,16)}</th>
+                                <th colSpan="3">Date: {timeMade && (timeMade).substring(0,10)} Time: {timeMade && (timeMade).substring(12,16)}</th>
                             </tr>
                             <tr>
                                 <th>#</th>
