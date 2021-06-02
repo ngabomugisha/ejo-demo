@@ -101,7 +101,7 @@ export const Index = (props) => {
     const [TEACHER, setTEACHER] = useState(props.state.teachers)
     const [openMsg, setOpenMsg] = useState(false)
     const [Data, setData] = useState([])
-    const [ dataSet, setDataSet] = useState([])
+    const [dataSet, setDataSet] = useState([])
     const [msg, setMsg] = useState(null)
     const [updateData, setUpdateData] = useState(null)
     const [type, setType] = useState(null)

@@ -9,7 +9,6 @@ import { Paper } from '@material-ui/core'
 import { DataGrid } from '@material-ui/data-grid';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -19,83 +18,45 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import TextField from '@material-ui/core/TextField';
+import { AgGridReact, AgGridColumn } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Button } from 'react-bootstrap';
 
 
-function TransitionRight(props) {
-    return <Slide {...props} direction="right" />;
-}
-
-const columns = [
-    {
-        field: '#',
-        headerClassName: 'super-app-theme--header',
-        headerAlign: 'center',
-    },
-    {
-        field: 'School Name',
-        headerClassName: 'super-app-theme--header',
-        headerAlign: 'center',
-        width: 150
-    },
-    {
-        field: 'Created On',
-        headerClassName: 'super-app-theme--header',
-        headerAlign: 'center',
-        width: 150
-    },
-];
-
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& .super-app-theme--header': {
-            backgroundColor: '#1f72c7',
-            color: 'white',
-            fontWeight: '50px',
-        },
-
-        '& > *': {
-            margin: theme.spacing(1),
-        },
-        fab: {
-            position: 'absolute',
-            bottom: theme.spacing(2),
-            right: theme.spacing(2),
-        },
-    },
-    margin: {
-        margin: theme.spacing(1),
-    },
-    withoutLabel: {
-        marginTop: theme.spacing(3),
-    },
-    textField: {
-        width: '25ch',
-    },
-    input: {
-        display: 'none',
-    },
-}));
 
 export const Index = (props) => {
-    let ar = []
+    const [tableData, setTableData] = useState([])
     const dispatch = useDispatch();
     const { list: ALL_SCHOOLS } = useSelector((state) => state.schools);
     const [isLoading, setIsLoading] = useState(true);
-  //  const [newSchool , setNewSchool] = useState(null)
-
-
-    // const handleTextField = (e) => {
-    //         setNewSchool(e.target.value)
-    //     }
-    // )(e){
-    //     setNewSchool(e.target.value)
-    //     alert(newSchool)
-    //}
-    // for alert message
-
-    //for dialog box
     const [open, setOpen] = React.useState(false);
+
+
+    const [gridApi, setGridApi] = useState(null);
+    const [gridColumnApi, setGridColumnApi] = useState(null);
+    const [rowData, setRowData] = useState(null);
+    const onGridReady = (params) => {
+        setGridApi(params.api);
+        setGridColumnApi(params.columnApi);
+        const updateData = (data) => { setRowData(data); };
+    }
+
+    const columns = [
+    { headerName: 'School Name', field: 'name', sortable: true, filter: true, checkboxSelection: true, headerCheckboxSelection: true,flex:1 },
+    { headerName: 'Gender', field: 'gender', sortable: true, filter: true,flex:1 },
+    { headerName: 'Status', field: 'status', flex:1 },
+    { headerName: 'ID', field: '_id', hide: true, flex: 1 },
+    { headerName: "Action", field: "id",
+        cellRendererFramework: (params) => <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "20px", backgroundColor: "#e8f5ff" , marginRight: "10px", textAlign: 'center', paddingLeft: "35px", paddingRight: "35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => alert(JSON.stringify(params))}>Delete</div>
+            {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "14px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
+        </div>
+    }]
+
+
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -104,7 +65,6 @@ export const Index = (props) => {
     const handleClose = () => {
         setOpen(false);
     };
-    const classes = useStyles();
     let count = 0
 
 
@@ -120,7 +80,7 @@ export const Index = (props) => {
 
     const fetchData = async () => {
         try {
-            await dispatch(handleFetchSchool());
+            props.handleFetchSchool()
         } catch (error) {
         } finally {
             setIsLoading(false);
@@ -130,19 +90,21 @@ export const Index = (props) => {
 
     useEffect(() => {
         fetchData();
-        ALL_SCHOOLS.map((school) => (
-            ar.push({ id: count++, '#': count, 'School Name': school.name, 'Created On': school.createdAt })
+        props.schoolList &&
+        props.schoolList.map((school) => (
+            setTableData(data => [...data, { id: count++, '#': count, 'School Name': school.name, 'Created On': school.createdAt }])
         ))
     }, []);
 
-
+ useEffect(() => {
+     console.log("TABLE DATA :", tableData)
+ }, [tableData])
    
     return (
         <>
             <PanelLayout selected={2} role={props.state.auth.user.role}>
 
                 <div className="students-container">
-                    <Paper elevation={3}>
                         <div className='paper-hd'>
                             <h2>{"Schools List"}</h2>
                             <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
@@ -159,7 +121,7 @@ export const Index = (props) => {
                                 </DialogContentText>
 
                                         <div className="form">
-                                            <form className={classes.root} className="my" noValidate autoComplete="off">
+                                            <form className="my" noValidate autoComplete="off">
                                                 <TextField id="outlined-basic" label="School Name" variant="outlined"  />
                                             </form>
                                         </div>
@@ -168,14 +130,14 @@ export const Index = (props) => {
                                         <Button onClick={handleClose} color="primary" variant="outlined">
                                             Cancel
                                     </Button>
-                                        <Button onClick={addSchool()} color="primary" variant="outlined">
+                                        <Button onClick={addSchool} color="primary" variant="outlined">
                                             Submit
                                     </Button>
                                     </DialogActions>
                                 </Dialog>
                             </div>
                         </div>
-                        <div style={{ height: 300, width: '100%' }} className={classes.root}>
+                        <div style={{ height: 300, width: '100%' }}>
                             {isLoading ? (
                                 <SkeletonTheme color="lightGray">
                                     <section>
@@ -183,10 +145,20 @@ export const Index = (props) => {
                                     </section>
                                 </SkeletonTheme>
                             ) : (
-                                    <DataGrid rows={ar} columns={columns} />
+                                <div
+                                    id="myGrid"
+                                    style={{
+                                        height: '100%',
+                                        width: "100%",
+                                    }}
+                                    className="ag-theme-alpine">
+                                    <AgGridReact
+                                    columnDefs={columns}
+                                    rowData={props.schoolList ? props.schoolList : []}
+                                    onGridReady={onGridReady}/>
+                                    </div>
                                 )}
                         </div>
-                    </Paper>
                 </div>
 
             </PanelLayout>
@@ -195,12 +167,19 @@ export const Index = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({
-    state: state
-})
-
-const mapDispatchToProps = {
-
+const mapStateToProps = (state) => {
+    const {schools} = state
+    const schoolList = schools.list
+    return {
+        state, schoolList
+    }
 }
 
+const mapDispatchToProps = dispatch => ({
+    handleFetchSchool: async () => {
+        await dispatch(handleFetchSchool())
+    },
+
+})
+  
 export default connect(mapStateToProps, mapDispatchToProps)(Index)

@@ -10,7 +10,7 @@ export const Index = (props) => {
         <>
         {!props.state.auth.user ? history.replace('/'):
             <PanelLayout selected={1} role={props.state.auth.user.role}>
-                <h3>super admin</h3>
+                <h3>Course</h3>
                 {/* <p>{props.state.auth.user}</p> */}
             </PanelLayout>
 }

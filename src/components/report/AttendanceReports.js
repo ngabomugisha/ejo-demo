@@ -32,11 +32,12 @@ export const AttendanceReports = (props) => {
     let school = null
     let role = null
     let teacherId = null
-
     let count = 1
-    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user.school; role = props.state.auth.user._id } }
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user._id; role = props.state.auth.user._id } }
     if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
     const descriptionElementRef = React.useRef(null);
+ 
+ 
     const [enabled, setEnabled] = useState(false)
     const [absent, setAbsent] = useState([])
     const [present, setPresent] = useState([])
@@ -80,6 +81,23 @@ export const AttendanceReports = (props) => {
     const [attendanceList_slot, setAttendanceList_slot] = useState([])
     const [ timeMade, setTimeMade] = useState(null)
 
+// for teacher
+    const [classs, setClasss] = React.useState(null);
+    const [unique, setUnique] = React.useState(null);
+    const [clas, setClas] = React.useState(null)
+
+
+
+    const fetchClasses = async () => {
+        const req = await https.get(`/class-teachers/${teacherId}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+          .then((res) => {
+            setClasss(res.data)
+          }).catch(function (err) {
+            console.log(err, '***********ERRRORR***********');
+          });
+        return req
+      }
+      
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -110,13 +128,6 @@ export const AttendanceReports = (props) => {
         if (e.target.name === 'subject-1') {
             setSubjectOne(e.target.value)
         }
-        // //for second graph
-        // if (e.target.name === 'date-2') setGrph2Date(e.target.value)
-        // if (e.target.name === 'class-2') {
-        //     setClassTwo(e.target.value)
-        //     fetchClassAttendance(e.target.value)
-        // }
-
     }
 
 
@@ -464,7 +475,7 @@ export const AttendanceReports = (props) => {
         setSubj(props.subjectsList)
         props.handleFetchClasses(school)
         fetchSlots()
-        // console.log("{{{{{{{{{{{{{{{{{{{{{",timetabledata, "}}}}}}}}}}}}}}}}}}}}}}}")
+        fetchClasses()
     }, [])
 
     useEffect(() => {
@@ -512,8 +523,18 @@ export const AttendanceReports = (props) => {
         console.log("^^^^^^^^^^^^^^^^^^ PRESENT", present)
     }, [present])
 
-    // console.log("[[[[[[[[[[[[[[[[[[[[",subj,']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]')
-    // console.log("{{{{{{{{{{{{{{{{{{{{{",timetabledata, "}}}}}}}}}}}}}}}}}}}}}}}")
+    useEffect(() => {
+        classs != null &&
+          setUnique(classs.reduce((acc, current) => {
+            const x = acc.find(item => item.class._id === current.class._id);
+            if (!x) {
+              return acc.concat([current]);
+            } else {
+              return acc;
+            }
+          }, []))
+      }, [classs])
+    console.log("THIS IS THE CLASSES : ", unique)
     return (
         <div className="attendanceReport-container">
             <div className="">
@@ -534,10 +555,17 @@ export const AttendanceReports = (props) => {
                         <MenuItem value={null}>
                             <em>None</em>
                         </MenuItem>
-                        {props.classList &&
+                        {
+                            role != "TEACHER" ?
+                            props.classList &&
                             props.classList.map(item => (
                                 <MenuItem key={item._id} value={item._id}>{item.level && item.level.name} {item.combination && item.combination.name} {item.label && item.label}</MenuItem>
                             ))
+                                :
+                                unique &&
+                                unique.map(item => (
+                                    <MenuItem key={item.class._id} value={item.class._id}>{item.class.level && item.class.level.name} {item.class.combination && item.class.combination.name} {item.class.label && item.class.label}</MenuItem>
+                                ))
                         }
                     </TextField>
                 </div>
@@ -565,7 +593,7 @@ export const AttendanceReports = (props) => {
                         filename="tablexls"
                         sheet="tablexls"
                         buttonText="Download as XLS" />
-                    <Table striped bordered hover id="table-to-xls-attendance-1">
+                    <Table striped bordered hover id="table-to-xls-attendance-1" responsive>
                         <thead>
                             <tr>
                                 <th colSpan="2">{props.classList.reduce(function(res,opt){
@@ -582,6 +610,7 @@ export const AttendanceReports = (props) => {
                             <tr>
                                 <th>#</th>
                                 <th>Names</th>
+                                <th>Gender</th>
                                 <th>Status</th>
                                 <th>Reason</th>
                             </tr>
@@ -601,6 +630,15 @@ export const AttendanceReports = (props) => {
                                                 return res
                                             }, "")
                                         }</td>
+                                        <td>{
+                                            props.studentsList.reduce(function (res, opt) {
+                                                if (opt._id == item.student) {
+                                                    let finded = opt.gender
+                                                    res = finded
+                                                }
+                                                return res
+                                            }, "")
+                                            }</td>
                                         {
                                             item.present ?
                                                 <td style={{ backgroundColor: "#eef6ff", color: "#3194f6" }}>
@@ -610,9 +648,6 @@ export const AttendanceReports = (props) => {
                                                     Absent
                                             </td>
                                         }
-                                        {/* <td>{
-                                            item.present ? "Present" : "Absent"
-                                            }</td> */}
                                         <td>{item.absenceReason}</td>
 
                                     </tr>
@@ -624,162 +659,9 @@ export const AttendanceReports = (props) => {
                 </div>
 
                 <div className="report-field">
-                    {/* <TextField
-                        label="Class"
-                        value={classOne}
-                        name="class-1"
-                        variant="outlined"
-                        type="text"
-                        fullWidth="true"
-                        onChange={handleChanges}
-                        select
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {props.classList &&
-                            props.classList.map(item => (
-                                <MenuItem key={item._id} value={item._id}>{item.level && item.level.name} {item.combination && item.combination.name} {item.label && item.label}</MenuItem>
-                            ))
-                        }
-                    </TextField>
                 </div>
-                <div className='report-field'>
-                    <TextField
-                        label="Subject"
-                        variant="outlined"
-                        name="subject-1"
-                        value={subjectOne}
-                        onChange={handleChanges}
-                        type="text"
-                        fullWidth
-                        select
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {timeTable && timeTable.map((item) => (
-                            <MenuItem key={item._id} value={item._id}>
-                                <div>{(props.subjectsList.find(i => i._id === item.subject)).name}
-                                    <p className='details-time'><i>Time {(item.time.starts).substring(0, 2)}:{(item.time.starts).substring(2)} - {(item.time.ends).substring(0, 2)}:{(item.time.ends).substring(2)}</i></p></div>
-                            </MenuItem>
-                        ))}
-                    </TextField> */}
-                </div>
-
-                {/* <Doughnut
-                    data={graph}
-                    options={{
-                        title: {
-                            display: false,
-                            text: 'Average Rainfall per month',
-                            fontSize: 20
-                        },
-                        legend: {
-                            display: true,
-                            position: 'right'
-                        }
-                    }}
-                /> */}
             </div>
-            {/* {
-                absent &&
-                <h5>{JSON.stringify(absent.length)}|||{JSON.stringify(present.length)}</h5>
-            } */}
-            {/* <div className="report-1">
-                <div className="report-field">
-                    <TextField
-                        id="date"
-                        label="Date"
-                        name="date-2"
-                        fullWidth
-                        onChange={handleChanges}
-                        variant="outlined"
-                        type="date"
-                        value={grph2Date}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                </div>
-                <div className="report-field">
-                    <TextField
-                        label="Class"
-                        value={classTwo}
-                        name="class-2"
-                        variant="outlined"
-                        type="text"
-                        fullWidth="true"
-                        onChange={handleChanges}
-                        select
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    >
-                        <MenuItem value={null}>
-                            <em>None</em>
-                        </MenuItem>
-                        {props.classList &&
-                            props.classList.map(item => (
-                                <MenuItem key={item._id} value={item._id}>{item.level && item.level.name} {item.combination && item.combination.name} {item.label && item.label}</MenuItem>
-                            ))
-                        }
-                    </TextField>
-                </div> */}
-
-
-
-
-            {/* <div className='report-field'>
-                    <TextField
-                        label="Subject"
-                        variant="outlined"
-                        name="subject-1"
-                        value={subjectOne}
-                        onChange={handleChanges}
-                        type="text"
-                        fullWidth
-                        select
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {timeTable && timeTable.map((item) => (
-                            <MenuItem key={item._id} value={item._id}>
-                                <div>{(props.subjectsList.find(i => i._id === item.subject)).name} 
-                                <p className='details-time'><i>Time {(item.time.starts).substring(0,2)}:{(item.time.starts).substring(2)} - {(item.time.ends).substring(0,2)}:{(item.time.ends).substring(2)}</i></p></div>
-                            </MenuItem>
-                        ))}
-                    </TextField> */}
-            {/* </div> */}
-            {/* <Doughnut
-                    data={graph}
-                    options={{
-                        title: {
-                            display: false,
-                            text: 'Average Rainfall per month',
-                            fontSize: 20
-                        },
-                        legend: {
-                            display: true,
-                            position: 'right'
-                        }
-                    }}
-                /> */}
-            {/* </div> */}
-
-
-            {/* dialog for time table to get timetable slot */}
-
+          
             <Dialog
                 open={open}
                 fullWidth

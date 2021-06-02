@@ -8,6 +8,10 @@ import './style.css'
 import TimeTable from '../../../components/react-timetable-events'
 
 export function App(props) {
+  let school = null
+  let role = null
+  if (props.state.auth != undefined){if(props.state.auth.user != undefined) {school = props.state.auth.user.school; role = props.state.auth.user.role}}
+
 
 
   const renderHour = (hour, defaultAttributes, styles) => {
