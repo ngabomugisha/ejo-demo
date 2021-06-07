@@ -21,11 +21,6 @@ import StudentForm from '../../../components/schoolAdmin/StudentForm'
 import { DropzoneArea } from "material-ui-dropzone"
 // import ReactExport from 'react-data-export';
 
-
-
-// const ExcelFile = ReactExport.ExcelFile;
-// const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -76,6 +71,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 export const Index = (props) => {
+    let school = null
+    let role = null
+    let teacherId = null
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user._id; role = props.state.auth.user._id } }
+   
     const [gridApi, setGridApi] = useState(null);
     const [gridColumnApi, setGridColumnApi] = useState(null);
     const [rowData, setRowData] = useState(null);
@@ -105,12 +106,8 @@ export const Index = (props) => {
     const onFilterTextChange = (e) => {
         gridApi.setQuickFilter(e.target.value)
     }
-    let school = null
     const history = useHistory()
-    let role = null
-    let p2 = null
-    let edit = null
-    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+    
     const [STUDENT, setSTUDENT] = useState(props.state.students)
     const [recordForEdit, setRecordForEdit] = useState(null)
     const [uploadPopup, setUploadPopup] = useState(false)
@@ -345,7 +342,7 @@ export const Index = (props) => {
 
     useEffect(() => {
         async function fetchClasses() {
-            const req = await https.get(`/classes/602c1e8feeb9ae2820b62120/school-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+            const req = await https.get(`/classes/${school}/school-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
                 .then((res) => {
                     setClasss(res.data)
                 }).catch(function (err) {

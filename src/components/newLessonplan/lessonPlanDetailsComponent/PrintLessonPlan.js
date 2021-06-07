@@ -191,7 +191,7 @@ class ComponentToPrint extends React.Component {
           <table border="1" className="ls-table">
             <tr>
               <th>Timing for each step</th>
-              <th colSpan="2">Description of taching and leaning activity</th>
+              <th colSpan="2">Description of teaching and learning activity</th>
               <th></th>
             </tr>
             <tr>

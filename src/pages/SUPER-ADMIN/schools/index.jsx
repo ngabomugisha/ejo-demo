@@ -27,6 +27,13 @@ import { Button } from 'react-bootstrap';
 
 
 export const Index = (props) => {
+    let school = null
+    let role = null
+    let teacherId = null
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { school = props.state.auth.user.school; role = props.state.auth.user.role } }
+    if (props.state.auth != undefined) { if (props.state.auth.user != undefined) { teacherId = props.state.auth.user._id; role = props.state.auth.user._id } }
+   
+    
     const [tableData, setTableData] = useState([])
     const dispatch = useDispatch();
     const { list: ALL_SCHOOLS } = useSelector((state) => state.schools);
@@ -54,8 +61,6 @@ export const Index = (props) => {
             {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "14px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
         </div>
     }]
-
-
 
 
     const handleClickOpen = () => {
@@ -102,7 +107,7 @@ export const Index = (props) => {
    
     return (
         <>
-            <PanelLayout selected={2} role={props.state.auth.user.role}>
+            <PanelLayout selected={2} role={role}>
 
                 <div className="students-container">
                         <div className='paper-hd'>
