@@ -110,17 +110,17 @@ class ComponentToPrint extends React.Component {
             <tr>
               <td colSpan="8">
                 <h4 style={{ fontWeight: "bold" }}>Learning Objectives</h4>
-                <h6><b>- knowledge :</b></h6>
+                <h6><b>- Knowledge :</b></h6>
                 <p>{less.knowledge.topics.map(item => (
                  <div>
                  <li>
                    {item.topic}
                    <ul className="list">
                      <li>
-                       <b>bloomTaxonomy:</b> {item.bloomTaxonomy}
+                       <b>Bloom taxonomy:</b> {item.bloomTaxonomy}
                      </li>
                      <li>
-                       <b>Standard Creteria:</b> {item.standardCriteriaPerfomance}%
+                       <b>Standard Criteria:</b> {item.standardCriteriaPerfomance}%
                      </li>
                    </ul>
                  </li>
@@ -181,7 +181,7 @@ class ComponentToPrint extends React.Component {
 
             <tr>
               <td colSpan="2">References</td>
-              <td colSpan="6"></td>
+              <td colSpan="6">{less.knowledge.otherMaterialsAndReferences}</td>
             </tr>
 
 

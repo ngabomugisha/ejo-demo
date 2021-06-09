@@ -348,10 +348,12 @@ function LessonCards(props) {
         </Dialog>
       </div>
       {
-        props.lesss &&
+        
+        props.lesss ? 
         props.lesss.sort(function(a, b) {
-          var timeA = a.time.day.toUpperCase(); // ignore upper and lowercase
-          var timeB = b.time.day.toUpperCase(); // ignore upper and lowercase
+          
+          var timeA = a.time.day; // ignore upper and lowercase
+          var timeB = b.time.day; // ignore upper and lowercase
           if (timeA > timeB) {
             return -1;
           }
@@ -375,7 +377,7 @@ function LessonCards(props) {
               />
             </div>
           )
-        )
+        ) :""
       }
 
       <div className={classes.root}>
