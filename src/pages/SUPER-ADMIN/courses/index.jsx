@@ -60,6 +60,13 @@ export const Index = (props) => {
 
 
 
+  const deleteRow = (parms) => {
+        console.log(parms.data,"%%%%%")
+        //setId(parms.value)
+       //handleDelete(parms.value)
+        // setUpdating(true)
+    }
+
 
     const onGridReady = (params) => {
         setGridApi(params.api);
@@ -72,8 +79,8 @@ export const Index = (props) => {
         { headerName: 'ID', field: '_id', hide: true, flex: 1 },
         { headerName: "Action", field: "id",
             cellRendererFramework: (params) => <div style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "20px", backgroundColor: "#e8f5ff" , marginRight: "10px", textAlign: 'center', paddingLeft: "35px", paddingRight: "35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => alert(JSON.stringify(params))}>Delete</div>
-                {/* <div style={{ color: "#f00", cursor: "pointer", borderRadius: "14px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div> */}
+                {/* <div style={{ color: "#1F72C6", cursor: "pointer", borderRadius: "20px", backgroundColor: "#e8f5ff" , marginRight: "10px", textAlign: 'center', paddingLeft: "35px", paddingRight: "35px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => alert(JSON.stringify(params))}>Delete</div> */}
+                <div style={{ color: "#f00", cursor: "pointer", borderRadius: "14px", backgroundColor: "whitesmoke", textAlign: 'center', paddingLeft:"25px", paddingRight:"25px", verticalAlign: "center", fontWeight: "bold" }} className="edit-btn-class" onClick={() => deleteRow(params)}>Delete</div>
             </div>
         }]
 

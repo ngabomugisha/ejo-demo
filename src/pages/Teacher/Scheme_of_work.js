@@ -587,6 +587,9 @@ export const Scheme_of_work = (props) => {
                 color="primary"
                 value={create_start_time}
                 className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
               <TextField
                 id="date"
@@ -599,6 +602,9 @@ export const Scheme_of_work = (props) => {
                 type="date"
                 value={create_end_time}
                 className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </div>
           </form>
