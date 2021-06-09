@@ -21,7 +21,7 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import TimeTable from "../../../pages/SCHOOL-ADMIN/timeTable/TimeTable";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {Button} from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 
 
 export const LessonPlan_start = (props) => {
@@ -29,13 +29,13 @@ export const LessonPlan_start = (props) => {
   let school = null
   let role = null
   let teacherId
-  
+
   if (auth != undefined) {
     if (auth.user != undefined) {
       teacherId = auth.user._id;
     }
   }
-  if (auth != undefined) { if (auth.user != undefined) { school = auth.user.school; role = auth.user.role } }
+  if (auth != undefined) { if (auth.user != undefined) { school = auth.user.school; role = auth.user.role; teacherId = auth.user._id } }
 
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -43,18 +43,21 @@ export const LessonPlan_start = (props) => {
   const [slot, setSlot] = useState(null);
   const [lessonNum, setLessonNum] = useState(null)
 
+  const [unique, setUnique] = React.useState(null);
   const [teacher, setTeacher] = React.useState([]);
   const [subj, setSubj] = React.useState([]);
   const [topics, setTopics] = useState([]);
   const [subtopic, setSubtopic] = useState([]);
   const [units, setUnits] = useState([]);
 
+  const [clas, setClas] = React.useState(null)
   const [sub, setSub] = useState("");
   const [top, setTop] = useState("");
   const [subT, setSubT] = useState("");
   const [uni, setUni] = useState("");
 
   const [classs, setClasss] = React.useState([]);
+  const [sublist, setSublist] = useState(null)
   const [selectedDate, setSelectedDate] = React.useState(
     new Date("2014-08-18T21:11:54")
   );
@@ -86,21 +89,8 @@ export const LessonPlan_start = (props) => {
     time,
     subject,
   } = props.formData;
-  console.log("FORM DATA, ", props.formData);
-  //END of assignment and declaration
 
-// // dialog for timetable
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//     setScroll("paper");
-//   };
-//   const handleClose = () => {
-//     setOpen(false);
-//   };
-// //end of dialog functions
-
-
-//My functions
+  //My functions
   const handleClickOpen = () => {
     setOpen(true);
     setScroll("paper");
@@ -144,6 +134,10 @@ export const LessonPlan_start = (props) => {
   };
 
   const handleChange = (e) => {
+    if (e.target.name === "class") {
+      setClas(e.target.value)
+      setSublist(classs.filter(el => el.class._id === e.target.value));
+    }
     if (e.target.name == 'lessonNum') setLessonNum(e.target.value)
   }
 
@@ -152,6 +146,17 @@ export const LessonPlan_start = (props) => {
     time.day = date;
     handleClickOpen();
   };
+
+
+  const fetchClasses = async () => {
+    const req = await https.get(`/class-teachers/${teacherId}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+      .then((res) => {
+        setClasss(res.data)
+      }).catch(function (err) {
+        console.log(err, '***********ERRRORR***********');
+      });
+    return req
+  }
 
   const putMon = (dt) => {
     //this is for monday events
@@ -243,7 +248,13 @@ export const LessonPlan_start = (props) => {
           };
           fit.push(sm);
         }
-        console.log("RETURNED OBJECT:", fit);
+        // console.log("RETURNED OBJECT:", fit);
+        {
+          unique &&
+          unique.map(item => (
+            <MenuItem key={item.class._id} value={item.class._id}>{!item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
+          ))
+        }
         return fit;
       }, [])
     );
@@ -289,7 +300,7 @@ export const LessonPlan_start = (props) => {
           };
           fit.push(sm);
         }
-        console.log("RETURNED OBJECT:", fit);
+        // console.log("RETURNED OBJECT:", fit);
         return fit;
       }, [])
     );
@@ -335,7 +346,7 @@ export const LessonPlan_start = (props) => {
           };
           fit.push(sm);
         }
-        console.log("RETURNED OBJECT:", fit);
+        // console.log("RETURNED OBJECT:", fit);
         return fit;
       }, [])
     );
@@ -381,7 +392,7 @@ export const LessonPlan_start = (props) => {
           };
           fit.push(sm);
         }
-        console.log("RETURNED OBJECT:", fit);
+        // console.log("RETURNED OBJECT:", fit);
         return fit;
       }, [])
     );
@@ -423,13 +434,28 @@ export const LessonPlan_start = (props) => {
     }
   };
 
+  async function fetchSubjects() {
+    const req = await https
+      .get(`/lessons/subjects`, {
+        headers: { Authorization: `Basic ${localStorage.token}` },
+      })
+      .then((res) => {
+        setSubj(res.data);
+        console.log("SUBJECTS : ", res.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+    return req;
+  }
+
   function fetchSlots() {
     const req = https
       .get(`/timetables/${teacherId}/teacher`, {
         headers: { Authorization: `Basic ${localStorage.token}` },
       })
       .then((res) => {
-        console.log("RETURNED DATA:", res.data);
+        // console.log("RETURNED DATA:", res.data);
         putMon(res.data);
       })
       .catch(function (err) {
@@ -437,9 +463,9 @@ export const LessonPlan_start = (props) => {
       });
     return req;
   }
-//END of functions
+  //END of functions
 
-//UseEffects
+  //UseEffects
   useEffect(() => {
     if (open) {
       const { current: descriptionElement } = descriptionElementRef;
@@ -450,6 +476,7 @@ export const LessonPlan_start = (props) => {
   }, [open]);
 
   useEffect(() => {
+    units &&
     setKeyUnitComp(
       units.reduce(function (fit, condition) {
         if (condition._id == uni) {
@@ -457,13 +484,7 @@ export const LessonPlan_start = (props) => {
           fit = keyUnit;
         }
         return fit;
-      }, "")
-    );
-
-
-
-
-
+      }, ""))
   }, [uni])
 
   useEffect(() => {
@@ -471,41 +492,18 @@ export const LessonPlan_start = (props) => {
     setOpen(false);
   }, [slot]);
 
+
   useEffect(() => {
-    fetchSlots();
-
-    async function fetchSubjects() {
-      const req = await https
-        .get(`/lessons/subjects`, {
-          headers: { Authorization: `Basic ${localStorage.token}` },
-        })
-        .then((res) => {
-          setSubj(res.data);
-          console.log("SUBJECTS : ", res.data);
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-      return req;
-    }
-    fetchSubjects();
-
-    async function fetchClasses() {
-      const req = await https
-        .get(`/classes/${school}/school-classes`, {
-          headers: { Authorization: `Basic ${localStorage.token}` },
-        })
-        .then((res) => {
-          setClasss(res.data);
-          console.log("CLASSES : ", res.data);
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-      return req;
-    }
-    fetchClasses();
-  }, []);
+    classs != null &&
+      setUnique(classs.reduce((acc, current) => {
+        const x = acc.find(item => item.class._id === current.class._id);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          return acc;
+        }
+      }, []))
+  }, [classs])
 
   useEffect(() => {
     async function fetchTopics() {
@@ -560,15 +558,45 @@ export const LessonPlan_start = (props) => {
     }
     fetchUnit();
   }, [subT]);
-// END of useEffects
+  // END of useEffects
+  useEffect(() => {
+    console.log("________________", unique)
+  }, [unique])
+
 
   useEffect(() => {
-    console.log("THIS IS WHAT WE HAVE NOW", props.formData)
+    fetchClasses()
+    fetchSlots();
   }, [])
   return (
-    <Container maxWidth="xs">
+    <>
       {/* subject */}
       <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <TextField
+            label="Classes"
+            variant="outlined"
+            value={clas}
+            onChange={handleChange}
+            type="text"
+            fullWidth
+            name="class"
+            select
+            InputLabelProps={{
+              shrink: true,
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {unique &&
+              unique.map(item => (
+                <MenuItem key={item.class._id} value={item.class._id}>{!item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
+              ))
+            }
+          </TextField>
+        </Grid>
+
         <Grid item xs={12}>
           <TextField
             label="Subject"
@@ -585,11 +613,12 @@ export const LessonPlan_start = (props) => {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {subj.map((item) => (
-              <MenuItem key={item._id} value={item._id}>
-                {item.name}
-              </MenuItem>
-            ))}
+            {sublist
+              &&
+              sublist.map(item => (
+                <MenuItem key={item.subject && item.subject._id} value={item.subject && item.subject._id}>{item.subject && item.subject.name}</MenuItem>
+              ))
+            }
           </TextField>
         </Grid>
         <Grid item xs={12}>
@@ -794,7 +823,7 @@ export const LessonPlan_start = (props) => {
           </Button>
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 };
 

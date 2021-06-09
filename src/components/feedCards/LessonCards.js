@@ -188,9 +188,7 @@ function LessonCards(props) {
   useEffect(() => {
     props.handleFetchTeacherData()
     fetchClasses()
-
     props.handleFetchTeacherData()
-
   }, [])
 
   return (

@@ -574,6 +574,7 @@ export const Scheme_of_work = (props) => {
                 fullWidth="true"
                 onChange={handleChange}
                 select
+                multiline ={false}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -584,7 +585,7 @@ export const Scheme_of_work = (props) => {
 
                 {topic &&
                   topic.map(item => (
-                    <MenuItem key={item._id} value={item._id}>{item.name}</MenuItem>
+                    <MenuItem key={item._id} value={item._id}><span className="multiLine">{item.name}</span></MenuItem>
                   ))
                 }
               </TextField>

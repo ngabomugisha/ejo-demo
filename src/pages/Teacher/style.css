@@ -14,3 +14,13 @@
     padding: 5px;
     margin-top:20px;
 }
+.multiLine{
+    word-spacing: normal;
+    white-space: normal;
+    max-width: 350px;
+    padding: 10px;
+    padding-right: 15px;
+}
+ .MuiSelect-selectMenu{
+    white-space: nowrap !important;
+}
