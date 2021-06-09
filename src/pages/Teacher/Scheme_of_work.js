@@ -149,6 +149,9 @@ export const Scheme_of_work = (props) => {
     }
   }
 
+
+
+  
   const fetchClasses = () => {
     const req = https.get(`/class-teachers/${teacher}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
       .then((res) => {
@@ -460,9 +463,10 @@ export const Scheme_of_work = (props) => {
                 <MenuItem value={null}>
                   <em>None</em>
                 </MenuItem>
-                {classs &&
-                  classs.map(item => (
-                    <MenuItem key={item.class._id} value={item.class._id}>{!item ? '' : !item.class != null && !item.class != undefined ? '' : !item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
+                {unique &&
+                  unique.map(item => (
+
+                    <MenuItem key={item.class._id} value={item.class._id}>{!item ? '' : !item.class != null && !item.class == undefined ? '' : !item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
                   ))
                 }
               </TextField>
