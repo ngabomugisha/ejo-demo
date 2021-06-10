@@ -366,7 +366,7 @@ const renderswitch = (id) => {
 }
   return (
     <>
-      <PanelLayout selected={3} role="TEACHER">
+      <PanelLayout selected={4} role="TEACHER">
         <div className="new-lesson-container">
          {renderswitch(step.id)}
         </div>

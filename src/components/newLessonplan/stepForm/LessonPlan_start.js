@@ -628,7 +628,7 @@ export const LessonPlan_start = (props) => {
             <KeyboardDatePicker
               margin="normal"
               id="date-picker-dialog"
-              label="Date picker dialog"
+              label="Date"
               format="MM/dd/yyyy"
               variant="outlined"
               value={time.day}
