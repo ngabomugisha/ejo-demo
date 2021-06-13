@@ -330,8 +330,6 @@ export const KnowledgeForm = (props) => {
 
                 <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                     <button onClick={handleAddFields} className="check-btn">
-                        <PlusOneRoundedIcon />
-                        <br />
                 New Knowledge
               </button>
                     {/* 
@@ -613,8 +611,6 @@ export const KnowledgeForm = (props) => {
                     </>))}
                 <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                     <button onClick={handleAddFieldsUpload} className="check-btn">
-                        <PlusOneRoundedIcon />
-                        <br />
                 Add Instructional Material
               </button>
                 </div>
