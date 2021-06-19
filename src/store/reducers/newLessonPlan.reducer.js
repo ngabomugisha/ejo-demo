@@ -1,29 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "./NewLessonPlan.css";
-import { connect } from "react-redux";
-import { useDispatch, useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import PanelLayout from "../Layouts/PanelLayout/Index";
-import { Link, useHistory } from "react-router-dom";
-import { Button } from "@material-ui/core";
-import Slide2 from "./lessonPlanSlide/Slide2";
-import Slide1 from "./lessonPlanSlide/Slide1";
-import Slide3 from "./lessonPlanSlide/Slide3";
-import { useForm, useStep } from "react-hooks-helper";
-import { LessonPlan_start } from "./stepForm/LessonPlan_start";
-import { LessonPlan_2 } from "./stepForm/LessonPlan_2";
-import { LessonPlan_3 } from "./stepForm/LessonPlan_3";
-import { Review } from "./stepForm/Review";
-import { Submit } from "./stepForm/Submit";
+import { HANDLE_SET_NEW_LESSONPLAN } from "../types";
 
-const useStyles = makeStyles({
-  root: {
-    width: "100%",
-  },
-});
-
-const defaultData = {
+const initialState = {
   unit: null,
   unitPlanId: null,
   subject: null,
@@ -311,62 +288,16 @@ const defaultData = {
   },
 };
 
-const defaultData2 = {
-  firstName: "",
-  lastName: "",
-  nickName: "",
-  address: "",
-  city: "",
-  state: "",
-  zip: "",
-  phone: "",
-  email: "",
+const newLessonPlanReducer = (state = initialState, { type, payload }) => {
+  switch (type) {
+    case HANDLE_SET_NEW_LESSONPLAN:
+      return {
+        ...state,
+        ...payload,
+      };
+    default:
+      return state;
+  }
 };
 
-const steps = [
-  { id: "names" },
-  { id: "LessonPlan_2" },
-  { id: "LessonPlan_3" },
-  { id: "review" },
-  { id: "submit" },
-];
-
-function NewLessonPlan() {
-  const [formData, setForm] = useForm(defaultData);
-  const { step, navigation } = useStep({
-    steps,
-    initialStep: 0,
-  });
-
-  const props = { formData, setForm, navigation };
-
-  const renderswitch = (id) => {
-    switch (id) {
-      case "names":
-        return <LessonPlan_start {...props} />;
-      case "LessonPlan_2":
-        return <LessonPlan_2 {...props} />;
-      case "LessonPlan_3":
-        return <LessonPlan_3 {...props} />;
-      case "review":
-        return <Review {...props} />;
-      case "submit":
-        return <Submit {...props} />;
-    }
-  };
-  return (
-    <>
-      <PanelLayout selected={4} role="TEACHER">
-        <div className="new-lesson-container">{renderswitch(step.id)}</div>
-      </PanelLayout>
-    </>
-  );
-}
-
-const mapStateToProps = (state) => ({
-  state: state,
-});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewLessonPlan);
+export default newLessonPlanReducer;

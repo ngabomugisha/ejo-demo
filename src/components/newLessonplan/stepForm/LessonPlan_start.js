@@ -21,27 +21,35 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import TimeTable from "../../../pages/SCHOOL-ADMIN/timeTable/TimeTable";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button } from 'react-bootstrap'
-
+import { Button } from "react-bootstrap";
+import { setNewLessonplan } from "../../../store/actions/newLessonPlan.actions";
 
 export const LessonPlan_start = (props) => {
-  const { auth } = useSelector((state) => state);
-  let school = null
-  let role = null
-  let teacherId
+  const { auth, newLessonPlan } = useSelector((state) => state);
+  const dispatchLesson = useDispatch();
+  console.log("new lesson plan", newLessonPlan);
+  let school = null;
+  let role = null;
+  let teacherId;
 
   if (auth != undefined) {
     if (auth.user != undefined) {
       teacherId = auth.user._id;
     }
   }
-  if (auth != undefined) { if (auth.user != undefined) { school = auth.user.school; role = auth.user.role; teacherId = auth.user._id } }
+  if (auth != undefined) {
+    if (auth.user != undefined) {
+      school = auth.user.school;
+      role = auth.user.role;
+      teacherId = auth.user._id;
+    }
+  }
 
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState("paper");
   const [slot, setSlot] = useState(null);
-  const [lessonNum, setLessonNum] = useState(null)
+  const [lessonNum, setLessonNum] = useState(null);
 
   const [unique, setUnique] = React.useState(null);
   const [teacher, setTeacher] = React.useState([]);
@@ -50,14 +58,14 @@ export const LessonPlan_start = (props) => {
   const [subtopic, setSubtopic] = useState([]);
   const [units, setUnits] = useState([]);
 
-  const [clas, setClas] = React.useState(null)
+  const [clas, setClas] = React.useState(null);
   const [sub, setSub] = useState("");
   const [top, setTop] = useState("");
   const [subT, setSubT] = useState("");
   const [uni, setUni] = useState("");
 
   const [classs, setClasss] = React.useState([]);
-  const [sublist, setSublist] = useState(null)
+  const [sublist, setSublist] = useState(null);
   const [selectedDate, setSelectedDate] = React.useState(
     new Date("2014-08-18T21:11:54")
   );
@@ -78,6 +86,16 @@ export const LessonPlan_start = (props) => {
       thursday: thu,
       friday: fri,
     },
+  };
+
+  const assignStatevalues = (newLessonPlan, formData) => {
+    newLessonPlan.unit = formData.unit;
+    newLessonPlan.unitPlanId = formData.unitPlanId;
+    newLessonPlan.lessonNumber = formData.lessonNumber;
+    newLessonPlan.keyUnitCompetency = formData.keyUnitCompetency;
+    newLessonPlan.lessonName = formData.lessonName;
+    newLessonPlan.time = formData.time;
+    newLessonPlan.subject = formData.subject;
   };
 
   const {
@@ -135,11 +153,11 @@ export const LessonPlan_start = (props) => {
 
   const handleChange = (e) => {
     if (e.target.name === "class") {
-      setClas(e.target.value)
-      setSublist(classs.filter(el => el.class._id === e.target.value));
+      setClas(e.target.value);
+      setSublist(classs.filter((el) => el.class._id === e.target.value));
     }
-    if (e.target.name == 'lessonNum') setLessonNum(e.target.value)
-  }
+    if (e.target.name == "lessonNum") setLessonNum(e.target.value);
+  };
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -147,16 +165,19 @@ export const LessonPlan_start = (props) => {
     handleClickOpen();
   };
 
-
   const fetchClasses = async () => {
-    const req = await https.get(`/class-teachers/${teacherId}/teacher-classes`, { headers: { 'Authorization': `Basic ${localStorage.token}` } })
+    const req = await https
+      .get(`/class-teachers/${teacherId}/teacher-classes`, {
+        headers: { Authorization: `Basic ${localStorage.token}` },
+      })
       .then((res) => {
-        setClasss(res.data)
-      }).catch(function (err) {
-        console.log(err, '***********ERRRORR***********');
+        setClasss(res.data);
+      })
+      .catch(function (err) {
+        console.log(err, "***********ERRRORR***********");
       });
-    return req
-  }
+    return req;
+  };
 
   const putMon = (dt) => {
     //this is for monday events
@@ -188,17 +209,17 @@ export const LessonPlan_start = (props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-              opt.time.starts.substring(0, 2) +
-              ":" +
-              opt.time.starts.substring(2, 4) +
-              ":00"
+                opt.time.starts.substring(0, 2) +
+                ":" +
+                opt.time.starts.substring(2, 4) +
+                ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-              opt.time.ends.substring(0, 2) +
-              ":" +
-              opt.time.ends.substring(2, 4) +
-              ":00"
+                opt.time.ends.substring(0, 2) +
+                ":" +
+                opt.time.ends.substring(2, 4) +
+                ":00"
             ),
           };
           fit.push(sm);
@@ -221,7 +242,7 @@ export const LessonPlan_start = (props) => {
                   done = yes;
                 }
                 return done;
-              }, '') +
+              }, "") +
               "& Teacher :" +
               teacher.reduce(function (done2, cond2) {
                 if (cond2._id === opt.teacher) {
@@ -229,21 +250,21 @@ export const LessonPlan_start = (props) => {
                   done2 = yes2;
                 }
                 return done2;
-              }, ''),
+              }, ""),
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-              opt.time.starts.substring(0, 2) +
-              ":" +
-              opt.time.starts.substring(2, 4) +
-              ":00"
+                opt.time.starts.substring(0, 2) +
+                ":" +
+                opt.time.starts.substring(2, 4) +
+                ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-              opt.time.ends.substring(0, 2) +
-              ":" +
-              opt.time.ends.substring(2, 4) +
-              ":00"
+                opt.time.ends.substring(0, 2) +
+                ":" +
+                opt.time.ends.substring(2, 4) +
+                ":00"
             ),
           };
           fit.push(sm);
@@ -251,9 +272,28 @@ export const LessonPlan_start = (props) => {
         // console.log("RETURNED OBJECT:", fit);
         {
           unique &&
-          unique.map(item => (
-            <MenuItem key={item.class._id} value={item.class._id}>{!item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
-          ))
+            unique.map((item) => (
+              <MenuItem key={item.class._id} value={item.class._id}>
+                {!item.class.level ? "" : item.class.level.name}&nbsp;
+                {!item
+                  ? ""
+                  : !item.class
+                  ? ""
+                  : !item.class.combination
+                  ? ""
+                  : !item.class.combination
+                  ? ""
+                  : item.class.combination.name}
+                &nbsp;
+                {!item
+                  ? ""
+                  : !item.class
+                  ? ""
+                  : item.class.label
+                  ? item.class.label
+                  : ""}
+              </MenuItem>
+            ));
         }
         return fit;
       }, [])
@@ -285,17 +325,17 @@ export const LessonPlan_start = (props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-              opt.time.starts.substring(0, 2) +
-              ":" +
-              opt.time.starts.substring(2, 4) +
-              ":00"
+                opt.time.starts.substring(0, 2) +
+                ":" +
+                opt.time.starts.substring(2, 4) +
+                ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-              opt.time.ends.substring(0, 2) +
-              ":" +
-              opt.time.ends.substring(2, 4) +
-              ":00"
+                opt.time.ends.substring(0, 2) +
+                ":" +
+                opt.time.ends.substring(2, 4) +
+                ":00"
             ),
           };
           fit.push(sm);
@@ -331,17 +371,17 @@ export const LessonPlan_start = (props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-              opt.time.starts.substring(0, 2) +
-              ":" +
-              opt.time.starts.substring(2, 4) +
-              ":00"
+                opt.time.starts.substring(0, 2) +
+                ":" +
+                opt.time.starts.substring(2, 4) +
+                ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-              opt.time.ends.substring(0, 2) +
-              ":" +
-              opt.time.ends.substring(2, 4) +
-              ":00"
+                opt.time.ends.substring(0, 2) +
+                ":" +
+                opt.time.ends.substring(2, 4) +
+                ":00"
             ),
           };
           fit.push(sm);
@@ -377,17 +417,17 @@ export const LessonPlan_start = (props) => {
             type: "custom",
             startTime: moment(
               "2018-02-23T" +
-              opt.time.starts.substring(0, 2) +
-              ":" +
-              opt.time.starts.substring(2, 4) +
-              ":00"
+                opt.time.starts.substring(0, 2) +
+                ":" +
+                opt.time.starts.substring(2, 4) +
+                ":00"
             ),
             endTime: moment(
               "2018-02-23T" +
-              opt.time.ends.substring(0, 2) +
-              ":" +
-              opt.time.ends.substring(2, 4) +
-              ":00"
+                opt.time.ends.substring(0, 2) +
+                ":" +
+                opt.time.ends.substring(2, 4) +
+                ":00"
             ),
           };
           fit.push(sm);
@@ -477,33 +517,35 @@ export const LessonPlan_start = (props) => {
 
   useEffect(() => {
     units &&
-    setKeyUnitComp(
-      units.reduce(function (fit, condition) {
-        if (condition._id == uni) {
-          let keyUnit = condition.keyCompetency;
-          fit = keyUnit;
-        }
-        return fit;
-      }, ""))
-  }, [uni])
+      setKeyUnitComp(
+        units.reduce(function (fit, condition) {
+          if (condition._id == uni) {
+            let keyUnit = condition.keyCompetency;
+            fit = keyUnit;
+          }
+          return fit;
+        }, "")
+      );
+  }, [uni]);
 
   useEffect(() => {
     props.formData.time.slotOnTimetable = slot;
     setOpen(false);
   }, [slot]);
 
-
   useEffect(() => {
     classs != null &&
-      setUnique(classs.reduce((acc, current) => {
-        const x = acc.find(item => item.class._id === current.class._id);
-        if (!x) {
-          return acc.concat([current]);
-        } else {
-          return acc;
-        }
-      }, []))
-  }, [classs])
+      setUnique(
+        classs.reduce((acc, current) => {
+          const x = acc.find((item) => item.class._id === current.class._id);
+          if (!x) {
+            return acc.concat([current]);
+          } else {
+            return acc;
+          }
+        }, [])
+      );
+  }, [classs]);
 
   useEffect(() => {
     async function fetchTopics() {
@@ -560,14 +602,14 @@ export const LessonPlan_start = (props) => {
   }, [subT]);
   // END of useEffects
   useEffect(() => {
-    console.log("________________", unique)
-  }, [unique])
-
+    console.log("________________", unique);
+  }, [unique]);
 
   useEffect(() => {
-    fetchClasses()
+    fetchClasses();
     fetchSlots();
-  }, [])
+    dispatchLesson(setNewLessonplan(newLessonPlan));
+  }, []);
   return (
     <>
       {/* subject */}
@@ -590,10 +632,28 @@ export const LessonPlan_start = (props) => {
               <em>None</em>
             </MenuItem>
             {unique &&
-              unique.map(item => (
-                <MenuItem key={item.class._id} value={item.class._id}>{!item.class.level ? '' : item.class.level.name}&nbsp;{!item ? '' : !item.class ? '' : !item.class.combination ? '' : !item.class.combination ? '' : item.class.combination.name}&nbsp;{!item ? "" : !item.class ? "" : item.class.label ? item.class.label : ''}</MenuItem>
-              ))
-            }
+              unique.map((item) => (
+                <MenuItem key={item.class._id} value={item.class._id}>
+                  {!item.class.level ? "" : item.class.level.name}&nbsp;
+                  {!item
+                    ? ""
+                    : !item.class
+                    ? ""
+                    : !item.class.combination
+                    ? ""
+                    : !item.class.combination
+                    ? ""
+                    : item.class.combination.name}
+                  &nbsp;
+                  {!item
+                    ? ""
+                    : !item.class
+                    ? ""
+                    : item.class.label
+                    ? item.class.label
+                    : ""}
+                </MenuItem>
+              ))}
           </TextField>
         </Grid>
 
@@ -613,12 +673,15 @@ export const LessonPlan_start = (props) => {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {sublist
-              &&
-              sublist.map(item => (
-                <MenuItem key={item.subject && item.subject._id} value={item.subject && item.subject._id}>{item.subject && item.subject.name}</MenuItem>
-              ))
-            }
+            {sublist &&
+              sublist.map((item) => (
+                <MenuItem
+                  key={item.subject && item.subject._id}
+                  value={item.subject && item.subject._id}
+                >
+                  {item.subject && item.subject.name}
+                </MenuItem>
+              ))}
           </TextField>
         </Grid>
         <Grid item xs={12}>
@@ -649,7 +712,9 @@ export const LessonPlan_start = (props) => {
             aria-labelledby="scroll-dialog-title"
             aria-describedby="scroll-dialog-description"
           >
-            <DialogTitle id="scroll-dialog-title">Select a slot on timetable</DialogTitle>
+            <DialogTitle id="scroll-dialog-title">
+              Select a slot on timetable
+            </DialogTitle>
             <DialogContent dividers={scroll === "paper"}>
               <DialogContentText
                 id="scroll-dialog-description"
@@ -691,10 +756,10 @@ export const LessonPlan_start = (props) => {
             {!topics
               ? ""
               : topics.map((item) => (
-                <MenuItem key={item._id} value={item._id}>
-                  {item.name}
-                </MenuItem>
-              ))}
+                  <MenuItem key={item._id} value={item._id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
           </TextField>
         </Grid>
 
@@ -719,10 +784,10 @@ export const LessonPlan_start = (props) => {
             {!subtopic
               ? ""
               : subtopic.map((item) => (
-                <MenuItem key={item._id} value={item._id}>
-                  {item.name}
-                </MenuItem>
-              ))}
+                  <MenuItem key={item._id} value={item._id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
           </TextField>
         </Grid>
 
@@ -747,10 +812,10 @@ export const LessonPlan_start = (props) => {
             {!units
               ? ""
               : units.map((item) => (
-                <MenuItem key={item._id} value={item._id}>
-                  {item.name}
-                </MenuItem>
-              ))}
+                  <MenuItem key={item._id} value={item._id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
           </TextField>
         </Grid>
 
@@ -795,7 +860,9 @@ export const LessonPlan_start = (props) => {
               shrink: true,
             }}
           >
-            <MenuItem key='1' value="1">1</MenuItem>
+            <MenuItem key="1" value="1">
+              1
+            </MenuItem>
           </TextField>
         </Grid>
 
@@ -817,7 +884,14 @@ export const LessonPlan_start = (props) => {
           <Button
             block
             style={{ marginTop: "1rem" }}
-            onClick={() => props.navigation.next()}
+            onClick={() => {
+              assignStatevalues(newLessonPlan, props.formData);
+              console.log(
+                "this denzo at work ari kumva usiende mbali old school",
+                newLessonPlan
+              );
+              props.navigation.next();
+            }}
           >
             Next
           </Button>
@@ -834,15 +908,15 @@ const mapStateToProps = (state, OwnProps) => {
   // return {
   //   state, navigation, formData, setForm
   // }
-}
+};
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   // handleFetchTeacherData: () => {
   //   dispatch(handleFetchTeacherData())
   // },
   // handleFetchLessonPlanSubject: (sub, classs) => {
   //   dispatch(handleFetchLessonPlanSubject(sub, classs))
   // }
-})
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LessonPlan_start);

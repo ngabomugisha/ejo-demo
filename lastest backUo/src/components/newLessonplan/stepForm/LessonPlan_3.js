@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../NewLessonPlan.css";
-import https from '../../../helpers/https'
+import https from "../../../helpers/https";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -39,64 +39,63 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const crossCuttingIssuesArrInto = [
-    {issue: 'GENOCIDE-STUDIES'},
-    {issue: 'ENVIRONMENT-AND-SUSTAINABILITY'},
-    {issue: 'GENDER'},
-    {issue: 'COMPREHENSIVE-SEXUALITY-EDUCATION'},
-    {issue: 'PEACE-AND-VALUES-EDUCATION'},
-    {issue: 'FINANCIAL-EDUCATION'},
-    {issue: 'STANDARDISATION-CULTURE'},
-    {issue: 'INCLUSIVE-EDUCATION'}
-]
+  { issue: "GENOCIDE-STUDIES" },
+  { issue: "ENVIRONMENT-AND-SUSTAINABILITY" },
+  { issue: "GENDER" },
+  { issue: "COMPREHENSIVE-SEXUALITY-EDUCATION" },
+  { issue: "PEACE-AND-VALUES-EDUCATION" },
+  { issue: "FINANCIAL-EDUCATION" },
+  { issue: "STANDARDISATION-CULTURE" },
+  { issue: "INCLUSIVE-EDUCATION" },
+];
 const crossCuttingIssuesArrDeve = [
-    {issue: 'GENOCIDE-STUDIES'},
-    {issue: 'ENVIRONMENT-AND-SUSTAINABILITY'},
-    {issue: 'GENDER'},
-    {issue: 'COMPREHENSIVE-SEXUALITY-EDUCATION'},
-    {issue: 'PEACE-AND-VALUES-EDUCATION'},
-    {issue: 'FINANCIAL-EDUCATION'},
-    {issue: 'STANDARDISATION-CULTURE'},
-    {issue: 'INCLUSIVE-EDUCATION'}
-]
+  { issue: "GENOCIDE-STUDIES" },
+  { issue: "ENVIRONMENT-AND-SUSTAINABILITY" },
+  { issue: "GENDER" },
+  { issue: "COMPREHENSIVE-SEXUALITY-EDUCATION" },
+  { issue: "PEACE-AND-VALUES-EDUCATION" },
+  { issue: "FINANCIAL-EDUCATION" },
+  { issue: "STANDARDISATION-CULTURE" },
+  { issue: "INCLUSIVE-EDUCATION" },
+];
 const crossCuttingIssuesArrConc = [
-    {issue: 'GENOCIDE-STUDIES'},
-    {issue: 'ENVIRONMENT-AND-SUSTAINABILITY'},
-    {issue: 'GENDER'},
-    {issue: 'COMPREHENSIVE-SEXUALITY-EDUCATION'},
-    {issue: 'PEACE-AND-VALUES-EDUCATION'},
-    {issue: 'FINANCIAL-EDUCATION'},
-    {issue: 'STANDARDISATION-CULTURE'},
-    {issue: 'INCLUSIVE-EDUCATION'}
-]
+  { issue: "GENOCIDE-STUDIES" },
+  { issue: "ENVIRONMENT-AND-SUSTAINABILITY" },
+  { issue: "GENDER" },
+  { issue: "COMPREHENSIVE-SEXUALITY-EDUCATION" },
+  { issue: "PEACE-AND-VALUES-EDUCATION" },
+  { issue: "FINANCIAL-EDUCATION" },
+  { issue: "STANDARDISATION-CULTURE" },
+  { issue: "INCLUSIVE-EDUCATION" },
+];
 const competenceArrInto = [
-    {competency: 'CRITICAL-THINKING'},
-    {competency: 'RESEARCH-AND-PROBLEM-SOLVING'},
-    {competency: 'CREATIVITY-AND-INNOVATION'},
-    {competency: 'COMMUNICATION'},
-    {competency: 'COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS'},
-    {competency: 'LIFELONG-LEARNING'},
-]
+  { competency: "CRITICAL-THINKING" },
+  { competency: "RESEARCH-AND-PROBLEM-SOLVING" },
+  { competency: "CREATIVITY-AND-INNOVATION" },
+  { competency: "COMMUNICATION" },
+  { competency: "COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS" },
+  { competency: "LIFELONG-LEARNING" },
+];
 const competenceArrDeve = [
-    {competency: 'CRITICAL-THINKING'},
-    {competency: 'RESEARCH-AND-PROBLEM-SOLVING'},
-    {competency: 'CREATIVITY-AND-INNOVATION'},
-    {competency: 'COMMUNICATION'},
-    {competency: 'COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS'},
-    {competency: 'LIFELONG-LEARNING'},
-]
+  { competency: "CRITICAL-THINKING" },
+  { competency: "RESEARCH-AND-PROBLEM-SOLVING" },
+  { competency: "CREATIVITY-AND-INNOVATION" },
+  { competency: "COMMUNICATION" },
+  { competency: "COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS" },
+  { competency: "LIFELONG-LEARNING" },
+];
 const competenceArrConc = [
-    {competency: 'CRITICAL-THINKING'},
-    {competency: 'RESEARCH-AND-PROBLEM-SOLVING'},
-    {competency: 'CREATIVITY-AND-INNOVATION'},
-    {competency: 'COMMUNICATION'},
-    {competency: 'COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS'},
-    {competency: 'LIFELONG-LEARNING'},
-]
+  { competency: "CRITICAL-THINKING" },
+  { competency: "RESEARCH-AND-PROBLEM-SOLVING" },
+  { competency: "CREATIVITY-AND-INNOVATION" },
+  { competency: "COMMUNICATION" },
+  { competency: "COOPERATION-INTERPERSONAL-MANAGEMENT-AND-LIFE-SKILLS" },
+  { competency: "LIFELONG-LEARNING" },
+];
 
 export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
-    const [contentData , setContentData] = useState(null)
+  const [contentData, setContentData] = useState(null);
   const [key, setKey] = React.useState("home");
   const [term, setTerm] = React.useState("");
   const classes = useStyles();
@@ -130,25 +129,23 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
 
   useEffect(() => {
     async function fetchUnit() {
-        if(formData.unit){
-      const req = await https
-        .get(`/lessons/units/${formData.unit}`, {
-          headers: { Authorization: `Basic ${localStorage.token}` },
-        })
-        .then((res) => {
-          setContentData(res.data.activities);
-          console.log("UNITS : ", res.data);
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-      return req;
-    }
+      if (formData.unit) {
+        const req = await https
+          .get(`/lessons/units/${formData.unit}`, {
+            headers: { Authorization: `Basic ${localStorage.token}` },
+          })
+          .then((res) => {
+            setContentData(res.data.activities);
+            console.log("UNITS : ", res.data);
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+        return req;
+      }
     }
     fetchUnit();
   }, []);
-
-
 
   return (
     <Container maxWidth="xs">
@@ -158,13 +155,12 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
           id="controlled-tab-example"
           activeKey={key}
           onSelect={(k) => setKey(k)}
-        >
+        >{console.log("here we are in lessonPlan 3")}
           <Tab eventKey="home" title="Introduction" fill={true}>
             <div className="knowledge-container">
               <h5>Introduction</h5>
-
+              {console.log("here we are in lessonPlan 3 intro")}
               <div className="topic">
-              
                 <Accordion defaultActiveKey="">
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="0">
@@ -177,18 +173,18 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="0">
                       <Card.Body>
-{!contentData? "" : contentData.map((val) => {
-        return(
-            <FormControlLabel
-                          value={val._id}
-                          control={<Checkbox color="primary" />}
-                          label={val.activity}
-                          labelPlacement="start"
-                        />
-        )
-    })
-
-}
+                        {!contentData
+                          ? ""
+                          : contentData.map((val) => {
+                              return (
+                                <FormControlLabel
+                                  value={val._id}
+                                  control={<Checkbox color="primary" />}
+                                  label={val.activity}
+                                  labelPlacement="start"
+                                />
+                              );
+                            })}
 
                         <div className="msg-field">
                           <TextField
@@ -234,19 +230,16 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="0">
                       <Card.Body>
-{
-    crossCuttingIssuesArrInto.map((val) => {
-        return(
-            <FormControlLabel
-                          value={val.issue}
-                          control={<Checkbox color="primary" />}
-                          label={val.issue}
-                          labelPlacement="start"
-                        />
-        )
-    })
-
-}
+                        {crossCuttingIssuesArrInto.map((val) => {
+                          return (
+                            <FormControlLabel
+                              value={val.issue}
+                              control={<Checkbox onchange={} color="primary" />}
+                              label={val.issue}
+                              labelPlacement="start"
+                            />
+                          );
+                        })}
 
                         <div className="msg-field">
                           <TextField
@@ -279,20 +272,16 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="0">
                       <Card.Body>
-                      
-{
-    competenceArrInto.map((val) => {
-        return(
-            <FormControlLabel
-                          value={val.competency}
-                          control={<Checkbox color="primary" />}
-                          label={val.competency}
-                          labelPlacement="start"
-                        />
-        )
-    })
-
-}
+                        {competenceArrInto.map((val) => {
+                          return (
+                            <FormControlLabel
+                              value={val.competency}
+                              control={<Checkbox color="primary" />}
+                              label={val.competency}
+                              labelPlacement="start"
+                            />
+                          );
+                        })}
 
                         <div className="msg-field">
                           <TextField
@@ -316,7 +305,7 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
           <Tab eventKey="profile" title="Development" fill={true}>
             <div className="knowledge-container">
               <h5>Development</h5>
-
+              {console.log("here we are in lessonPlan 3 dev")}
               <div className="topic">
                 <Accordion defaultActiveKey="">
                   <Card>
@@ -432,9 +421,9 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
           <Tab eventKey="contact" title="Conclusion" fill={true}>
             <div className="knowledge-container">
               <h5>Introduction</h5>
-
+              {console.log("here we are in lessonPlan 3 conc")}
               <div className="topic">
-              <Accordion defaultActiveKey="">
+                <Accordion defaultActiveKey="">
                   <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="0">
                       <div className="accordion-title">
@@ -542,7 +531,7 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
                     </Accordion.Collapse>
                   </Card>
                 </Accordion>
-            </div>
+              </div>
             </div>
           </Tab>
         </Tabs>
