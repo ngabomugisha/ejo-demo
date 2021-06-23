@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../NewLessonPlan.css";
 import { connect, useDispatch, useSelector } from "react-redux";
+import https from "../../../helpers/https";
 import TextField from "@material-ui/core/TextField";
 // import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -91,11 +92,13 @@ const competenceArrConc = [
   { competency: "LIFELONG-LEARNING" },
 ];
 
-export const ActivitiesIntro = () => {
-  const { newLessonPlan } = useSelector((state) => state);
+export const ActivitiesIntro = (props) => {
+  // const { formData } = props;
+  // console.log("formdata", formData);
+  const { newLessonPlan } = props;
   const dispatchLesson = useDispatch();
-  console.log("new lesson plan in activitiesIntro form", newLessonPlan);
-  const [content, setContent] = useState("");
+  // console.log("new lesson plan in activitiesIntro form", newLessonPlan);
+  const [content, setContent] = useState([]);
   const [crossCuttingIssues, setCrossCuttingIssues] = useState("");
   const [competency, setCompetency] = useState("");
   const [issueComment, setIssueComment] = useState("");
@@ -135,92 +138,17 @@ export const ActivitiesIntro = () => {
     questions: [],
   };
 
-  const questionBank = [
-    {
-      difficultLevel: "MEDIUM",
-      questionsObjective: "REMEMBERING",
-      question: "What is the answer",
-      questionType: "MULTI-CHOICE",
-      possibleAnswer: [
-        {
-          answer: "answer",
-        },
-        {
-          answer: "answer2",
-        },
-        {
-          answer: "answer3",
-        },
-      ],
-      answers: [
-        {
-          answer: "answer2",
-        },
-        {
-          answer: "answer3",
-        },
-      ],
-      points: 10,
-    },
-    {
-      difficultLevel: "MEDIUM",
-      questionsObjective: "REMEMBERING",
-      question: "What is your name",
-      questionType: "MULTI-CHOICE",
-      possibleAnswer: [
-        {
-          answer: "answer",
-        },
-        {
-          answer: "answer2",
-        },
-        {
-          answer: "answer3",
-        },
-      ],
-      answers: [
-        {
-          answer: "answer2",
-        },
-        {
-          answer: "answer3",
-        },
-      ],
-      points: 10,
-    },
-    {
-      difficultLevel: "MEDIUM",
-      questionsObjective: "REMEMBERING",
-      question: "What is my name",
-      questionType: "MULTI-CHOICE",
-      possibleAnswer: [
-        {
-          answer: "answer",
-        },
-        {
-          answer: "answer2",
-        },
-        {
-          answer: "answer3",
-        },
-      ],
-      answers: [
-        {
-          answer: "answer2",
-        },
-        {
-          answer: "answer3",
-        },
-      ],
-      points: 10,
-    },
-  ];
+  const [questionBank, setQuestionBank] = useState(null);
   const [contentData, setContentData] = useState(null);
   const classes = useStyles();
   const [show, setShow] = useState(false);
 
-  const assignStatevalues = (newLessonPlan, formData) => {
+  const assignIntro = (newLessonPlan, formData) => {
     newLessonPlan.activities.introduction = formData.introduction;
+  };
+
+  const assignExercises = (newLessonPlan, formData) => {
+    newLessonPlan.activities.exercises = formData.exercises;
   };
 
   const handleClose = () => setShow(false);
@@ -236,73 +164,142 @@ export const ActivitiesIntro = () => {
 
   const handleAddChange = (e) => {
     if (e.target.name === "content") {
-      setContent(e.target.value);
+      newLessonPlan.activities.introduction.content.activities.push({
+        activity: e.target.value,
+      });
     } else if (e.target.name == "crossCuttingIssues") {
-      setCrossCuttingIssues(e.target.value);
+      newLessonPlan.activities.introduction.crossCuttingIssues.issues.push({
+        issue: e.target.value,
+      });
     } else if (e.target.name == "competency") {
-      setCompetency(e.target.value);
+      newLessonPlan.activities.introduction.competency.competencies.push({
+        competency: e.target.value,
+      });
     }
-    // console.log("form about to be completete", thisFormData);
   };
 
   const handleRemoveChange = (e) => {
-    console.log(e.target.checked);
     if (e.target.name === "content") {
-      setContent("");
+      var contentIndex =
+        newLessonPlan.activities.introduction.content.activities.indexOf(
+          e.target.value
+        );
+      newLessonPlan.activities.introduction.content.activities.splice(
+        contentIndex,
+        1
+      );
     } else if (e.target.name == "crossCuttingIssues") {
-      setCrossCuttingIssues("");
+      var issueIndex =
+        newLessonPlan.activities.introduction.crossCuttingIssues.issues.indexOf(
+          e.target.value
+        );
+      newLessonPlan.activities.introduction.crossCuttingIssues.issues.splice(
+        issueIndex,
+        1
+      );
     } else if (e.target.name == "competency") {
-      setCompetency("");
+      var competencyIndex =
+        newLessonPlan.activities.introduction.competency.competencies.indexOf(
+          e.target.value
+        );
+      newLessonPlan.activities.introduction.competency.competencies.splice(
+        competencyIndex,
+        1
+      );
     }
-    // console.log("form about to be completete", thisFormData);
   };
 
-  const handleClick = (e) => {
+  const handleQuestionClick = (e) => {
+    const quest = questionBank.filter((q) => q._id == e.target.value);
     if (e.target.checked) {
-      exercises.questions.push({ 1: e.target.value });
+      newLessonPlan.activities.introduction.exercises.questions.push(quest);
     } else {
-      if (exercises.questions.includes(e.target.value))
-        exercises.questions.pop({ 1: e.target.value });
+      var questionIndex =
+        newLessonPlan.introduction.activities.exercises.questions.indexOf(
+          e.target.value
+        );
+      newLessonPlan.activities.introduction.exercises.questions.splice(
+        questionIndex,
+        1
+      );
+    }
+  };
+
+  const handleTextField = (e) => {
+    if (e.target.name === "otherActivity") {
+      newLessonPlan.activities.introduction.content.otherActivity =
+        e.target.value;
+    } else if (e.target.name === "crossCuttingIssues") {
+      newLessonPlan.activities.introduction.crossCuttingIssues.omment =
+        e.target.value;
+    } else if (e.target.name === "competency") {
+      newLessonPlan.activities.introduction.competency.comment = e.target.value;
     }
   };
 
   useEffect(() => {
-    thisFormData.introduction.content.activities.push({
-      activity: content,
-    });
+    async function fetchQuestion() {
+      if (newLessonPlan.unit) {
+        const req = await https
+          .get(
+            `question-banks/602c349dfd1613203834880d/subject-question-bank`,
+            {
+              headers: { Authorization: `Basic ${localStorage.token}` },
+            }
+          )
+          .then((res) => {
+            setQuestionBank(res.data);
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+        return req;
+      }
+    }
+    fetchQuestion();
+  }, []);
 
-    thisFormData.introduction.crossCuttingIssues.issues.push({
-      issue: crossCuttingIssues,
-    });
+  useEffect(() => {
+    async function fetchUnit() {
+      if (newLessonPlan.unit) {
+        const req = await https
+          .get(`/lessons/units/${newLessonPlan.unit}`, {
+            headers: { Authorization: `Basic ${localStorage.token}` },
+          })
+          .then((res) => {
+            setContentData(res.data.activities);
+            //setContentDevelopmentData(res.data.activities)
+            // console.log("UNITS : ", res.data);
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
+        return req;
+      }
+    }
+    fetchUnit();
+  }, []);
 
-    thisFormData.introduction.competency.competencies.push({
-      competency: competency,
-    });
+  useEffect(() => {
+    console.log("dispatchhhh:");
+    dispatchLesson(setNewLessonplan(newLessonPlan));
+    console.log("dispached an action", newLessonPlan);
 
-    thisFormData.introduction.crossCuttingIssues.omment = issueComment;
-    thisFormData.introduction.competency.comment = competencyComment;
-    thisFormData.introduction.content.otherActivity = otherActivity;
-    thisFormData.introduction.content.otherActivity = otherActivity;
-    thisFormData.exercises = exercises;
-
-    assignStatevalues(newLessonPlan, thisFormData);
-    //dispatchLesson(setNewLessonplan(newLessonPlan));
-
-    console.log("data ready for state: ", thisFormData);
+    console.log("dispatch finally", newLessonPlan);
   }, [
     content,
     crossCuttingIssues,
     competency,
+    otherActivity,
     issueComment,
     competencyComment,
-    otherActivity,
-    exercises,
   ]);
 
   return (
     <>
       <div className="knowledge-container">
-        <h5>Introduction</h5>
+        {/* <h5>Introduction</h5> */}
+        <p></p>
         <div className="topic">
           <Accordion defaultActiveKey="">
             <Card>
@@ -321,19 +318,15 @@ export const ActivitiesIntro = () => {
                     : contentData.map((val) => {
                         return (
                           <FormControlLabel
-                            value={val._id}
+                            value={val.activity}
                             control={
                               <Checkbox
                                 onChange={(e) => {
-                                  if (e.target.checked) {
-                                    handleAddChange(e);
-                                  } else {
-                                    handleRemoveChange(e);
-                                  }
+                                  handleChange(e);
+                                  setContent(e.target.value);
                                 }}
                                 color="primary"
                                 name="content"
-                                value
                               />
                             }
                             label={val.activity}
@@ -345,6 +338,7 @@ export const ActivitiesIntro = () => {
                   <div className="msg-field">
                     <TextField
                       id="outlined-basic"
+                      name="otherActivity"
                       variant="outlined"
                       label="Other Activities"
                       row={2}
@@ -354,6 +348,7 @@ export const ActivitiesIntro = () => {
                       multiline={true}
                       rowsMax="8"
                       onChange={(e) => {
+                        handleTextField(e);
                         setOtherActivity(e.target.value);
                       }}
                     />
@@ -379,22 +374,26 @@ export const ActivitiesIntro = () => {
           </Modal.Header>
           <Modal.Body>
             <h3>Available exercises</h3>
-            {questionBank.map((q) => {
-              return (
-                <FormControlLabel
-                  value={q.question}
-                  control={
-                    <Checkbox
-                      color="primary"
-                      name="exercises"
-                      onChange={handleClick}
+            {!questionBank
+              ? ""
+              : questionBank.map((q) => {
+                  return (
+                    <FormControlLabel
+                      value={q._id}
+                      control={
+                        <Checkbox
+                          color="primary"
+                          name="exercises"
+                          onChange={(e) => {
+                            handleQuestionClick(e);
+                          }}
+                        />
+                      }
+                      label={q.question}
+                      labelPlacement="end"
                     />
-                  }
-                  label={q.question}
-                  labelPlacement="end"
-                />
-              );
-            })}
+                  );
+                })}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -424,7 +423,10 @@ export const ActivitiesIntro = () => {
                           <Checkbox
                             color="primary"
                             name="crossCuttingIssues"
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              handleChange(e);
+                              setCrossCuttingIssues(e.target.value);
+                            }}
                           />
                         }
                         label={val.issue}
@@ -436,6 +438,7 @@ export const ActivitiesIntro = () => {
                   <div className="msg-field">
                     <TextField
                       id="outlined-basic"
+                      name="crossCuttingIssues"
                       variant="outlined"
                       label="Comment"
                       row={2}
@@ -445,6 +448,7 @@ export const ActivitiesIntro = () => {
                       multiline={true}
                       rowsMax="8"
                       onChange={(e) => {
+                        handleTextField(e);
                         setIssueComment(e.target.value);
                       }}
                     />
@@ -473,7 +477,10 @@ export const ActivitiesIntro = () => {
                         value={val.competency}
                         control={
                           <Checkbox
-                            onChange={handleChange}
+                            onChange={(e) => {
+                              handleChange(e);
+                              setCompetency(e.target.value);
+                            }}
                             color="primary"
                             name="competency"
                           />
@@ -487,6 +494,7 @@ export const ActivitiesIntro = () => {
                   <div className="msg-field">
                     <TextField
                       id="outlined-basic"
+                      name="competency"
                       variant="outlined"
                       label="Comment"
                       row={2}
@@ -496,6 +504,7 @@ export const ActivitiesIntro = () => {
                       multiline={true}
                       rowsMax="8"
                       onChange={(e) => {
+                        handleTextField(e);
                         setCompetencyComment(e.target.value);
                       }}
                     />
@@ -513,8 +522,11 @@ export const ActivitiesIntro = () => {
 const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => {
-  return{
-  setNewLessonplan: (newLessonPlan) => dispatch(setNewLessonplan(newLessonPlan))}
+  // console.log("dispatch");
+  // return {
+  //   setNewLessonplan: (newLessonPlan) =>
+  //     dispatch(setNewLessonplan(newLessonPlan)),
+  // };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivitiesIntro);

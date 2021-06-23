@@ -58,11 +58,7 @@ const initialState = {
   activities: {
     introduction: {
       content: {
-        activities: [
-          {
-            activity: null,
-          },
-        ],
+        activities: [],
         otherActivity: "",
       },
       crossCuttingIssues: {
@@ -80,6 +76,9 @@ const initialState = {
           },
         ],
         comment: null,
+      },
+      exercises: {
+        questions: [{}],
       },
     },
     development: {
@@ -107,6 +106,9 @@ const initialState = {
         ],
         comment: null,
       },
+      exercises: {
+        questions: [{}],
+      },
     },
     conclusion: {
       content: {
@@ -133,153 +135,62 @@ const initialState = {
         ],
         comment: null,
       },
-    },
-
-    exercises: {
-      questions: [
-        {
-          difficultLevel: "MEDIUM",
-          questionsObjective: "REMEMBERING",
-          question: "What is the answer",
-          questionType: "MULTI-CHOICE",
-          possibleAnswer: [
-            {
-              answer: "answer",
-            },
-            {
-              answer: "answer2",
-            },
-            {
-              answer: "answer3",
-            },
-          ],
-          answers: [
-            {
-              answer: "answer2",
-            },
-            {
-              answer: "answer3",
-            },
-          ],
-          points: 10,
-        },
-      ],
+      exercises: {
+        questions: [{}],
+      },
     },
   },
   teachingTechniques: {
     introduction: {
       contentFocus: [
-        {
-          item: "LIVE-LECTURING",
-        },
       ],
       interactiveFocus: [
-        {
-          item: "GROUP-WORK",
-        },
       ],
       criticalThinking: [
-        {
-          item: "CLASS-DISCUSSIONS-DEBATES",
-        },
       ],
       production: [
-        {
-          item: "SKILLS-PRACTICE",
-        },
       ],
       problemSolving: [
-        {
-          item: "RESEARCH-INQUIRY",
-        },
       ],
       reflection: [
-        {
-          item: "REFLECTION-ON-LEARNING",
-        },
       ],
       sitingArrangement: [
-        {
-          item: "LECTURE/INDEPENDENT-WORK/TEST",
-        },
       ],
-      duration: 10,
+      duration: 0,
     },
     development: {
       contentFocus: [
-        {
-          item: "LIVE-LECTURING",
-        },
       ],
       interactiveFocus: [
-        {
-          item: "GROUP-WORK",
-        },
       ],
       criticalThinking: [
-        {
-          item: "CLASS-DISCUSSIONS-DEBATES",
-        },
       ],
       production: [
-        {
-          item: "SKILLS-PRACTICE",
-        },
       ],
       problemSolving: [
-        {
-          item: "RESEARCH-INQUIRY",
-        },
       ],
       reflection: [
-        {
-          item: "REFLECTION-ON-LEARNING",
-        },
       ],
       sitingArrangement: [
-        {
-          item: "LECTURE/INDEPENDENT-WORK/TEST",
-        },
       ],
-      duration: 10,
+      duration: 0,
     },
     conclusion: {
       contentFocus: [
-        {
-          item: "LIVE-LECTURING",
-        },
       ],
       interactiveFocus: [
-        {
-          item: "GROUP-WORK",
-        },
       ],
       criticalThinking: [
-        {
-          item: "CLASS-DISCUSSIONS-DEBATES",
-        },
       ],
       production: [
-        {
-          item: "SKILLS-PRACTICE",
-        },
       ],
       problemSolving: [
-        {
-          item: "RESEARCH-INQUIRY",
-        },
       ],
       reflection: [
-        {
-          item: "REFLECTION-ON-LEARNING",
-        },
       ],
       sitingArrangement: [
-        {
-          item: "LECTURE/INDEPENDENT-WORK/TEST",
-        },
       ],
-      duration: 10,
+      duration: 0,
     },
   },
   time: {

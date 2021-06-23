@@ -215,7 +215,7 @@ export const SkillsForm = (props) => {
   return (
     <>
       <div className="knowledge-container">
-        <h5>Instructional Object</h5>
+        <p></p>
         {inputsSkills.map((input) => (
           <>
             <div className="knowledge-container-2">

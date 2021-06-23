@@ -14,6 +14,7 @@ import { useForm, useStep } from "react-hooks-helper";
 import { LessonPlan_start } from "./stepForm/LessonPlan_start";
 import { LessonPlan_2 } from "./stepForm/LessonPlan_2";
 import { LessonPlan_3 } from "./stepForm/LessonPlan_3";
+import { LessonPlan_4 } from "./stepForm/LessonPlan_4";
 import { Review } from "./stepForm/Review";
 import { Submit } from "./stepForm/Submit";
 
@@ -104,6 +105,9 @@ const defaultData = {
         ],
         comment: null,
       },
+      exercises: {
+        questions: [],
+      },
     },
     development: {
       content: {
@@ -129,6 +133,9 @@ const defaultData = {
           },
         ],
         comment: null,
+      },
+      exercises: {
+        questions: [],
       },
     },
     conclusion: {
@@ -156,37 +163,9 @@ const defaultData = {
         ],
         comment: null,
       },
-    },
-
-    exercises: {
-      questions: [
-        {
-          difficultLevel: "MEDIUM",
-          questionsObjective: "REMEMBERING",
-          question: "What is the answer",
-          questionType: "MULTI-CHOICE",
-          possibleAnswer: [
-            {
-              answer: "answer",
-            },
-            {
-              answer: "answer2",
-            },
-            {
-              answer: "answer3",
-            },
-          ],
-          answers: [
-            {
-              answer: "answer2",
-            },
-            {
-              answer: "answer3",
-            },
-          ],
-          points: 10,
-        },
-      ],
+      exercises: {
+        questions: [],
+      },
     },
   },
   teachingTechniques: {
@@ -327,6 +306,7 @@ const steps = [
   { id: "names" },
   { id: "LessonPlan_2" },
   { id: "LessonPlan_3" },
+  { id: "LessonPlan_4" },
   { id: "review" },
   { id: "submit" },
 ];
@@ -348,6 +328,8 @@ function NewLessonPlan() {
         return <LessonPlan_2 {...props} />;
       case "LessonPlan_3":
         return <LessonPlan_3 {...props} />;
+      case "LessonPlan_4":
+        return <LessonPlan_4 {...props} />;
       case "review":
         return <Review {...props} />;
       case "submit":

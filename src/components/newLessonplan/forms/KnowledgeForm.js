@@ -215,7 +215,8 @@ export const KnowledgeForm = (props) => {
   return (
     <>
       <div className="knowledge-container">
-        <h5>Instructional Object</h5>
+        {/* <h5>Instructional Object</h5> */}
+        <p></p>
         {inputsKnowledge.map((input) => (
           <>
             <div className="knowledge-container-2">

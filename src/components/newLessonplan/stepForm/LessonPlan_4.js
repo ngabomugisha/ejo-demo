@@ -17,9 +17,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
-import { ActivitiesIntro } from "../forms/ActivitiesIntro";
-import { ActivitiesDev } from "../forms/ActivitiesDev";
-import { ActivitiesConc } from "../forms/ActivitiesConc";
+import { TechniquesIntro } from "../forms/TechniquesIntro";
+import { TechniquesDev } from "../forms/TechniquesDev";
+import { TechniquesConc } from "../forms/TechniquesConc";
 import { useSelector, useDispatch } from "react-redux";
 import { setNewLessonplan } from "../../../store/actions/newLessonPlan.actions";
 
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
+export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
   const { newLessonPlan } = useSelector((state) => state);
   const dispatchLesson = useDispatch();
   const [key, setKey] = React.useState("activitiesIntro");
@@ -58,7 +58,7 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
   return (
     <Container maxWidth="xs">
       <div className="slide3-container">
-        <h5>Learning Activities</h5>
+        <h5>Teaching Techniques</h5>
         <Tabs
           fill={true}
           id="controlled-tab-example"
@@ -66,19 +66,19 @@ export const LessonPlan_3 = ({ formData, setForm, navigation }) => {
           onSelect={(k) => setKey(k)}
         >
           <Tab eventKey="activitiesIntro" title="Introduction" fill={true}>
-            <ActivitiesIntro newLessonPlan={newLessonPlan} />
+            <TechniquesIntro newLessonPlan={newLessonPlan} />
             <Button block onClick={moveToNext}>
               Next
             </Button>
           </Tab>
           <Tab eventKey="activitiesDev" title="Development" fill={true}>
-            <ActivitiesDev newLessonPlan={newLessonPlan} />
+            <TechniquesDev newLessonPlan={newLessonPlan} />
             <Button block onClick={moveToNext}>
               Next
             </Button>
           </Tab>
           <Tab eventKey="activitiesConc" title="Conclusion" fill={true}>
-            <ActivitiesConc newLessonPlan={newLessonPlan} />
+            <TechniquesConc newLessonPlan={newLessonPlan} />
           </Tab>
         </Tabs>
       </div>
