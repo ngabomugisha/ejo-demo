@@ -11,38 +11,42 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
+import { useSelector } from "react-redux";
 
 export const Review = ({ formData, navigation }) => {
-  console.log("FORM DATA, ", formData);
-  const { go } = navigation;
-  const [alertMsg, setAlertMsg] = useState("");
-  const {
-    firstName,
-    lastName,
-    nickName,
-    address,
-    city,
-    state,
-    zip,
-    phone,
-    email,
-  } = formData;
-  // const onSubmit = async () => {
-  //   await https
-  //     .post("/lessonplan/", data, {
-  //       headers: { Authorization: `Basic ${localStorage.token}` },
-  //     })
-  //     .then((res) => {
-  //       if (res.status == 200) {
-  //         setAlertMsg("lesson paln submitted");
-  //         setOpen(true);
-  //       } else return alert("something went wrong");
-  //     });
-  // };
+	console.log("FORM DATA, ", formData);
+	const { go } = navigation;
+	const { newLessonPlan } = useSelector((state) => state);
+	const [alertMsg, setAlertMsg] = useState("");
+	const {
+		firstName,
+		lastName,
+		nickName,
+		address,
+		city,
+		state,
+		zip,
+		phone,
+		email,
+	} = formData;
+	const onSubmit = async () => {
+		await https
+			.post("/lessons/plans", newLessonPlan, {
+				headers: { Authorization: `Basic ${localStorage.token}` },
+			})
+			.then((res) => {
+				if (res.status == 200) {
+					console.log("submitted");
+					setAlertMsg("lesson paln submitted");
+					//setOpen(true);
+				} else return alert("something went wrong");
+			});
+	};
 
-  return (
-    <Container maxWidth="sm">
-      {/* <h3>Review</h3>
+	return (
+		<Container maxWidth="sm">
+			{console.log(newLessonPlan)}
+			{/* <h3>Review</h3>
       <RenderAccordion summary="Names" go={ go } details={[
         { 'First Name': firstName },
         { 'Last Name': lastName },
@@ -59,42 +63,45 @@ export const Review = ({ formData, navigation }) => {
         { 'Email': email },
       ]} /> */}
 
-      <h3>Ready to submit </h3>
-      <Button
-        color="primary"
-        variant="contained"
-        style={{ marginTop: "1.5rem" }}
-        onClick={() => go("submit")}
-      >
-        Submit
-      </Button>
-    </Container>
-  );
+			<h3>Ready to submit </h3>
+			<Button
+				color="primary"
+				variant="contained"
+				style={{ marginTop: "1.5rem" }}
+				onClick={() => {
+					onSubmit();
+					go("submit");
+				}}
+			>
+				Submit
+			</Button>
+		</Container>
+	);
 };
 
 export const RenderAccordion = ({ summary, details, go }) => (
-  <Accordion>
-    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-      {summary}
-    </AccordionSummary>
-    <AccordionDetail>
-      <div>
-        {details.map((data, index) => {
-          const objKey = Object.keys(data)[0];
-          const objValue = data[Object.keys(data)[0]];
+	<Accordion>
+		<AccordionSummary expandIcon={<ExpandMoreIcon />}>
+			{summary}
+		</AccordionSummary>
+		<AccordionDetail>
+			<div>
+				{details.map((data, index) => {
+					const objKey = Object.keys(data)[0];
+					const objValue = data[Object.keys(data)[0]];
 
-          return (
-            <ListItemText key={index}>{`${objKey}: ${objValue}`}</ListItemText>
-          );
-        })}
-        <IconButton
-          color="primary"
-          component="span"
-          onClick={() => go(`${summary.toLowerCase()}`)}
-        >
-          <EditIcon />
-        </IconButton>
-      </div>
-    </AccordionDetail>
-  </Accordion>
+					return (
+						<ListItemText key={index}>{`${objKey}: ${objValue}`}</ListItemText>
+					);
+				})}
+				<IconButton
+					color="primary"
+					component="span"
+					onClick={() => go(`${summary.toLowerCase()}`)}
+				>
+					<EditIcon />
+				</IconButton>
+			</div>
+		</AccordionDetail>
+	</Accordion>
 );

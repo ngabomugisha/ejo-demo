@@ -24,73 +24,73 @@ import { useSelector, useDispatch } from "react-redux";
 import { setNewLessonplan } from "../../../store/actions/newLessonPlan.actions";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-  withoutLabel: {
-    marginTop: theme.spacing(3),
-  },
-  textField: {
-    width: "25ch",
-  },
-  input: {
-    display: "none",
-  },
+	root: {
+		display: "flex",
+		flexWrap: "wrap",
+		"& > *": {
+			margin: theme.spacing(1),
+		},
+	},
+	margin: {
+		margin: theme.spacing(1),
+	},
+	withoutLabel: {
+		marginTop: theme.spacing(3),
+	},
+	textField: {
+		width: "25ch",
+	},
+	input: {
+		display: "none",
+	},
 }));
 
 export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
-  const { newLessonPlan } = useSelector((state) => state);
-  const dispatchLesson = useDispatch();
-  const [key, setKey] = React.useState("activitiesIntro");
+	const { newLessonPlan } = useSelector((state) => state);
+	const dispatchLesson = useDispatch();
+	const [key, setKey] = React.useState("techniquesIntro");
 
-  const moveToNext = () => {
-    if (key === "activitiesIntro") setKey("activitiesDev");
-    else if (key === "activitiesDev") setKey("activitiesConc");
-  };
+	const moveToNext = () => {
+		if (key === "techniquesIntro") setKey("techniquesDev");
+		else if (key === "techniquesDev") setKey("techniquesConc");
+	};
 
-  return (
-    <Container maxWidth="xs">
-      <div className="slide3-container">
-        <h5>Teaching Techniques</h5>
-        <Tabs
-          fill={true}
-          id="controlled-tab-example"
-          activeKey={key}
-          onSelect={(k) => setKey(k)}
-        >
-          <Tab eventKey="activitiesIntro" title="Introduction" fill={true}>
-            <TechniquesIntro newLessonPlan={newLessonPlan} />
-            <Button block onClick={moveToNext}>
-              Next
-            </Button>
-          </Tab>
-          <Tab eventKey="activitiesDev" title="Development" fill={true}>
-            <TechniquesDev newLessonPlan={newLessonPlan} />
-            <Button block onClick={moveToNext}>
-              Next
-            </Button>
-          </Tab>
-          <Tab eventKey="activitiesConc" title="Conclusion" fill={true}>
-            <TechniquesConc newLessonPlan={newLessonPlan} />
-          </Tab>
-        </Tabs>
-      </div>
-      <div style={{ marginTop: "1rem" }}>
-        {key === "activitiesConc" ? (
-          <Button block onClick={() => navigation.next()}>
-            Next
-          </Button>
-        ) : (
-          ""
-        )}
-      </div>
-    </Container>
-  );
+	return (
+		<Container maxWidth="xs">
+			<div className="slide3-container">
+				<h5>Teaching Techniques</h5>
+				<Tabs
+					fill={true}
+					id="controlled-tab-example"
+					activeKey={key}
+					onSelect={(k) => setKey(k)}
+				>
+					<Tab eventKey="techniquesIntro" title="Introduction" fill={true}>
+						<TechniquesIntro newLessonPlan={newLessonPlan} />
+						<Button block onClick={moveToNext}>
+							Next
+						</Button>
+					</Tab>
+					<Tab eventKey="techniquesDev" title="Development" fill={true}>
+						<TechniquesDev newLessonPlan={newLessonPlan} />
+						<Button block onClick={moveToNext}>
+							Next
+						</Button>
+					</Tab>
+					<Tab eventKey="techniquesConc" title="Conclusion" fill={true}>
+						<TechniquesConc newLessonPlan={newLessonPlan} />
+					</Tab>
+				</Tabs>
+			</div>
+			<div style={{ marginTop: "1rem" }}>
+				{key === "techniquesConc" ? (
+					<Button block onClick={() => navigation.next()}>
+						Next
+					</Button>
+				) : (
+					""
+				)}
+			</div>
+		</Container>
+	);
 };
