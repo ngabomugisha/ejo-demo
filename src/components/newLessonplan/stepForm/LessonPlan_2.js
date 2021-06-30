@@ -28,118 +28,118 @@ import { SkillsForm } from "../forms/SkillsForm";
 import { AttitudeForm } from "../forms/AttitudeAndValuesForm";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-  withoutLabel: {
-    marginTop: theme.spacing(3),
-  },
-  textField: {
-    width: "25ch",
-  },
-  input: {
-    display: "none",
-  },
-  select: {
-    backgroundColor: "#ff0",
-  },
+	root: {
+		display: "flex",
+		flexWrap: "wrap",
+		"& > *": {
+			margin: theme.spacing(1),
+		},
+	},
+	margin: {
+		margin: theme.spacing(1),
+	},
+	withoutLabel: {
+		marginTop: theme.spacing(3),
+	},
+	textField: {
+		width: "25ch",
+	},
+	input: {
+		display: "none",
+	},
+	select: {
+		backgroundColor: "#ff0",
+	},
 }));
 
 export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
-  const classes = useStyles();
-  const [choosenMaterial, setChoosenMaterial] = useState(null);
-  const [img, setImg] = useState(null);
-  const [knowledgePage, setKnowledgePage] = useState({});
-  const datagetter = { knowledgePage, setKnowledgePage };
+	const classes = useStyles();
+	const [choosenMaterial, setChoosenMaterial] = useState(null);
+	const [img, setImg] = useState(null);
+	const [knowledgePage, setKnowledgePage] = useState({});
+	const datagetter = { knowledgePage, setKnowledgePage };
 
-  const [key, setKey] = useState("knowledge");
-  const [units, setUnits] = useState(null);
-  const [term, setTerm] = React.useState("");
-  const [checked, setChecked] = React.useState(true);
-  const { knowledge, topics, instructionalMaterial, otherMaterialsReferences } =
-    formData;
+	const [key, setKey] = useState("knowledge");
+	const [units, setUnits] = useState(null);
+	const [term, setTerm] = React.useState("");
+	const [checked, setChecked] = React.useState(true);
+	const { knowledge, topics, instructionalMaterial, otherMaterialsReferences } =
+		formData;
 
-  const imgSetter = (ob) => {
-    setImg(ob);
-  };
+	const imgSetter = (ob) => {
+		setImg(ob);
+	};
 
-  const moveToNext = () => {
-    if (key === "knowledge") setKey("skills");
-    else if (key === "skills") setKey("attitudeAndValue");
-  };
+	const moveToNext = () => {
+		if (key === "knowledge") setKey("skills");
+		else if (key === "skills") setKey("attitudeAndValue");
+	};
 
-  useEffect(() => {
-    async function fetchUnit() {
-      const req = await https
-        .get(`/lessons/unit-plans/${formData.unit}`, {
-          headers: { Authorization: `Basic ${localStorage.token}` },
-        })
-        .then((res) => {
-          setUnits(res.data.content.knowledgeAndUnderstanding);
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-      return req;
-    }
-    fetchUnit();
-  }, []);
-  useEffect(() => {
-    console.log("[[[[[[[[[[[[", formData, "]]]]]]]]]]]]]");
-  }, [formData]);
-  return (
-    <Container maxWidth="xs">
-      <h5>Instructional Objectives</h5>
-      <Tabs
-        fill={true}
-        id="controlled-tab-example"
-        activeKey={key}
-        onSelect={(k) => setKey(k)}
-      >
-        <Tab eventKey="knowledge" title="Knowledge" fill={true}>
-          <KnowledgeForm
-            formData={formData}
-            setForm={setForm}
-            navigation={navigation}
-            {...datagetter}
-          />
-          <Button block onClick={moveToNext}>
-            Next
-          </Button>
-        </Tab>
-        <Tab eventKey="skills" title="Skills" fill={true}>
-          <div className="knowledge-container">
-            <SkillsForm
-              formData={formData}
-              setForm={setForm}
-              navigation={navigation}
-              {...datagetter}
-            />
-            <Button block onClick={moveToNext}>
-              Next
-            </Button>
-          </div>
-        </Tab>
-        <Tab eventKey="attitudeAndValue" title="Attitude and Value" fill={true}>
-          <div className="knowledge-container">
-            <AttitudeForm
-              formData={formData}
-              setForm={setForm}
-              navigation={navigation}
-              {...datagetter}
-            />
-          </div>
-        </Tab>
-      </Tabs>
-      <div style={{ marginTop: "1rem" }}>
-        {/* <Button
+	useEffect(() => {
+		async function fetchUnit() {
+			const req = await https
+				.get(`/lessons/unit-plans/${formData.unit}`, {
+					headers: { Authorization: `Basic ${localStorage.token}` },
+				})
+				.then((res) => {
+					setUnits(res.data.content.knowledgeAndUnderstanding);
+				})
+				.catch(function (err) {
+					console.log(err);
+				});
+			return req;
+		}
+		fetchUnit();
+	}, []);
+	useEffect(() => {
+		console.log("[[[[[[[[[[[[", formData, "]]]]]]]]]]]]]");
+	}, [formData]);
+	return (
+		<Container maxWidth="xs">
+			<h5>Instructional Objectives</h5>
+			<Tabs
+				fill={true}
+				id="controlled-tab-example"
+				activeKey={key}
+				onSelect={(k) => setKey(k)}
+			>
+				<Tab eventKey="knowledge" title="Knowledge" fill={true}>
+					<KnowledgeForm
+						formData={formData}
+						setForm={setForm}
+						navigation={navigation}
+						{...datagetter}
+					/>
+					<Button block onClick={moveToNext}>
+						Next
+					</Button>
+				</Tab>
+				<Tab eventKey="skills" title="Skills" fill={true}>
+					<div className="knowledge-container">
+						<SkillsForm
+							formData={formData}
+							setForm={setForm}
+							navigation={navigation}
+							{...datagetter}
+						/>
+						<Button block onClick={moveToNext}>
+							Next
+						</Button>
+					</div>
+				</Tab>
+				<Tab eventKey="attitudeAndValue" title="Attitude and Value" fill={true}>
+					<div className="knowledge-container">
+						<AttitudeForm
+							formData={formData}
+							setForm={setForm}
+							navigation={navigation}
+							{...datagetter}
+						/>
+					</div>
+				</Tab>
+			</Tabs>
+			<div style={{ marginTop: "1rem" }}>
+				{/* <Button
           color="secondary"
           variant="contained"
           style={{ marginRight: "1rem" }}
@@ -147,14 +147,14 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
         >
           Back
         </Button> */}
-        {key == "attitudeAndValue" ? (
-          <Button block onClick={() => navigation.next()}>
-            Next
-          </Button>
-        ) : (
-          ""
-        )}
-      </div>
-    </Container>
-  );
+				{key == "attitudeAndValue" ? (
+					<Button block onClick={() => navigation.next()}>
+						Next
+					</Button>
+				) : (
+					""
+				)}
+			</div>
+		</Container>
+	);
 };

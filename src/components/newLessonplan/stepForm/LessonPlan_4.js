@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
 	const { newLessonPlan } = useSelector((state) => state);
+	console.log("LAST STEP DATA:", newLessonPlan);
 	const dispatchLesson = useDispatch();
 	const [key, setKey] = React.useState("techniquesIntro");
 

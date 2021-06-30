@@ -25,265 +25,146 @@ const useStyles = makeStyles({
 });
 
 const defaultData = {
+	assignedClass: null,
 	unit: null,
-	unitPlanId: null,
+	unitPlanId: "60473131fe2fc60c449b5f5b",
 	subject: null,
 	keyUnitCompetency: null,
 	lessonNumber: 0,
 	lessonName: null,
-	// knowledge: {
-	// 	topics: [],
-	// 	instructionalMaterial: [],
-	// 	otherMaterialsAndReferences: null,
-	// },
-	// skills: {
-	// 	topics: [
-	// 		{
-	// 			topic: null,
-	// 			bloomTaxonomy: null,
-	// 			standardCriteriaPerfomance: 0,
-	// 		},
-	// 	],
-	// 	instructionalMaterial: [
-	// 		{
-	// 			materialType: null,
-	// 			items: [
-	// 				{
-	// 					item: null,
-	// 				},
-	// 			],
-	// 			uploads: [{ file1: null }],
-	// 		},
-	// 	],
-	// 	otherMaterialsAndReferences: null,
-	// },
-	// attitudesAndValues: {
-	// 	topics: [
-	// 		{
-	// 			topic: null,
-	// 			bloomTaxonomy: null,
-	// 			standardCriteriaPerfomance: 80,
-	// 		},
-	// 	],
-	// 	instructionalMaterial: [
-	// 		{
-	// 			materialType: null,
-	// 			items: [
-	// 				{
-	// 					item: null,
-	// 				},
-	// 			],
-	// 			uploads: [{ file1: null }],
-	// 		},
-	// 	],
-	// 	otherMaterialsAndReferences: null,
-	// },
+	knowledge: {
+		topics: [],
+		instructionalMaterial: [],
+		otherMaterialsAndReferences: null,
+	},
+	skills: {
+		topics: [
+			{
+				topic: null,
+				bloomTaxonomy: null,
+				standardCriteriaPerfomance: 0,
+			},
+		],
+		instructionalMaterial: [
+			{
+				materialType: null,
+				items: [
+					{
+						item: null,
+					},
+				],
+				uploads: [{ file1: null }],
+			},
+		],
+		otherMaterialsAndReferences: null,
+	},
+	attitudesAndValues: {
+		topics: [
+			{
+				topic: null,
+				bloomTaxonomy: null,
+				standardCriteriaPerfomance: 80,
+			},
+		],
+		instructionalMaterial: [
+			{
+				materialType: null,
+				items: [
+					{
+						item: null,
+					},
+				],
+				uploads: [{ file1: null }],
+			},
+		],
+		otherMaterialsAndReferences: null,
+	},
 
-	// activities: {
-	// 	introduction: {
-	// 		content: {
-	// 			activities: [
-	// 				{
-	// 					activity: null,
-	// 				},
-	// 			],
-	// 			otherActivity: "",
-	// 		},
-	// 		crossCuttingIssues: {
-	// 			issues: [
-	// 				{
-	// 					issue: null,
-	// 				},
-	// 			],
-	// 			omment: null,
-	// 		},
-	// 		competency: {
-	// 			competencies: [
-	// 				{
-	// 					competency: null,
-	// 				},
-	// 			],
-	// 			comment: null,
-	// 		},
-	// 		exercises: {
-	// 			questions: [],
-	// 		},
-	// 	},
-	// 	development: {
-	// 		content: {
-	// 			activities: [
-	// 				{
-	// 					activity: null,
-	// 				},
-	// 			],
-	// 			otherActivity: "",
-	// 		},
-	// 		crossCuttingIssues: {
-	// 			issues: [
-	// 				{
-	// 					issue: null,
-	// 				},
-	// 			],
-	// 			omment: null,
-	// 		},
-	// 		competency: {
-	// 			competencies: [
-	// 				{
-	// 					competency: null,
-	// 				},
-	// 			],
-	// 			comment: null,
-	// 		},
-	// 		exercises: {
-	// 			questions: [],
-	// 		},
-	// 	},
-	// 	conclusion: {
-	// 		content: {
-	// 			activities: [
-	// 				{
-	// 					activity: null,
-	// 				},
-	// 			],
-	// 			otherActivity: "",
-	// 		},
-	// 		crossCuttingIssues: {
-	// 			issues: [
-	// 				{
-	// 					issue: null,
-	// 				},
-	// 			],
-	// 			omment: null,
-	// 		},
-	// 		competency: {
-	// 			competencies: [
-	// 				{
-	// 					competency: null,
-	// 				},
-	// 			],
-	// 			comment: null,
-	// 		},
-	// 		exercises: {
-	// 			questions: [],
-	// 		},
-	// 	},
-	// },
-	// teachingTechniques: {
-	// 	introduction: {
-	// 		contentFocus: [
-	// 			{
-	// 				item: "LIVE-LECTURING",
-	// 			},
-	// 		],
-	// 		interactiveFocus: [
-	// 			{
-	// 				item: "GROUP-WORK",
-	// 			},
-	// 		],
-	// 		criticalThinking: [
-	// 			{
-	// 				item: "CLASS-DISCUSSIONS-DEBATES",
-	// 			},
-	// 		],
-	// 		production: [
-	// 			{
-	// 				item: "SKILLS-PRACTICE",
-	// 			},
-	// 		],
-	// 		problemSolving: [
-	// 			{
-	// 				item: "RESEARCH-INQUIRY",
-	// 			},
-	// 		],
-	// 		reflection: [
-	// 			{
-	// 				item: "REFLECTION-ON-LEARNING",
-	// 			},
-	// 		],
-	// 		sitingArrangement: [
-	// 			{
-	// 				item: "LECTURE/INDEPENDENT-WORK/TEST",
-	// 			},
-	// 		],
-	// 		duration: 10,
-	// 	},
-	// 	development: {
-	// 		contentFocus: [
-	// 			{
-	// 				item: "LIVE-LECTURING",
-	// 			},
-	// 		],
-	// 		interactiveFocus: [
-	// 			{
-	// 				item: "GROUP-WORK",
-	// 			},
-	// 		],
-	// 		criticalThinking: [
-	// 			{
-	// 				item: "CLASS-DISCUSSIONS-DEBATES",
-	// 			},
-	// 		],
-	// 		production: [
-	// 			{
-	// 				item: "SKILLS-PRACTICE",
-	// 			},
-	// 		],
-	// 		problemSolving: [
-	// 			{
-	// 				item: "RESEARCH-INQUIRY",
-	// 			},
-	// 		],
-	// 		reflection: [
-	// 			{
-	// 				item: "REFLECTION-ON-LEARNING",
-	// 			},
-	// 		],
-	// 		sitingArrangement: [
-	// 			{
-	// 				item: "LECTURE/INDEPENDENT-WORK/TEST",
-	// 			},
-	// 		],
-	// 		duration: 10,
-	// 	},
-	// 	conclusion: {
-	// 		contentFocus: [
-	// 			{
-	// 				item: "LIVE-LECTURING",
-	// 			},
-	// 		],
-	// 		interactiveFocus: [
-	// 			{
-	// 				item: "GROUP-WORK",
-	// 			},
-	// 		],
-	// 		criticalThinking: [
-	// 			{
-	// 				item: "CLASS-DISCUSSIONS-DEBATES",
-	// 			},
-	// 		],
-	// 		production: [
-	// 			{
-	// 				item: "SKILLS-PRACTICE",
-	// 			},
-	// 		],
-	// 		problemSolving: [
-	// 			{
-	// 				item: "RESEARCH-INQUIRY",
-	// 			},
-	// 		],
-	// 		reflection: [
-	// 			{
-	// 				item: "REFLECTION-ON-LEARNING",
-	// 			},
-	// 		],
-	// 		sitingArrangement: [
-	// 			{
-	// 				item: "LECTURE/INDEPENDENT-WORK/TEST",
-	// 			},
-	// 		],
-	// 		duration: 10,
-	// 	},
-	// },
+	activities: {
+		introduction: {
+			content: {
+				activities: [],
+				otherActivity: null,
+			},
+			crossCuttingIssues: {
+				issues: [],
+				omment: null,
+			},
+			competency: {
+				competencies: [],
+				comment: null,
+			},
+			exercises: {
+				questions: [],
+			},
+		},
+		development: {
+			content: {
+				activities: [],
+				otherActivity: null,
+			},
+			crossCuttingIssues: {
+				issues: [],
+				omment: null,
+			},
+			competency: {
+				competencies: [],
+				comment: null,
+			},
+			exercises: {
+				questions: [],
+			},
+		},
+		conclusion: {
+			content: {
+				activities: [],
+				otherActivity: null,
+			},
+			crossCuttingIssues: {
+				issues: [],
+				omment: null,
+			},
+			competency: {
+				competencies: [],
+				comment: null,
+			},
+			exercises: {
+				questions: [],
+			},
+		},
+	},
+	teachingTechniques: {
+		introduction: {
+			contentFocus: [],
+			interactiveFocus: [],
+			criticalThinking: [],
+			production: [],
+			problemSolving: [],
+			reflection: [],
+			sitingArrangement: [],
+			duration: 10,
+		},
+		development: {
+			contentFocus: [],
+			interactiveFocus: [],
+			criticalThinking: [],
+			production: [],
+			problemSolving: [],
+			reflection: [],
+			sitingArrangement: [],
+			duration: 10,
+		},
+		conclusion: {
+			contentFocus: [],
+			interactiveFocus: [],
+			criticalThinking: [],
+			production: [],
+			problemSolving: [],
+			reflection: [],
+			sitingArrangement: [],
+			duration: 10,
+		},
+	},
 	time: {
 		day: new Date(),
 		slotOnTimetable: "603159c6191af33cdc989ff0",
@@ -312,7 +193,7 @@ const steps = [
 ];
 
 function NewLessonPlan() {
-	const { newLessonPlan } = useSelector((state) => state);
+	// const { newLessonPlan } = useSelector((state) => state);
 	const [formData, setForm] = useForm(defaultData);
 	const { step, navigation } = useStep({
 		steps,
