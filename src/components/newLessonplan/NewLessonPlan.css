@@ -1,104 +1,143 @@
-.new-lesson-container{
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-self: center;
-    justify-self: center;
-    flex-direction: column;
-    min-width: 75%;
-    max-width: 75%;
-    padding: 30px 50px 30px;
-    border-radius: 10px;
-    border: 0.4px solid #1b7dceaf;
-    margin-top: 30px;
+h5 {
+	color: #007bff;
 }
-.MuiInputBase-input{
-    color:red
+.new-lesson-container {
+	background-color: white;
+	display: flex;
+	justify-content: center;
+	align-self: center;
+	justify-self: center;
+	flex-direction: column;
+	min-width: 75%;
+	max-width: 75%;
+	padding: 30px 50px 30px;
+	border-radius: 10px;
+	border: 0.4px solid #1b7dceaf;
+	margin-top: 30px;
 }
-.btn-next{
-    float: right;
+.MuiInputBase-input {
+	color: red;
 }
-
-.ft-btn{
-    padding-top: 40px;
-    padding-bottom: 20px;
+.btn-next {
+	float: right;
 }
 
-.menu-option{
-    display: block;
-    max-width: 500px;
-    word-wrap: break-word;
-    
+.ft-btn {
+	padding-top: 40px;
+	padding-bottom: 20px;
 }
 
-.menu-option > h3{
-    display: flex;
-    white-space: pre-wrap;
-    font-size: 1rem;
+.menu-option {
+	display: block;
+	max-width: 500px;
+	word-wrap: break-word;
 }
 
+.menu-option > h3 {
+	display: flex;
+	white-space: pre-wrap;
+	font-size: 1rem;
+}
 
 .menu-option > p {
-    color : #0052cc ;
-    word-spacing: normal; 
-    margin: 0 !important;
-    font-size: 12px;
-    font-weight: 200;  
+	color: #0052cc;
+	word-spacing: normal;
+	margin: 0 !important;
+	font-size: 12px;
+	font-weight: 200;
 }
 
-.menu-option > img{
-    max-width: 250px;
+.menu-option > img {
+	max-width: 250px;
 }
 
-.delete-btn{
-    display: flex;
-    justify-content: flex-end;
+.delete-btn {
+	display: flex;
+	justify-content: flex-end;
 }
 
-.delete-btn > button{
-    border: 1px solid red;
-    border-radius: 3px;
-    padding: 10px;
-
+.delete-btn > button {
+	border: 1px solid red;
+	border-radius: 3px;
+	padding: 10px;
 }
 
-.knowledge-container-2, .knowledge-container-3{
-    border: #0052cc28 1px solid;
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 5px;
+.knowledge-container-2,
+.knowledge-container-3 {
+	border: #0052cc28 1px solid;
+	border-radius: 10px;
+	padding: 10px;
+	margin-top: 5px;
 }
 
-.accordion-title{
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
+.accordion-title {
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
 }
-.card-body > label > span{
-    color: black !important;
-    font-weight: 100 !important;
-
-}
-
-.card-body > label{
-    display: flex !important;
-    justify-content: space-between !important;
-    margin: 10px !important;
-    padding: 10px !important;
+.card-body > label > span {
+	color: black !important;
+	font-weight: 100 !important;
 }
 
-.card-body > label:hover{
-    background-color:rgba(218, 218, 218, 0.425);
+.card-body > label {
+	display: flex !important;
+	justify-content: space-between !important;
+	margin: 10px !important;
+	padding: 10px !important;
 }
 
-.forCheckBox{
-    display: flex;
-    justify-content: space-between;
+.card-body > label:hover {
+	background-color: rgba(218, 218, 218, 0.425);
 }
 
-.field{
-    margin: 25px 0px 25px;
+.forCheckBox {
+	display: flex;
+	justify-content: space-between;
 }
-.field > .MuiFormControl-root{
-    min-width: 100%;
+
+.field {
+	margin: 25px 0px 25px;
+}
+.field > .MuiFormControl-root {
+	min-width: 100%;
+}
+
+.questionWrapper {
+	min-height: 100px;
+	background-color: #eef6ff;
+	margin-bottom: 10px;
+	padding: 0 20px;
+}
+.questionLabels {
+	padding-left: 20px;
+	font-weight: 600;
+	display: inline-block;
+}
+
+.labelItem {
+	background-color: #007bff;
+	color: #ffffff;
+	padding: 0 5px;
+	margin: 5px;
+	border-radius: 5px;
+	font-size: 12px;
+}
+
+.lessonPlan {
+	display: flex;
+	justify-content: space-between;
+}
+
+.smallDiv {
+	font-weight: 500;
+}
+.rightSide {
+	display: flex;
+	justify-content: flex-end;
+	flex-direction: column;
+}
+.rightSide h5 {
+	text-decoration: underline;
+	padding-bottom: 10px;
 }
