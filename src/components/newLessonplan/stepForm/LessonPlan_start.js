@@ -160,7 +160,11 @@ export const LessonPlan_start = (props) => {
 			props.formData.assignedClass = e.target.value;
 			setSublist(classs.filter((el) => el.class._id === e.target.value));
 		}
-		if (e.target.name == "lessonNum") setLessonNum(e.target.value);
+		if (e.target.name == "lessonNum") {
+			setLessonNum(e.target.value);
+			props.formData.lessonNumber = parseInt(e.target.value);
+			console.log("number", props.formData.lessonNumber);
+		}
 	};
 
 	const handleDateChange = (date) => {

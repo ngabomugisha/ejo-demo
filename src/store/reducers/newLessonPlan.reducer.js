@@ -10,7 +10,17 @@ const initialState = {
 	lessonName: null,
 	knowledge: {
 		topics: [],
-		instructionalMaterial: [],
+		instructionalMaterial: [
+			{
+				materialType: null,
+				items: [
+					{
+						item: null,
+					},
+				],
+				uploads: [{ file1: null }],
+			},
+		],
 		otherMaterialsAndReferences: null,
 	},
 	skills: {

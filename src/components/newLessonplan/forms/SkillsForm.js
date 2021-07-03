@@ -4,9 +4,8 @@ import "../NewLessonPlan.css";
 import https from "../../../helpers/https";
 import { makeStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
-import PlusOneRoundedIcon from "@material-ui/icons/PlusOneRounded";
 import { v4 as uuidv4 } from "uuid";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { TiUpload } from "react-icons/ti";
@@ -14,6 +13,7 @@ import { Checkbox, TextField } from "@material-ui/core";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { setNewLessonplan } from "../../../store/actions/newLessonPlan.actions";
+import { FormControlLabel } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -40,147 +40,159 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export const SkillsForm = (props) => {
-	const { newLessonPlan } = useSelector((state) => state);
+const inputs = {
+	Prints: ["Textbooks", "Pamphlets", "Handouts", "Study guides", "Manuals"],
+	Audio: ["CD", "USB"],
+	Visual: ["Charts", "Real Objects", "Photographs", "Transparencies"],
+	"Audio-Visual": [
+		"Slides",
+		"Tapes",
+		"Films",
+		"Filmstrips",
+		"Television",
+		"Video",
+		"Multimedia",
+	],
+	"Electronic Interactives": [
+		"Interactives",
+		"Computers",
+		"Calculator",
+		"Tablets",
+	],
+};
+
+export const SkillsForm = () => {
+	const { newLessonPlan } = useSelector((state) => state); // get from the store
 	const dispatchLesson = useDispatch();
 	const classes = useStyles();
-	let collected = {};
-	const { formData, setForm, knowledgePage, setSkillsPage } = props;
-	const [inputsSkills, setInputsSkills] = useState([
-		{
-			id: uuidv4(),
-			topic: "",
-			bloomTaxonomyLevel: "",
-			standardCriteriaPerfomance: 0,
-		},
-	]);
-	const [uploadsSkills, setUploadsSkills] = useState([
-		{
-			id: uuidv4(),
-			materialType: "",
-			items: [],
-		},
-	]);
+
 	const [units, setUnits] = useState(null);
 	const [materialReference, setMaterialReference] = useState("");
-	const [choosenMaterial, setChoosenMaterial] = useState(null);
 	const [allData, setAllData] = useState({});
 
-	const [file, setFile] = useState({});
-	const [isSelected, setIsSelected] = useState(false);
-	const [fnames, setNames] = useState([]);
-
-	const uploadFiles = [];
-	const fileNames = [];
-
+	/**----------------------needed data will be stored here-------------------------- */
 	const thisFormData = {
 		skills: {},
 	};
 
-	const assignStatevalues = (newLessonPlan, formData) => {
-		newLessonPlan.skills = formData.skills;
+	const assignStatevalues = (newLessonPlan, thisformData) => {
+		newLessonPlan.skills = thisformData.skills;
 	};
 
-	const handleChange = (e) => {
-		if (e.target.name == "materialReference") {
-			setMaterialReference(e.target.value);
-			setAllData({ ...allData, materialReference: e.target.value });
+	/**----------------------CREATE TOPICS-------------------------------------- */
+	const [topics, setTopics] = useState([]); // array of topics
+	const [topic, setTopic] = useState("");
+	const [bloomTaxonomyLevel, setBloomTaxonomyLevel] = useState("");
+	const [standardCriteriaPerfomance, setStandardCriteriaPerfomance] =
+		useState(0);
+	const [selection, setSelection] = useState(false);
+
+	const toggleSelection = () => {
+		setSelection(!selection);
+		setTopic("");
+	};
+
+	const handleAddTopics = () => {
+		if (topic == "" || null) {
+			window.alert("enter a skill first");
+			return;
+		}
+		const topicObject = {
+			id: uuidv4(),
+			topic: topic,
+			bloomTaxonomy: bloomTaxonomyLevel,
+			standardCriteriaPerfomance: standardCriteriaPerfomance,
+		};
+		setTopic("");
+		setBloomTaxonomyLevel("");
+		setStandardCriteriaPerfomance(0);
+
+		setTopics([...topics, topicObject]);
+	};
+
+	const handleDeleteTopic = (id) => {
+		const newTopics = topics.filter((t) => t.id !== id);
+		setTopics(newTopics);
+	};
+
+	/**-------------------CREATE INSTRUCTIONAL MATERIAL---------------------------- */
+	const [instructionalMaterial, setInstructionalMaterial] = useState([]);
+	const [materialType, setMaterialType] = useState("");
+	const [items, setItems] = useState([]);
+	const [uploadFiles, setUploadFiles] = useState([]);
+
+	const handleItems = (e) => {
+		if (e.target.checked) {
+			setItems([...items, { item: e.target.value }]);
+		} else {
+			const newItems = items.filter((i) => i.item !== e.target.value);
+			setItems(newItems);
 		}
 	};
 
-	//change for knowledge fields
-	const handleChangeInputSkills = (id, event) => {
-		inputsSkills.map((i) => {
-			if (id === i.id) {
-				i[event.target.name] = event.target.value;
-			}
-			return i;
-		});
-		setAllData({ ...allData, topics: inputsSkills });
-	};
-
-	// adding and removing additional content and uploads
-	const handleChangeUploads = (id, event) => {
-		uploadsSkills.map((i) => {
-			if (id === i.id) {
-				if (event.target.name == "materialType") {
-					i[event.target.name] = event.target.value;
-				} else {
-					if (event.target.checked == true) {
-						i.items && i.items.push({ item: event.target.name });
-					} else {
-						i.items &&
-							i.items.splice(
-								i.items.findIndex((x) => x.item === event.target.name),
-								1
-							);
-					}
-				}
-			}
-			return i;
-		});
-		setAllData({ ...allData, instructionalMaterial: uploadsSkills });
-	};
-
-	const handleAddFields = () => {
-		setInputsSkills([
-			...inputsSkills,
-			{
-				id: uuidv4(),
-				topic: "",
-				bloomTaxonomyLevel: "",
-				standardCriteriaPerfomance: "",
-			},
-		]);
-	};
-
-	const handleAddFieldsUpload = () => {
-		setUploadsSkills([
-			...uploadsSkills,
-			{
-				id: uuidv4(),
-				instructionalMaterial: "",
-				uploadbtn: "",
-				items: [],
-			},
-		]);
-	};
-
-	const handleRemoveInput = (id) => {
-		const values = [...inputsSkills];
-		values.splice(
-			values.findIndex((value) => value.id === id),
-			1
-		);
-		setInputsSkills(values);
-		setAllData({ ...allData, topics: inputsSkills });
-	};
-
-	const handleRemoveInputUpload = (id) => {
-		const values = [...uploadsSkills];
-		values.splice(
-			values.findIndex((value) => value.id === id),
-			1
-		);
-		setUploadsSkills(values);
-		setAllData({ ...allData, instructionalMaterial: uploadsSkills });
-	};
-
 	const handleFileChange = (e) => {
-		setFile(e.target.files[0]);
+		console.log("skill", e.target);
 		_.forEach(e.target.files, (file) => {
-			uploadFiles.push(file);
-			fileNames.push(file.name); //console.log("filenames", fileNames);
+			setUploadFiles([...uploadFiles, file]);
 		});
-		setNames(fileNames); //console.log("filenames", names);
-		allData.instructionalMaterial.files = uploadFiles;
-		setIsSelected(true);
 	};
 
+	const handleDeleteFile = (name) => {
+		const newFiles = uploadFiles.filter((f) => f.name !== name);
+		setUploadFiles(newFiles);
+	};
+
+	const addInstructionalMaterial = () => {
+		const instructionalMaterialObject = {
+			id: uuidv4(),
+			materialType: materialType,
+			items: items,
+			files: uploadFiles,
+		};
+
+		setMaterialType("");
+		setItems([]);
+		setUploadFiles([]);
+
+		setInstructionalMaterial([
+			...instructionalMaterial,
+			instructionalMaterialObject,
+		]);
+	};
+
+	const handleDeleteMaterials = (id) => {
+		const newMaterials = instructionalMaterial.filter((m) => m.id !== id);
+		setInstructionalMaterial(newMaterials);
+	};
+
+	/**----------------------CREATE MATERIAL REFERENCE---------------------------------- */
+
+	const handleChange = (e) => {
+		setMaterialReference(e.target.value);
+	};
+
+	/**-----------------USE EFFECTS-------------------------- */
+
+	//set topics
+	useEffect(() => {
+		setAllData({ ...allData, topics });
+	}, [topics]);
+
+	//set instructional material
+	useEffect(() => {
+		setAllData({ ...allData, instructionalMaterial });
+	}, [instructionalMaterial]);
+
+	//set material reference
+	useEffect(() => {
+		setAllData({ ...allData, otherMaterialsAndReferences: materialReference });
+	}, [materialReference]);
+
+	// fetch units
 	useEffect(() => {
 		function fetchUnit() {
 			const req = https
-				.get(`/lessons/unit-plans/${formData.unit}`, {
+				.get(`/lessons/unit-plans/${newLessonPlan.unit}`, {
 					headers: { Authorization: `Basic ${localStorage.token}` },
 				})
 				.then((res) => {
@@ -194,6 +206,7 @@ export const SkillsForm = (props) => {
 		fetchUnit();
 	}, []);
 
+	// assign values and dispatch to store
 	useEffect(() => {
 		thisFormData.skills = allData;
 		assignStatevalues(newLessonPlan, thisFormData);
@@ -203,451 +216,286 @@ export const SkillsForm = (props) => {
 	return (
 		<>
 			<div className="knowledge-container">
-				{inputsSkills.map((input) => (
-					<>
-						<div className="knowledge-container-2">
-							<div className="field">
-								<TextField
-									labelId="demo-simple-select-outlined-label"
-									id="demo-simple-select-outlined"
-									value={inputsSkills.topic}
-									onChange={(e) => handleChangeInputSkills(input.id, e)}
-									label="Select Skills"
-									color="primary"
-									name="topic"
-									type="text"
-									fullWidth
-									variant="outlined"
-									select
-									InputLabelProps={{
-										shrink: true,
-									}}
-								>
-									<MenuItem value="">
-										<em>None</em>
-									</MenuItem>
-									{units &&
-										units.map((item) => (
-											<MenuItem key={item._id} value={item.topic}>
-												<div className="menu-option">
-													<h3>{item.topic}</h3>
-													<p>
-														<i>
-															{item.bloomTaxonomy &&
-																`Bloom Taxonomy :${item.bloomTaxonomy}`}
-														</i>
-													</p>
-													<p>
-														<i>
-															{item.standardCriteriaPerfomance &&
-																`Standard Criteria Perfomance :${item.standardCriteriaPerfomance}`}
-														</i>
-													</p>
-													<p>
-														<i>
-															{item.numberOftimesTaught >= 0 &&
-																`Number of times taught :${item.numberOftimesTaught}`}
-														</i>
-													</p>
-													{/* <img src={}/> */}
-													{/* <h3>{JSON.stringify(item)}</h3> */}
-													{item.files.length > 0 &&
-														item.files.map((im) => {
-															let imgurl = {
-																uri: `https://ejo-education.herokuapp.com\\${im.file}`,
-															};
-															return (
-																<img
-																	className="knowledge-img"
-																	src={imgurl.uri}
-																/>
-															);
-														})}
-													{/* {img && <img src={`${process.env.REACT_APP_API_NORMAL}/${img.file}`} />} */}
-												</div>
-											</MenuItem>
-										))}
-								</TextField>
-							</div>
-							<div className="field">
-								<TextField
-									labelId="demo-simple-select-outlined-label"
-									id="demo-simple-select-outlined"
-									value={inputsSkills.bloomTaxonomyLevel}
-									name="bloomTaxonomyLevel"
-									onChange={(e) => handleChangeInputSkills(input.id, e)}
-									label="Cognitive Domain Level"
-									type="text"
-									fullWidth
-									variant="outlined"
-									select
-									InputLabelProps={{
-										shrink: true,
-									}}
-								>
-									<MenuItem value="Skills">Skills</MenuItem>
-								</TextField>
-							</div>
-							<div className="field">
-								<TextField
-									labelId="demo-simple-select-outlined-label"
-									id="demo-simple-select-outlined"
-									name="standardCriteriaPerfomance"
-									value={
-										input.standardCriteriaPerfomance &&
-										input.standardCriteriaPerfomance
-									}
-									onChange={(e) => handleChangeInputSkills(input.id, e)}
-									label="Standard Criteria Performance"
-									type="text"
-									fullWidth
-									variant="outlined"
-									select
-									InputLabelProps={{
-										shrink: true,
-									}}
-								>
-									<MenuItem value="">
-										<em>None</em>
-									</MenuItem>
-									<MenuItem value={10}>10</MenuItem>
-									<MenuItem value={20}>20</MenuItem>
-									<MenuItem value={30}>30</MenuItem>
-									<MenuItem value={40}>40</MenuItem>
-									<MenuItem value={50}>50</MenuItem>
-									<MenuItem value={60}>60</MenuItem>
-									<MenuItem value={70}>70</MenuItem>
-									<MenuItem value={80}>80</MenuItem>
-									<MenuItem value={90}>90</MenuItem>
-									<MenuItem value={100}>100</MenuItem>
-								</TextField>
-								{/* <LinearProgress variant="determinate" value={input.standardCriteriaPerfomance} /> */}
-							</div>
-							<ProgressBar
-								now={input.standardCriteriaPerfomance}
-								label={`${input.standardCriteriaPerfomance}%`}
-							/>
-							<div className="delete-btn">
-								{inputsSkills.length > 1 ? (
-									<button
-										style={{ color: "red" }}
-										onClick={() => handleRemoveInput(input.id)}
-										className="check-btn-3"
-									>
-										<RiDeleteBin6Line />
-									</button>
-								) : (
-									""
-								)}
-							</div>
-						</div>
-					</>
-				))}
-				{/* END OF KNOWLEDGE */}
-
-				<div style={{ display: "flex", justifyContent: "space-evenly" }}>
-					<button onClick={handleAddFields} className="check-btn">
-						<PlusOneRoundedIcon />
-						<br />
-						New Skills
-					</button>
-					{/* 
-              <button className="check-btn-2">
-                <PlusOneRoundedIcon />
-              </button> */}
-				</div>
-
-				{uploadsSkills.map((input) => (
-					<>
-						<div className="knowledge-container-3">
-							<div className="topic">
-								<TextField
-									labelId="demo-simple-select-outlined-label"
-									id="demo-simple-select-outlined"
-									value={input.materialType}
-									onChange={(e) => handleChangeUploads(input.id, e)}
-									label="Instruction Material Type"
-									name="materialType"
-									type="text"
-									fullWidth
-									variant="outlined"
-									select
-									InputLabelProps={{
-										shrink: true,
-									}}
-								>
-									<MenuItem value="">
-										<em>None</em>
-									</MenuItem>
-									<MenuItem value="Prints">Prints</MenuItem>
-									<MenuItem value="Audio">Audio</MenuItem>
-									<MenuItem value="Visual">Visual</MenuItem>
-									<MenuItem value="Audio visuals">Audio visuals</MenuItem>
-									<MenuItem value="Electronic Interactives">
-										Electronic Interactives
-									</MenuItem>
-								</TextField>
-							</div>
-							{input.materialType == "Prints" ? (
-								<div>
-									<div className="forCheckBox">
-										<p>TextBooks</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="TextBooks"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Pamphlets</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Pamphlets"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Handouts</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Handouts"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Study guides</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="StudyGuides"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Manuals</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Manuals"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-								</div>
-							) : input.materialType == "Audio" ? (
-								<div>
-									<div className="forCheckBox">
-										<p>CD</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="CD"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>USB</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="USB"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-								</div>
-							) : input.materialType == "Visual" ? (
-								<div>
-									<div className="forCheckBox">
-										<p>Charts</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Charts"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Real Objects</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="realOpjects"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Photographs</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Photographs"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Transparencies</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Transparencies"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-								</div>
-							) : input.materialType == "Audio visuals" ? (
-								<div>
-									<div className="forCheckBox">
-										<p>Slides</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Slides"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Tapes</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Tapes"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Films</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Films"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Filmstrips</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Filmstrips"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Television</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Television"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Video</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Video"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Multimedia</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Multimedia"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-								</div>
-							) : input.materialType == "Electronic Interactives" ? (
-								<div>
-									<div className="forCheckBox">
-										<p>Interactives</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Interactives"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Computers</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Computers"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Calculator</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Calculator"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-									<div className="forCheckBox">
-										<p>Tablets</p>
-										<Checkbox
-											onChange={(e) => handleChangeUploads(input.id, e)}
-											name="Tablets"
-											color="primary"
-											inputProps={{ "aria-label": "secondary checkbox" }}
-										/>
-									</div>
-								</div>
-							) : (
-								""
-							)}
-							<input
-								className={classes.input}
-								id="contained-button-file"
-								multiple
-								type="file"
+				<div className="knowledge-container-2">
+					{selection == false ? (
+						<div className="field">
+							<TextField
+								labelId="demo-simple-select-outlined-label"
+								id="demo-simple-select-outlined"
+								value={topic}
 								onChange={(e) => {
-									console.log("helloooo");
-									handleFileChange(e);
+									setTopic(e.target.value);
+								}}
+								label="Add Custom Skills"
+								color="primary"
+								name="topic"
+								type="text"
+								fullWidth
+								variant="outlined"
+								InputLabelProps={{
+									shrink: true,
 								}}
 							/>
-							<label htmlFor="contained-button-file">
-								<h7>
-									<TiUpload />
-									&nbsp; Upload Content
-								</h7>
-							</label>
-							{isSelected ? (
-								<div>
-									{/* <h5>Files</h5>
-									{fnames.map((name) => ( */}
-									<p>{file.name}</p>
-									{/* ))} */}
+							<div className="toggleSelection" onClick={toggleSelection}>
+								Or select from existing objects
+							</div>
+						</div>
+					) : (
+						<div className="field">
+							<TextField
+								labelId="demo-simple-select-outlined-label"
+								id="demo-simple-select-outlined"
+								value={topic}
+								onChange={(e) => {
+									setTopic(e.target.value);
+								}}
+								label="Select A Skill"
+								color="primary"
+								name="topic"
+								type="text"
+								fullWidth
+								variant="outlined"
+								select
+								InputLabelProps={{
+									shrink: true,
+								}}
+							>
+								<MenuItem value="">
+									<em>None</em>
+								</MenuItem>
+								{units &&
+									units.map((item) => (
+										<MenuItem key={item._id} value={item.topic}>
+											<div className="menu-option">
+												<h3>{item.topic}</h3>
+												<p>
+													<i>
+														{item.bloomTaxonomy &&
+															`Bloom Taxonomy :${item.bloomTaxonomy}`}
+													</i>
+												</p>
+												<p>
+													<i>
+														{item.standardCriteriaPerfomance &&
+															`Standard Criteria Perfomance :${item.standardCriteriaPerfomance}`}
+													</i>
+												</p>
+												<p>
+													<i>
+														{item.numberOftimesTaught >= 0 &&
+															`Number of times taught :${item.numberOftimesTaught}`}
+													</i>
+												</p>
+												{item.files.length > 0 &&
+													item.files.map((im) => {
+														let imgurl = {
+															uri: `https://ejo-education.herokuapp.com\\${im.file}`,
+														};
+														return (
+															<img className="knowledge-img" src={imgurl.uri} />
+														);
+													})}
+											</div>
+										</MenuItem>
+									))}
+							</TextField>
+							<div className="toggleSelection" onClick={toggleSelection}>
+								Or add custom object
+							</div>
+						</div>
+					)}
+					<div className="field">
+						<TextField
+							labelId="demo-simple-select-outlined-label"
+							id="demo-simple-select-outlined"
+							value={bloomTaxonomyLevel}
+							name="bloomTaxonomyLevel"
+							onChange={(e) => setBloomTaxonomyLevel(e.target.value)}
+							label="Cognitive Domain Level"
+							type="text"
+							fullWidth
+							variant="outlined"
+							select
+							InputLabelProps={{
+								shrink: true,
+							}}
+						>
+							<MenuItem value="SKILLS">Skills</MenuItem>
+						</TextField>
+					</div>
+					<div className="field">
+						<TextField
+							labelId="demo-simple-select-outlined-label"
+							id="demo-simple-select-outlined"
+							name="standardCriteriaPerfomance"
+							value={standardCriteriaPerfomance}
+							onChange={(e) => setStandardCriteriaPerfomance(e.target.value)}
+							label="Standard Criteria Performance"
+							type="text"
+							fullWidth
+							variant="outlined"
+							select
+							InputLabelProps={{
+								shrink: true,
+							}}
+						>
+							<MenuItem value="">
+								<em>None</em>
+							</MenuItem>
+							<MenuItem value={10}>10</MenuItem>
+							<MenuItem value={20}>20</MenuItem>
+							<MenuItem value={30}>30</MenuItem>
+							<MenuItem value={40}>40</MenuItem>
+							<MenuItem value={50}>50</MenuItem>
+							<MenuItem value={60}>60</MenuItem>
+							<MenuItem value={70}>70</MenuItem>
+							<MenuItem value={80}>80</MenuItem>
+							<MenuItem value={90}>90</MenuItem>
+							<MenuItem value={100}>100</MenuItem>
+						</TextField>
+					</div>
+					<ProgressBar
+						now={standardCriteriaPerfomance}
+						label={`${standardCriteriaPerfomance}%`}
+					/>
+				</div>
+				{topics
+					? topics.map((topic) => {
+							return (
+								<div className="itemList">
+									<div className="itemContent">{topic.topic}</div>
+									<div>
+										<button
+											className="deleteBtn"
+											onClick={() => handleDeleteTopic(topic.id)}
+										>
+											<RiDeleteBin6Line />
+										</button>
+									</div>
 								</div>
-							) : null}
-							<div className="delete-btn">
-								{uploadsSkills.length <= 1 ? (
-									""
-								) : (
+							);
+					  })
+					: null}
+				<div style={{ display: "flex", justifyContent: "space-evenly" }}>
+					<button onClick={handleAddTopics} className="check-btn">
+						Add Skill
+					</button>
+				</div>
+
+				<div className="knowledge-container-3">
+					<div className="topic">
+						<TextField
+							labelId="demo-simple-select-outlined-label"
+							id="demo-simple-select-outlined"
+							value={materialType}
+							onChange={(e) => setMaterialType(e.target.value)}
+							label="Instruction Material Type"
+							name="materialType"
+							type="text"
+							fullWidth
+							variant="outlined"
+							select
+							InputLabelProps={{
+								shrink: true,
+							}}
+						>
+							<MenuItem value="">
+								<em>None</em>
+							</MenuItem>
+							{Object.keys(inputs).map((input) => {
+								return <MenuItem value={input}>{input}</MenuItem>;
+							})}
+						</TextField>
+					</div>
+					{materialType
+						? inputs[materialType].map((input) => {
+								return (
+									<div className="forCheckBox">
+										<FormControlLabel
+											value={input}
+											control={
+												<Checkbox
+													color="primary"
+													name="exercises"
+													onChange={handleItems}
+												/>
+											}
+											label={input}
+											labelPlacement="start"
+											style={{
+												display: "flex",
+												justifyContent: "space-between",
+											}}
+										/>
+									</div>
+								);
+						  })
+						: null}
+					<input
+						className={classes.input}
+						id="contained-button-file-2"
+						multiple
+						type="file"
+						onChange={handleFileChange}
+					/>
+					<label htmlFor="contained-button-file-2">
+						<h7>
+							<TiUpload />
+							&nbsp; Upload Content
+						</h7>
+					</label>
+					{uploadFiles ? (
+						<div>
+							{uploadFiles.map((file) => (
+								<div className="itemList">
+									<div className="fileItem">
+										<p>{file.name}</p>
+									</div>
+									<div>
+										<button
+											className="deleteFileBtn"
+											onClick={() => handleDeleteFile(file.name)}
+										>
+											<RiDeleteBin6Line />
+										</button>
+									</div>
+								</div>
+							))}
+						</div>
+					) : null}
+				</div>
+				{instructionalMaterial ? (
+					<div>
+						{instructionalMaterial.map((material) => (
+							<div className="itemList">
+								<div className="itemContent">
+									<p>{material.materialType}</p>
+									{material.items
+										? material.items.map((i) => {
+												return <p className="subParagraph">{i.item}</p>;
+										  })
+										: null}
+									{material.files
+										? material.files.map((f) => {
+												return <p className="subParagraph">{f.name}</p>;
+										  })
+										: null}
+								</div>
+								<div>
 									<button
-										style={{ color: "red" }}
-										onClick={() => handleRemoveInputUpload(input.id)}
-										className="check-btn-3"
+										onClick={() => handleDeleteMaterials(material.id)}
+										className="deleteBtn"
 									>
 										<RiDeleteBin6Line />
 									</button>
-								)}
+								</div>
 							</div>
-						</div>
-					</>
-				))}
+						))}
+					</div>
+				) : null}
+
 				<div style={{ display: "flex", justifyContent: "space-evenly" }}>
-					<button onClick={handleAddFieldsUpload} className="check-btn">
-						<PlusOneRoundedIcon />
-						<br />
+					<button onClick={addInstructionalMaterial} className="check-btn">
 						Add Instructional Material
 					</button>
 				</div>
@@ -667,8 +515,4 @@ export const SkillsForm = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SkillsForm);
+export default SkillsForm;

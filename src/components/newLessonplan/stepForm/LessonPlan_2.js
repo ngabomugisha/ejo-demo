@@ -104,12 +104,7 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 				onSelect={(k) => setKey(k)}
 			>
 				<Tab eventKey="knowledge" title="Knowledge" fill={true}>
-					<KnowledgeForm
-						formData={formData}
-						setForm={setForm}
-						navigation={navigation}
-						{...datagetter}
-					/>
+					<KnowledgeForm />
 					<Button block onClick={moveToNext}>
 						Next
 					</Button>

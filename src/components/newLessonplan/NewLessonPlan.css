@@ -141,3 +141,46 @@ h5 {
 	text-decoration: underline;
 	padding-bottom: 10px;
 }
+
+.toggleSelection {
+	cursor: pointer;
+	color: #007bff;
+	text-decoration: underline;
+}
+
+.itemList {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid lightgray;
+}
+
+.itemContent {
+	width: 85%;
+	font-weight: 600;
+}
+
+.deleteBtn {
+	background-color: transparent;
+	border: none;
+	font-size: 2.5em;
+	color: red;
+}
+
+.subParagraph {
+	font-size: 12px;
+}
+
+.fileItem {
+	width: 85%;
+	font-weight: 600;
+	font-size: 14px;
+	color: #007bff;
+}
+
+.deleteFileBtn {
+	background-color: transparent;
+	border: none;
+	color: red;
+	font-size: 1.6em;
+}
