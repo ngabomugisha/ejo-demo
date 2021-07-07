@@ -14,6 +14,8 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { setNewLessonplan } from "../../../store/actions/newLessonPlan.actions";
 import { FormControlLabel } from "@material-ui/core";
+import { Modal } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -62,7 +64,7 @@ const inputs = {
 };
 
 export const AttitudeForm = () => {
-	const { newLessonPlan } = useSelector((state) => state); // get from the store
+	const { newLessonPlan } = useSelector((state) => state); // get data from the store
 	const dispatchLesson = useDispatch();
 	const classes = useStyles();
 
@@ -80,34 +82,39 @@ export const AttitudeForm = () => {
 	};
 
 	/**----------------------CREATE TOPICS-------------------------------------- */
-	const [topics, setTopics] = useState([]); // array of topics
-	const [topic, setTopic] = useState("");
-	const [bloomTaxonomyLevel, setBloomTaxonomyLevel] = useState("");
-	const [standardCriteriaPerfomance, setStandardCriteriaPerfomance] =
-		useState(0);
-	const [selection, setSelection] = useState(false);
+	const [topics, setTopics] = useState([
+		{
+			id: uuidv4(),
+			topic: "",
+			bloomTaxonomyLevel: "",
+			standardCriteriaPerfomance: "",
+			custom: false,
+		},
+	]); // array of topics
 
-	const toggleSelection = () => {
-		setSelection(!selection);
-		setTopic("");
+	const [topic, setTopic] = useState("");
+	const handleSaveTopic = (id, e) => {
+		const { name, value } = e.target;
+		setTopic(value);
+		topics.map((input) => {
+			if (input.id === id) {
+				input[name] = value;
+				return input;
+			}
+		});
 	};
 
-	const handleAddTopics = () => {
-		if (topic == "" || null) {
-			window.alert("enter a skill first");
-			return;
-		}
-		const topicObject = {
-			id: uuidv4(),
-			topic: topic,
-			bloomTaxonomy: bloomTaxonomyLevel,
-			standardCriteriaPerfomance: standardCriteriaPerfomance,
-		};
-		setTopic("");
-		setBloomTaxonomyLevel("");
-		setStandardCriteriaPerfomance(0);
-
-		setTopics([...topics, topicObject]);
+	const handleAddTopic = () => {
+		setTopics([
+			...topics,
+			{
+				id: uuidv4(),
+				topic: "",
+				bloomTaxonomyLevel: "",
+				standardCriteriaPerfomance: "",
+				custom: false,
+			},
+		]);
 	};
 
 	const handleDeleteTopic = (id) => {
@@ -115,48 +122,108 @@ export const AttitudeForm = () => {
 		setTopics(newTopics);
 	};
 
+	/**---------------------CUSTOM KNOWLEDGE-------------------------------------- */
+	const [newTopic, setnewTopic] = useState("");
+	const [newBloomTaxonomy, setnewBloomTaxonomy] = useState("");
+	const [newStandardCriteria, setnewStandardCriteria] = useState(0);
+
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	const addNewAttitude = () => {
+		setTopics([
+			...topics,
+			{
+				id: uuidv4(),
+				topic: newTopic,
+				bloomTaxonomyLevel: newBloomTaxonomy,
+				standardCriteriaPerfomance: newStandardCriteria,
+				custom: true,
+			},
+		]);
+
+		handleClose();
+	};
+
 	/**-------------------CREATE INSTRUCTIONAL MATERIAL---------------------------- */
-	const [instructionalMaterial, setInstructionalMaterial] = useState([]);
+	const [instructionalMaterial, setInstructionalMaterial] = useState([
+		{
+			id: uuidv4(),
+			materialType: "",
+			items: [],
+			files: [],
+		},
+	]);
 	const [materialType, setMaterialType] = useState("");
 	const [items, setItems] = useState([]);
 	const [uploadFiles, setUploadFiles] = useState([]);
 
-	const handleItems = (e) => {
-		if (e.target.checked) {
-			setItems([...items, { item: e.target.value }]);
-		} else {
-			const newItems = items.filter((i) => i.item !== e.target.value);
-			setItems(newItems);
-		}
-	};
+	const handleItems = (id, e) => {
+		instructionalMaterial.map((input) => {
+			if (input.id === id) {
+				if (e.target.checked) {
+					input.items = [...input.items, { item: e.target.value }];
+				} else {
+					input.items = input.items.filter((i) => i.item !== e.target.value);
+					//setItems(newItems);
+				}
 
-	const handleFileChange = (e) => {
-		_.forEach(e.target.files, (file) => {
-			setUploadFiles([...uploadFiles, file]);
+				return input;
+			}
 		});
 	};
 
-	const handleDeleteFile = (name) => {
-		const newFiles = uploadFiles.filter((f) => f.name !== name);
-		setUploadFiles(newFiles);
+	const handleFileChange = (id, e) => {
+		const file = e.target.files[0];
+		setUploadFiles([...uploadFiles, file]);
+		console.log("SPECIAL TEST", id);
+		console.log("SPECIAL TEST", instructionalMaterial);
+
+		instructionalMaterial.map((input) => {
+			if (input.id === id) {
+				input.files = [...input.files, file];
+				return input;
+			}
+		});
+	};
+
+	const handleDeleteFile = (id, name) => {
+		instructionalMaterial.map((material) => {
+			if (material.id === id) {
+				material.files = material.files.filter((f) => f.name !== name);
+				setUploadFiles(material.files);
+				return material.files;
+			}
+		});
+	};
+
+	const handleSaveInstructionalMaterial = (id, e) => {
+		const { name, value } = e.target;
+		setMaterialType(value);
+		instructionalMaterial.map((material) => {
+			if (material.id === id) {
+				material[name] = value;
+				return material;
+			}
+		});
 	};
 
 	const addInstructionalMaterial = () => {
-		const instructionalMaterialObject = {
-			id: uuidv4(),
-			materialType: materialType,
-			items: items,
-			files: uploadFiles,
-		};
+		setInstructionalMaterial([
+			...instructionalMaterial,
+			{
+				id: uuidv4(),
+				materialType: "",
+				items: [],
+				files: [],
+			},
+		]);
 
 		setMaterialType("");
 		setItems([]);
 		setUploadFiles([]);
-
-		setInstructionalMaterial([
-			...instructionalMaterial,
-			instructionalMaterialObject,
-		]);
 	};
 
 	const handleDeleteMaterials = (id) => {
@@ -172,20 +239,20 @@ export const AttitudeForm = () => {
 
 	/**-----------------USE EFFECTS-------------------------- */
 
-	//set topics
+	//set data
 	useEffect(() => {
-		setAllData({ ...allData, topics });
-	}, [topics]);
+		setAllData({ topics, instructionalMaterial, materialReference });
+	}, [topics, instructionalMaterial, materialReference]);
 
-	//set instructional material
-	useEffect(() => {
-		setAllData({ ...allData, instructionalMaterial });
-	}, [instructionalMaterial]);
+	// //set instructional material
+	// useEffect(() => {
+	// 	setAllData({ ...allData, instructionalMaterial });
+	// }, [instructionalMaterial]);
 
-	//set material reference
-	useEffect(() => {
-		setAllData({ ...allData, otherMaterialsAndReferences: materialReference });
-	}, [materialReference]);
+	// //set material reference
+	// useEffect(() => {
+	// 	setAllData({ ...allData, otherMaterialsAndReferences: materialReference });
+	// }, [materialReference]);
 
 	// fetch units
 	useEffect(() => {
@@ -215,285 +282,389 @@ export const AttitudeForm = () => {
 	return (
 		<>
 			<div className="knowledge-container">
-				<div className="knowledge-container-2">
-					{selection == false ? (
-						<div className="field">
-							<TextField
-								labelId="demo-simple-select-outlined-label"
-								id="demo-simple-select-outlined"
-								value={topic}
-								onChange={(e) => {
-									setTopic(e.target.value);
-								}}
-								label="Add Custom Skills"
-								color="primary"
-								name="topic"
-								type="text"
-								fullWidth
-								variant="outlined"
-								InputLabelProps={{
-									shrink: true,
-								}}
-							/>
-							<div className="toggleSelection" onClick={toggleSelection}>
-								Or select from existing objects
-							</div>
-						</div>
-					) : (
-						<div className="field">
-							<TextField
-								labelId="demo-simple-select-outlined-label"
-								id="demo-simple-select-outlined"
-								value={topic}
-								onChange={(e) => {
-									setTopic(e.target.value);
-								}}
-								label="Select A Skill"
-								color="primary"
-								name="topic"
-								type="text"
-								fullWidth
-								variant="outlined"
-								select
-								InputLabelProps={{
-									shrink: true,
-								}}
-							>
-								<MenuItem value="">
-									<em>None</em>
-								</MenuItem>
-								{units &&
-									units.map((item) => (
-										<MenuItem key={item._id} value={item.topic}>
-											<div className="menu-option">
-												<h3>{item.topic}</h3>
-												<p>
-													<i>
-														{item.bloomTaxonomy &&
-															`Bloom Taxonomy :${item.bloomTaxonomy}`}
-													</i>
-												</p>
-												<p>
-													<i>
-														{item.standardCriteriaPerfomance &&
-															`Standard Criteria Perfomance :${item.standardCriteriaPerfomance}`}
-													</i>
-												</p>
-												<p>
-													<i>
-														{item.numberOftimesTaught >= 0 &&
-															`Number of times taught :${item.numberOftimesTaught}`}
-													</i>
-												</p>
-												{item.files.length > 0 &&
-													item.files.map((im) => {
-														let imgurl = {
-															uri: `https://ejo-education.herokuapp.com\\${im.file}`,
-														};
-														return (
-															<img className="knowledge-img" src={imgurl.uri} />
-														);
-													})}
-											</div>
-										</MenuItem>
-									))}
-							</TextField>
-							<div className="toggleSelection" onClick={toggleSelection}>
-								Or add custom object
-							</div>
-						</div>
-					)}
-					<div className="field">
-						<TextField
-							labelId="demo-simple-select-outlined-label"
-							id="demo-simple-select-outlined"
-							value={bloomTaxonomyLevel}
-							name="bloomTaxonomyLevel"
-							onChange={(e) => setBloomTaxonomyLevel(e.target.value)}
-							label="Cognitive Domain Level"
-							type="text"
-							fullWidth
-							variant="outlined"
-							select
-							InputLabelProps={{
-								shrink: true,
-							}}
-						>
-							<MenuItem value="ANALYSING">Analysing</MenuItem>
-							<MenuItem value="EVALUATING">Evaluating</MenuItem>
-							<MenuItem value="CREATING">Creating</MenuItem>
-						</TextField>
-					</div>
-					<div className="field">
-						<TextField
-							labelId="demo-simple-select-outlined-label"
-							id="demo-simple-select-outlined"
-							name="standardCriteriaPerfomance"
-							value={standardCriteriaPerfomance}
-							onChange={(e) => setStandardCriteriaPerfomance(e.target.value)}
-							label="Standard Criteria Performance"
-							type="text"
-							fullWidth
-							variant="outlined"
-							select
-							InputLabelProps={{
-								shrink: true,
-							}}
-						>
-							<MenuItem value="">
-								<em>None</em>
-							</MenuItem>
-							<MenuItem value={10}>10</MenuItem>
-							<MenuItem value={20}>20</MenuItem>
-							<MenuItem value={30}>30</MenuItem>
-							<MenuItem value={40}>40</MenuItem>
-							<MenuItem value={50}>50</MenuItem>
-							<MenuItem value={60}>60</MenuItem>
-							<MenuItem value={70}>70</MenuItem>
-							<MenuItem value={80}>80</MenuItem>
-							<MenuItem value={90}>90</MenuItem>
-							<MenuItem value={100}>100</MenuItem>
-						</TextField>
-					</div>
-					<ProgressBar
-						now={standardCriteriaPerfomance}
-						label={`${standardCriteriaPerfomance}%`}
-					/>
-				</div>
 				{topics
-					? topics.map((topic) => {
-							return (
-								<div className="itemList">
-									<div className="itemContent">{topic.topic}</div>
-									<div>
-										<button
-											className="deleteBtn"
-											onClick={() => handleDeleteTopic(topic.id)}
+					? topics.map((input) => (
+							<>
+								<div className="knowledge-container-2">
+									{input.custom ? (
+										<div className="field">
+											<TextField
+												labelId="demo-simple-select-outlined-label"
+												id="demo-simple-select-outlined"
+												value={input.topic}
+												onChange={(e) => {
+													handleSaveTopic(input.id, e);
+												}}
+												label="Select Attitude"
+												color="primary"
+												name="topic"
+												type="text"
+												fullWidth
+												variant="outlined"
+												InputLabelProps={{
+													shrink: true,
+												}}
+											></TextField>
+										</div>
+									) : (
+										<div className="field">
+											<TextField
+												labelId="demo-simple-select-outlined-label"
+												id="demo-simple-select-outlined"
+												value={input.topic}
+												onChange={(e) => {
+													handleSaveTopic(input.id, e);
+												}}
+												label="Select Attitude"
+												color="primary"
+												name="topic"
+												type="text"
+												fullWidth
+												variant="outlined"
+												select
+												InputLabelProps={{
+													shrink: true,
+												}}
+											>
+												<MenuItem value="">
+													<em>None</em>
+												</MenuItem>
+												{units &&
+													units.map((item) => (
+														<MenuItem key={item._id} value={item.topic}>
+															<div className="menu-option">
+																<h3>{item.topic}</h3>
+																<p>
+																	<i>
+																		{item.bloomTaxonomy &&
+																			`Bloom Taxonomy :${item.bloomTaxonomy}`}
+																	</i>
+																</p>
+																<p>
+																	<i>
+																		{item.standardCriteriaPerfomance &&
+																			`Standard Criteria Perfomance :${item.standardCriteriaPerfomance}`}
+																	</i>
+																</p>
+																<p>
+																	<i>
+																		{item.numberOftimesTaught >= 0 &&
+																			`Number of times taught :${item.numberOftimesTaught}`}
+																	</i>
+																</p>
+																{item.files.length > 0 &&
+																	item.files.map((im) => {
+																		let imgurl = {
+																			uri: `https://ejo-education.herokuapp.com\\${im.file}`,
+																		};
+																		return (
+																			<img
+																				className="knowledge-img"
+																				src={imgurl.uri}
+																			/>
+																		);
+																	})}
+															</div>
+														</MenuItem>
+													))}
+											</TextField>
+										</div>
+									)}
+
+									<div className="field">
+										<TextField
+											labelId="demo-simple-select-outlined-label"
+											id="demo-simple-select-outlined"
+											value={input.bloomTaxonomyLevel}
+											name="bloomTaxonomyLevel"
+											onChange={(e) => {
+												handleSaveTopic(input.id, e);
+											}}
+											label="Cognitive Domain Level"
+											type="text"
+											fullWidth
+											variant="outlined"
+											select
+											InputLabelProps={{
+												shrink: true,
+											}}
 										>
-											<RiDeleteBin6Line />
-										</button>
+											<MenuItem value="ANALYZING">Analyzing</MenuItem>
+											<MenuItem value="EVALUATING">Evaluating</MenuItem>
+											<MenuItem value="CREATING">Creating</MenuItem>
+										</TextField>
+									</div>
+									<div className="field">
+										<TextField
+											labelId="demo-simple-select-outlined-label"
+											id="demo-simple-select-outlined"
+											name="standardCriteriaPerfomance"
+											value={input.standardCriteriaPerfomance}
+											onChange={(e) => {
+												handleSaveTopic(input.id, e);
+											}}
+											label="Standard Criteria Performance"
+											type="text"
+											fullWidth
+											variant="outlined"
+											select
+											InputLabelProps={{
+												shrink: true,
+											}}
+										>
+											<MenuItem value="">
+												<em>None</em>
+											</MenuItem>
+											<MenuItem value={10}>10</MenuItem>
+											<MenuItem value={20}>20</MenuItem>
+											<MenuItem value={30}>30</MenuItem>
+											<MenuItem value={40}>40</MenuItem>
+											<MenuItem value={50}>50</MenuItem>
+											<MenuItem value={60}>60</MenuItem>
+											<MenuItem value={70}>70</MenuItem>
+											<MenuItem value={80}>80</MenuItem>
+											<MenuItem value={90}>90</MenuItem>
+											<MenuItem value={100}>100</MenuItem>
+										</TextField>
+									</div>
+									<ProgressBar
+										now={input.standardCriteriaPerfomance}
+										label={`${input.standardCriteriaPerfomance}%`}
+									/>
+									<div className="delete-btn">
+										{topics.length > 1 ? (
+											<button
+												style={{ color: "red" }}
+												onClick={() => handleDeleteTopic(input.id)}
+												className="check-btn-3"
+											>
+												<RiDeleteBin6Line />
+											</button>
+										) : (
+											""
+										)}
 									</div>
 								</div>
-							);
-					  })
-					: null}
+							</>
+					  ))
+					: ""}
+
 				<div style={{ display: "flex", justifyContent: "space-evenly" }}>
-					<button onClick={handleAddTopics} className="check-btn">
-						Add Skill
+					<button onClick={handleShow} className="check-btn">
+						Add Attitude
+					</button>
+					<Modal
+						show={show}
+						backdrop="static"
+						keyboard={false}
+						scrollable
+						size="lg"
+					>
+						<Modal.Header>
+							<Modal.Title id="contained-modal-title-vcenter">
+								Add Custom Attitude
+							</Modal.Title>
+						</Modal.Header>
+						<Modal.Body>
+							<div className="knowledge-container-2">
+								<div className="field">
+									<TextField
+										labelId="demo-simple-select-outlined-label"
+										id="demo-simple-select-outlined"
+										value={newTopic}
+										onChange={(e) => setnewTopic(e.target.value)}
+										label="Select Attitude"
+										color="primary"
+										name="topic"
+										type="text"
+										fullWidth
+										variant="outlined"
+										InputLabelProps={{
+											shrink: true,
+										}}
+									></TextField>
+								</div>
+
+								<div className="field">
+									<TextField
+										labelId="demo-simple-select-outlined-label"
+										id="demo-simple-select-outlined"
+										value={newBloomTaxonomy}
+										name="bloomTaxonomyLevel"
+										onChange={(e) => setnewBloomTaxonomy(e.target.value)}
+										label="Cognitive Domain Level"
+										type="text"
+										fullWidth
+										variant="outlined"
+										select
+										InputLabelProps={{
+											shrink: true,
+										}}
+									>
+										<MenuItem value="ANALYZING">Analyzing</MenuItem>
+										<MenuItem value="EVALUATING">Evaluating</MenuItem>
+										<MenuItem value="CREATING">Creating</MenuItem>
+									</TextField>
+								</div>
+
+								<div className="field">
+									<TextField
+										labelId="demo-simple-select-outlined-label"
+										id="demo-simple-select-outlined"
+										name="standardCriteriaPerfomance"
+										value={newStandardCriteria}
+										onChange={(e) => setnewStandardCriteria(e.target.value)}
+										label="Standard Criteria Performance"
+										type="text"
+										fullWidth
+										variant="outlined"
+										select
+										InputLabelProps={{
+											shrink: true,
+										}}
+									>
+										<MenuItem value="">
+											<em>None</em>
+										</MenuItem>
+										<MenuItem value={10}>10</MenuItem>
+										<MenuItem value={20}>20</MenuItem>
+										<MenuItem value={30}>30</MenuItem>
+										<MenuItem value={40}>40</MenuItem>
+										<MenuItem value={50}>50</MenuItem>
+										<MenuItem value={60}>60</MenuItem>
+										<MenuItem value={70}>70</MenuItem>
+										<MenuItem value={80}>80</MenuItem>
+										<MenuItem value={90}>90</MenuItem>
+										<MenuItem value={100}>100</MenuItem>
+									</TextField>
+								</div>
+								<ProgressBar
+									now={newStandardCriteria}
+									label={`${newStandardCriteria}%`}
+								/>
+							</div>
+						</Modal.Body>
+						<Modal.Footer>
+							<Button onClick={addNewAttitude}>Add</Button>
+							<Button onClick={handleClose}>Cancel</Button>
+						</Modal.Footer>
+					</Modal>
+					<button onClick={handleAddTopic} className="check-btn">
+						Select Attitude
 					</button>
 				</div>
 
-				<div className="knowledge-container-3">
-					<div className="topic">
-						<TextField
-							labelId="demo-simple-select-outlined-label"
-							id="demo-simple-select-outlined"
-							value={materialType}
-							onChange={(e) => setMaterialType(e.target.value)}
-							label="Instruction Material Type"
-							name="materialType"
-							type="text"
-							fullWidth
-							variant="outlined"
-							select
-							InputLabelProps={{
-								shrink: true,
-							}}
-						>
-							<MenuItem value="">
-								<em>None</em>
-							</MenuItem>
-							{Object.keys(inputs).map((input) => {
-								return <MenuItem value={input}>{input}</MenuItem>;
-							})}
-						</TextField>
-					</div>
-					{materialType
-						? inputs[materialType].map((input) => {
-								return (
-									<div className="forCheckBox">
-										<FormControlLabel
-											value={input}
-											control={
-												<Checkbox
-													color="primary"
-													name="exercises"
-													onChange={handleItems}
-												/>
+				{instructionalMaterial
+					? instructionalMaterial.map((material) => (
+							<>
+								<div className="knowledge-container-3">
+									<div className="topic">
+										<TextField
+											labelId="demo-simple-select-outlined-label"
+											id="demo-simple-select-outlined"
+											value={material.materialType}
+											onChange={(e) =>
+												handleSaveInstructionalMaterial(material.id, e)
 											}
-											label={input}
-											labelPlacement="start"
-											style={{
-												display: "flex",
-												justifyContent: "space-between",
+											label="Instruction Material Type"
+											name="materialType"
+											type="text"
+											fullWidth
+											variant="outlined"
+											select
+											InputLabelProps={{
+												shrink: true,
 											}}
-										/>
-									</div>
-								);
-						  })
-						: null}
-					<input
-						className={classes.input}
-						id="contained-button-file-3"
-						multiple
-						type="file"
-						onChange={handleFileChange}
-					/>
-					<label htmlFor="contained-button-file-3">
-						<h7>
-							<TiUpload />
-							&nbsp; Upload Content
-						</h7>
-					</label>
-					{uploadFiles ? (
-						<div>
-							{uploadFiles.map((file) => (
-								<div className="itemList">
-									<div className="fileItem">
-										<p>{file.name}</p>
-									</div>
-									<div>
-										<button
-											className="deleteFileBtn"
-											onClick={() => handleDeleteFile(file.name)}
 										>
-											<RiDeleteBin6Line />
-										</button>
+											<MenuItem value="">
+												<em>None</em>
+											</MenuItem>
+											{Object.keys(inputs).map((input) => {
+												return <MenuItem value={input}>{input}</MenuItem>;
+											})}
+										</TextField>
+									</div>
+									{material.materialType
+										? inputs[material.materialType].map((input) => {
+												return (
+													<div className="forCheckBox">
+														<FormControlLabel
+															value={input}
+															control={
+																<Checkbox
+																	color="primary"
+																	name="exercises"
+																	onChange={(e) => handleItems(material.id, e)}
+																/>
+															}
+															label={input}
+															labelPlacement="start"
+															style={{
+																display: "flex",
+																justifyContent: "space-between",
+															}}
+														/>
+													</div>
+												);
+										  })
+										: null}
+									<div>
+										<input
+											className={classes.input}
+											id={`contained-button-file${material.id}`}
+											onChange={(e) => {
+												console.log("si ngiyi", material.id);
+												handleFileChange(material.id, e);
+											}}
+											type="file"
+										/>
+										<label htmlFor={`contained-button-file${material.id}`}>
+											<h7>
+												<TiUpload />
+												&nbsp; Upload Content
+											</h7>
+										</label>
+									</div>
+
+									{material.files ? (
+										<div>
+											{console.log("we got some files", material.files)}
+											{material.files.map((file) => (
+												<div className="itemList">
+													<div className="fileItem">
+														<p>{file.name}</p>
+													</div>
+													<div>
+														<button
+															className="deleteFileBtn"
+															onClick={() =>
+																handleDeleteFile(material.id, file.name)
+															}
+														>
+															<RiDeleteBin6Line />
+														</button>
+													</div>
+												</div>
+											))}
+										</div>
+									) : null}
+									<div className="delete-btn">
+										{instructionalMaterial.length > 1 ? (
+											<button
+												style={{ color: "red" }}
+												onClick={() => handleDeleteMaterials(material.id)}
+												className="check-btn-3"
+											>
+												<RiDeleteBin6Line />
+											</button>
+										) : (
+											""
+										)}
 									</div>
 								</div>
-							))}
-						</div>
-					) : null}
-				</div>
-				{instructionalMaterial ? (
-					<div>
-						{instructionalMaterial.map((material) => (
-							<div className="itemList">
-								<div className="itemContent">
-									<p>{material.materialType}</p>
-									{material.items
-										? material.items.map((i) => {
-												return <p className="subParagraph">{i.item}</p>;
-										  })
-										: null}
-									{material.files
-										? material.files.map((f) => {
-												return <p className="subParagraph">{f.name}</p>;
-										  })
-										: null}
-								</div>
-								<div>
-									<button
-										onClick={() => handleDeleteMaterials(material.id)}
-										className="deleteBtn"
-									>
-										<RiDeleteBin6Line />
-									</button>
-								</div>
-							</div>
-						))}
-					</div>
-				) : null}
+							</>
+					  ))
+					: null}
 
 				<div style={{ display: "flex", justifyContent: "space-evenly" }}>
 					<button onClick={addInstructionalMaterial} className="check-btn">

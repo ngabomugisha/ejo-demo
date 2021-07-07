@@ -8,63 +8,10 @@ const initialState = {
 	keyUnitCompetency: null,
 	lessonNumber: 0,
 	lessonName: null,
-	knowledge: {
-		topics: [],
-		instructionalMaterial: [
-			{
-				materialType: null,
-				items: [
-					{
-						item: null,
-					},
-				],
-				uploads: [{ file1: null }],
-			},
-		],
-		otherMaterialsAndReferences: null,
-	},
-	skills: {
-		topics: [
-			{
-				topic: null,
-				bloomTaxonomy: null,
-				standardCriteriaPerfomance: 0,
-			},
-		],
-		instructionalMaterial: [
-			{
-				materialType: null,
-				items: [
-					{
-						item: null,
-					},
-				],
-				uploads: [{ file1: null }],
-			},
-		],
-		otherMaterialsAndReferences: null,
-	},
-	attitudesAndValues: {
-		topics: [
-			{
-				topic: null,
-				bloomTaxonomy: null,
-				standardCriteriaPerfomance: 80,
-			},
-		],
-		instructionalMaterial: [
-			{
-				materialType: null,
-				items: [
-					{
-						item: null,
-					},
-				],
-				uploads: [{ file1: null }],
-			},
-		],
-		otherMaterialsAndReferences: null,
-	},
+
+	knowledge: {},
+	skills: {},
+	attitudesAndValues: {},
 
 	activities: {
 		introduction: {

@@ -17,22 +17,21 @@ import AttitudeAndValuesForm from "../forms/AttitudeAndValuesForm";
 import { Link } from "react-router-dom";
 
 export const Review = ({ formData, navigation }) => {
-	console.log("FORM DATA, ", formData);
 	const { go } = navigation;
 	const { newLessonPlan } = useSelector((state) => state);
 
 	const [alertMsg, setAlertMsg] = useState("");
-	const {
-		firstName,
-		lastName,
-		nickName,
-		address,
-		city,
-		state,
-		zip,
-		phone,
-		email,
-	} = formData;
+	// const {
+	// 	firstName,
+	// 	lastName,
+	// 	nickName,
+	// 	address,
+	// 	city,
+	// 	state,
+	// 	zip,
+	// 	phone,
+	// 	email,
+	// } = formData;
 
 	const lesson = {
 		unit: newLessonPlan.unit,
@@ -53,7 +52,7 @@ export const Review = ({ formData, navigation }) => {
 		activities: JSON.stringify(newLessonPlan.activities),
 		teachingTechniques: JSON.stringify(newLessonPlan.teachingTechniques),
 	};
-
+	console.log("FINAL TEST:", newLessonPlan);
 	const onSubmit = async () => {
 		await https
 			.post("/lessons/plans", req, {
@@ -65,7 +64,7 @@ export const Review = ({ formData, navigation }) => {
 			.then((res) => {
 				if (res.status == 200) {
 					console.log("submitted");
-					setAlertMsg("lesson paln submitted");
+					setAlertMsg("lesson plan submitted");
 					//setOpen(true);
 				} else return alert("something went wrong");
 			});
@@ -110,29 +109,29 @@ export const Review = ({ formData, navigation }) => {
 	);
 };
 
-export const RenderAccordion = ({ summary, details, go }) => (
-	<Accordion>
-		<AccordionSummary expandIcon={<ExpandMoreIcon />}>
-			{summary}
-		</AccordionSummary>
-		<AccordionDetail>
-			<div>
-				{details.map((data, index) => {
-					const objKey = Object.keys(data)[0];
-					const objValue = data[Object.keys(data)[0]];
+// export const RenderAccordion = ({ summary, details, go }) => (
+// 	<Accordion>
+// 		<AccordionSummary expandIcon={<ExpandMoreIcon />}>
+// 			{summary}
+// 		</AccordionSummary>
+// 		<AccordionDetail>
+// 			<div>
+// 				{details.map((data, index) => {
+// 					const objKey = Object.keys(data)[0];
+// 					const objValue = data[Object.keys(data)[0]];
 
-					return (
-						<ListItemText key={index}>{`${objKey}: ${objValue}`}</ListItemText>
-					);
-				})}
-				<IconButton
-					color="primary"
-					component="span"
-					onClick={() => go(`${summary.toLowerCase()}`)}
-				>
-					<EditIcon />
-				</IconButton>
-			</div>
-		</AccordionDetail>
-	</Accordion>
-);
+// 					return (
+// 						<ListItemText key={index}>{`${objKey}: ${objValue}`}</ListItemText>
+// 					);
+// 				})}
+// 				<IconButton
+// 					color="primary"
+// 					component="span"
+// 					onClick={() => go(`${summary.toLowerCase()}`)}
+// 				>
+// 					<EditIcon />
+// 				</IconButton>
+// 			</div>
+// 		</AccordionDetail>
+// 	</Accordion>
+// );

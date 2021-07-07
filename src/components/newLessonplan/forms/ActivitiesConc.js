@@ -93,12 +93,9 @@ const competenceArrConc = [
 ];
 
 export const ActivitiesConc = (props) => {
-	// const { formData } = props;
-	// console.log("formdata", formData);
 	const { newLessonPlan } = props;
 	console.log("data one step away:", newLessonPlan);
 	const dispatchLesson = useDispatch();
-	// console.log("new lesson plan in activitiesIntro form", newLessonPlan);
 	const [content, setContent] = useState([]);
 	const [crossCuttingIssues, setCrossCuttingIssues] = useState("");
 	const [competency, setCompetency] = useState("");
