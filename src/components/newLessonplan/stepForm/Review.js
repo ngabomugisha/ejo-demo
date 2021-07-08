@@ -87,8 +87,8 @@ export const Review = ({ formData, navigation }) => {
 					<p>{today}</p>
 				</div>
 				<div className="smallDiv rightSide">
-					<Link>
-						<h5>Edit before submitting</h5>
+					<Link to="/teacher/newLessonPlan/details">
+						<h5>Review before submitting</h5>
 					</Link>
 				</div>
 			</div>
