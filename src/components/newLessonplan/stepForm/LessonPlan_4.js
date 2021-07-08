@@ -54,7 +54,7 @@ export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
 	console.log("LAST STEP DATA:", newLessonPlan);
 	const dispatchLesson = useDispatch();
 	const [key, setKey] = React.useState("techniquesIntro");
-	const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 	const classes = useStyles();
 	const introDuration = newLessonPlan.teachingTechniques.introduction.duration;
 	const devDuration = newLessonPlan.teachingTechniques.development.duration;
@@ -104,7 +104,7 @@ export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
 				>
 					<Tab eventKey="techniquesIntro" title="Introduction" fill={true}>
 						<TechniquesIntro newLessonPlan={newLessonPlan} />
-						<Button block onClick={validateIntro}>
+              <Button block onClick={validateIntro}>
 							Next
 						</Button>
 						<div className={classes.root}>
@@ -163,7 +163,7 @@ export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
 			</div>
 			<div style={{ marginTop: "1rem" }}>
 				{key === "techniquesConc" ? (
-					<>
+           <>
 						<Button block onClick={validateConc}>
 							Next
 						</Button>

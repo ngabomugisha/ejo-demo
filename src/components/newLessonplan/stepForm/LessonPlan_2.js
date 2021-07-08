@@ -58,13 +58,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
-	const { newLessonPlan } = useSelector((state) => state);
-	const classes = useStyles();
+  const { newLessonPlan } = useSelector((state) => state);
+  const classes = useStyles();
 	const [choosenMaterial, setChoosenMaterial] = useState(null);
 	const [img, setImg] = useState(null);
 	const [knowledgePage, setKnowledgePage] = useState({});
 	const datagetter = { knowledgePage, setKnowledgePage };
-	const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
 	const [key, setKey] = useState("knowledge");
 	const [units, setUnits] = useState(null);
@@ -139,7 +139,7 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 				onSelect={(k) => setKey(k)}
 			>
 				<Tab eventKey="knowledge" title="Knowledge" fill={true}>
-					<KnowledgeForm />
+          <KnowledgeForm />
 					<Button block onClick={validateKnowledge}>
 						Next
 					</Button>
@@ -196,7 +196,7 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 				</Tab>
 				<Tab eventKey="attitudeAndValue" title="Attitude and Value" fill={true}>
 					<div className="knowledge-container">
-						<AttitudeForm />
+            <AttitudeForm />
 					</div>
 				</Tab>
 			</Tabs>

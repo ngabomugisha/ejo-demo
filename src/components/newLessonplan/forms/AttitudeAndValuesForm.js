@@ -87,7 +87,7 @@ export const AttitudeForm = () => {
 			id: uuidv4(),
 			topic: "",
 			bloomTaxonomyLevel: "",
-			standardCriteriaPerfomance: "",
+      standardCriteriaPerfomance: "",
 			custom: false,
 		},
 	]); // array of topics
