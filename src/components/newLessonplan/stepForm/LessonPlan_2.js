@@ -26,6 +26,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { KnowledgeForm } from "../forms/KnowledgeForm";
 import { SkillsForm } from "../forms/SkillsForm";
 import { AttitudeForm } from "../forms/AttitudeAndValuesForm";
+import { useSelector } from "react-redux";
+import Alert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import Collapse from "@material-ui/core/Collapse";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -53,11 +58,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
-	const classes = useStyles();
+  const { newLessonPlan } = useSelector((state) => state);
+  const classes = useStyles();
 	const [choosenMaterial, setChoosenMaterial] = useState(null);
 	const [img, setImg] = useState(null);
 	const [knowledgePage, setKnowledgePage] = useState({});
 	const datagetter = { knowledgePage, setKnowledgePage };
+  const [open, setOpen] = useState(false);
 
 	const [key, setKey] = useState("knowledge");
 	const [units, setUnits] = useState(null);
@@ -73,6 +80,33 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 	const moveToNext = () => {
 		if (key === "knowledge") setKey("skills");
 		else if (key === "skills") setKey("attitudeAndValue");
+	};
+
+	const validateKnowledge = () => {
+		if (newLessonPlan.knowledge.topics[0].topic === "") {
+			setOpen(true);
+			return;
+		} else {
+			moveToNext();
+		}
+	};
+
+	const validateSkills = () => {
+		if (newLessonPlan.skills.topics[0].topic === "") {
+			setOpen(true);
+			return;
+		} else {
+			moveToNext();
+		}
+	};
+
+	const validateAttitude = () => {
+		if (newLessonPlan.attitudesAndValues.topics[0].topic === "") {
+			setOpen(true);
+			return;
+		} else {
+			navigation.next();
+		}
 	};
 
 	useEffect(() => {
@@ -91,6 +125,7 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 		}
 		fetchUnit();
 	}, []);
+
 	useEffect(() => {
 		console.log("[[[[[[[[[[[[", formData, "]]]]]]]]]]]]]");
 	}, [formData]);
@@ -104,37 +139,64 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 				onSelect={(k) => setKey(k)}
 			>
 				<Tab eventKey="knowledge" title="Knowledge" fill={true}>
-					<KnowledgeForm
-						formData={formData}
-						setForm={setForm}
-						navigation={navigation}
-						{...datagetter}
-					/>
-					<Button block onClick={moveToNext}>
+          <KnowledgeForm />
+					<Button block onClick={validateKnowledge}>
 						Next
 					</Button>
+					<div className={classes.root}>
+						<Collapse in={open}>
+							<Alert
+								severity="error"
+								action={
+									<IconButton
+										aria-label="close"
+										color="inherit"
+										size="small"
+										onClick={() => {
+											setOpen(false);
+										}}
+									>
+										<CloseIcon fontSize="inherit" />
+									</IconButton>
+								}
+							>
+								Enter atleast one Knowledge
+							</Alert>
+						</Collapse>
+					</div>
 				</Tab>
 				<Tab eventKey="skills" title="Skills" fill={true}>
 					<div className="knowledge-container">
-						<SkillsForm
-							formData={formData}
-							setForm={setForm}
-							navigation={navigation}
-							{...datagetter}
-						/>
-						<Button block onClick={moveToNext}>
+						<SkillsForm />
+						<Button block onClick={validateSkills}>
 							Next
 						</Button>
+						<div className={classes.root}>
+							<Collapse in={open}>
+								<Alert
+									severity="error"
+									action={
+										<IconButton
+											aria-label="close"
+											color="inherit"
+											size="small"
+											onClick={() => {
+												setOpen(false);
+											}}
+										>
+											<CloseIcon fontSize="inherit" />
+										</IconButton>
+									}
+								>
+									Enter atleast one Skill
+								</Alert>
+							</Collapse>
+						</div>
 					</div>
 				</Tab>
 				<Tab eventKey="attitudeAndValue" title="Attitude and Value" fill={true}>
 					<div className="knowledge-container">
-						<AttitudeForm
-							formData={formData}
-							setForm={setForm}
-							navigation={navigation}
-							{...datagetter}
-						/>
+            <AttitudeForm />
 					</div>
 				</Tab>
 			</Tabs>
@@ -148,9 +210,32 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
           Back
         </Button> */}
 				{key == "attitudeAndValue" ? (
-					<Button block onClick={() => navigation.next()}>
-						Next
-					</Button>
+					<>
+						<Button block onClick={validateAttitude}>
+							Next
+						</Button>
+						<div className={classes.root}>
+							<Collapse in={open}>
+								<Alert
+									severity="error"
+									action={
+										<IconButton
+											aria-label="close"
+											color="inherit"
+											size="small"
+											onClick={() => {
+												setOpen(false);
+											}}
+										>
+											<CloseIcon fontSize="inherit" />
+										</IconButton>
+									}
+								>
+									Enter atleast one Attitude
+								</Alert>
+							</Collapse>
+						</div>
+					</>
 				) : (
 					""
 				)}

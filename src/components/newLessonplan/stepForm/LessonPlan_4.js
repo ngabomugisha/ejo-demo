@@ -22,6 +22,10 @@ import { TechniquesDev } from "../forms/TechniquesDev";
 import { TechniquesConc } from "../forms/TechniquesConc";
 import { useSelector, useDispatch } from "react-redux";
 import { setNewLessonplan } from "../../../store/actions/newLessonPlan.actions";
+import Alert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import Collapse from "@material-ui/core/Collapse";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -50,10 +54,42 @@ export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
 	console.log("LAST STEP DATA:", newLessonPlan);
 	const dispatchLesson = useDispatch();
 	const [key, setKey] = React.useState("techniquesIntro");
+  const [open, setOpen] = useState(false);
+	const classes = useStyles();
+	const introDuration = newLessonPlan.teachingTechniques.introduction.duration;
+	const devDuration = newLessonPlan.teachingTechniques.development.duration;
+	const concDuration = newLessonPlan.teachingTechniques.conclusion.duration;
 
 	const moveToNext = () => {
 		if (key === "techniquesIntro") setKey("techniquesDev");
 		else if (key === "techniquesDev") setKey("techniquesConc");
+	};
+
+	const validateIntro = () => {
+		if (introDuration === 0) {
+			setOpen(true);
+			return;
+		} else {
+			moveToNext();
+		}
+	};
+
+	const validateDev = () => {
+		if (devDuration.duration === 0) {
+			setOpen(true);
+			return;
+		} else {
+			moveToNext();
+		}
+	};
+
+	const validateConc = () => {
+		if (concDuration === 0) {
+			setOpen(true);
+			return;
+		} else {
+			navigation.next();
+		}
 	};
 
 	return (
@@ -68,15 +104,57 @@ export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
 				>
 					<Tab eventKey="techniquesIntro" title="Introduction" fill={true}>
 						<TechniquesIntro newLessonPlan={newLessonPlan} />
-						<Button block onClick={moveToNext}>
+              <Button block onClick={validateIntro}>
 							Next
 						</Button>
+						<div className={classes.root}>
+							<Collapse in={open}>
+								<Alert
+									severity="error"
+									action={
+										<IconButton
+											aria-label="close"
+											color="inherit"
+											size="small"
+											onClick={() => {
+												setOpen(false);
+											}}
+										>
+											<CloseIcon fontSize="inherit" />
+										</IconButton>
+									}
+								>
+									Enter Introduction Duration
+								</Alert>
+							</Collapse>
+						</div>
 					</Tab>
 					<Tab eventKey="techniquesDev" title="Development" fill={true}>
 						<TechniquesDev newLessonPlan={newLessonPlan} />
-						<Button block onClick={moveToNext}>
+						<Button block onClick={validateDev}>
 							Next
 						</Button>
+						<div className={classes.root}>
+							<Collapse in={open}>
+								<Alert
+									severity="error"
+									action={
+										<IconButton
+											aria-label="close"
+											color="inherit"
+											size="small"
+											onClick={() => {
+												setOpen(false);
+											}}
+										>
+											<CloseIcon fontSize="inherit" />
+										</IconButton>
+									}
+								>
+									Enter Development Duration
+								</Alert>
+							</Collapse>
+						</div>
 					</Tab>
 					<Tab eventKey="techniquesConc" title="Conclusion" fill={true}>
 						<TechniquesConc newLessonPlan={newLessonPlan} />
@@ -85,9 +163,32 @@ export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
 			</div>
 			<div style={{ marginTop: "1rem" }}>
 				{key === "techniquesConc" ? (
-					<Button block onClick={() => navigation.next()}>
-						Next
-					</Button>
+           <>
+						<Button block onClick={validateConc}>
+							Next
+						</Button>
+						<div className={classes.root}>
+							<Collapse in={open}>
+								<Alert
+									severity="error"
+									action={
+										<IconButton
+											aria-label="close"
+											color="inherit"
+											size="small"
+											onClick={() => {
+												setOpen(false);
+											}}
+										>
+											<CloseIcon fontSize="inherit" />
+										</IconButton>
+									}
+								>
+									Enter Conclusion Duration
+								</Alert>
+							</Collapse>
+						</div>
+					</>
 				) : (
 					""
 				)}
