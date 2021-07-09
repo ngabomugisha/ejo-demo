@@ -251,7 +251,7 @@ export const ActivitiesDev = (props) => {
 			if (newLessonPlan.unit) {
 				const req = await https
 					.get(
-						`question-banks/602c349dfd1613203834880d/subject-question-bank`, //should be dynamic
+						`/question-banks/${newLessonPlan.unit}/unit-question-bank`, //should be dynamic
 						{
 							headers: { Authorization: `Basic ${localStorage.token}` },
 						}

@@ -214,12 +214,9 @@ export const ActivitiesIntro = (props) => {
 		async function fetchQuestion() {
 			if (newLessonPlan.unit) {
 				const req = await https
-					.get(
-						`question-banks/602c349dfd1613203834880d/subject-question-bank`, //should be dynamic
-						{
-							headers: { Authorization: `Basic ${localStorage.token}` },
-						}
-					)
+					.get(`/question-banks/${newLessonPlan.unit}/unit-question-bank`, {
+						headers: { Authorization: `Basic ${localStorage.token}` },
+					})
 					.then((res) => {
 						console.log("RESPONSE DATA", res.data);
 						const questions = [];
