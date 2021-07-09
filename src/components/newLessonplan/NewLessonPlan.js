@@ -17,6 +17,7 @@ import { LessonPlan_3 } from "./stepForm/LessonPlan_3";
 import { LessonPlan_4 } from "./stepForm/LessonPlan_4";
 import { Review } from "./stepForm/Review";
 import { Submit } from "./stepForm/Submit";
+import LessonReview from "./stepForm/lessonReview";
 
 const useStyles = makeStyles({
 	root: {
@@ -189,6 +190,7 @@ const steps = [
 	{ id: "LessonPlan_3" },
 	{ id: "LessonPlan_4" },
 	{ id: "review" },
+	{ id: "final" },
 	{ id: "submit" },
 ];
 
@@ -214,6 +216,8 @@ function NewLessonPlan() {
 				return <LessonPlan_4 {...props} />;
 			case "review":
 				return <Review {...props} />;
+			case "final":
+				return <LessonReview {...props} />;
 			case "submit":
 				return <Submit {...props} />;
 		}

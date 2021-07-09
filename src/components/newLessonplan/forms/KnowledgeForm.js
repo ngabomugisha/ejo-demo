@@ -175,19 +175,37 @@ export const KnowledgeForm = () => {
 			}
 		});
 	};
+	function getBase64(file) {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
 
-	const handleFileChange = (id, e) => {
-		const file = e.target.files[0];
-		setUploadFiles([...uploadFiles, file]);
-		console.log("SPECIAL TEST", id);
-		console.log("SPECIAL TEST", instructionalMaterial);
-
-		instructionalMaterial.map((input) => {
-			if (input.id === id) {
-				input.files = [...input.files, file];
-				return input;
-			}
+			reader.onloadend = () => resolve(reader.result);
+			reader.onerror = (error) => reject(error);
+			reader.readAsDataURL(file);
 		});
+	}
+
+	const handleFileChange = async (id, e) => {
+		const file = e.target.files[0];
+
+		await getBase64(file).then((data) => {
+			setUploadFiles([...uploadFiles, file]);
+			const uploadFile = {
+				name: file.name,
+				type: file.type,
+				file: data,
+			};
+			console.log("file", uploadFile);
+			instructionalMaterial.map((input) => {
+				if (input.id === id) {
+					input.files = [...input.files, uploadFile];
+					return input;
+				}
+			});
+		});
+
+		setUploadFiles([...uploadFiles, file]);
+
 	};
 
 	const handleDeleteFile = (id, name) => {
@@ -393,6 +411,7 @@ export const KnowledgeForm = () => {
 											<MenuItem value="REMEMBERING">Remembering</MenuItem>
 											<MenuItem value="UNDERSTANDING">Understanding</MenuItem>
 										</TextField>
+
 									</div>
 									<div className="field">
 										<TextField
@@ -427,6 +446,7 @@ export const KnowledgeForm = () => {
 											<MenuItem value={100}>100</MenuItem>
 										</TextField>
 									</div>
+
 									<ProgressBar
 										now={input.standardCriteriaPerfomance}
 										label={`${input.standardCriteriaPerfomance}%`}
@@ -628,16 +648,18 @@ export const KnowledgeForm = () => {
 									{material.files ? (
 										<div>
 											{console.log("we got some files", material.files)}
-											{material.files.map((file) => (
+											{material.files.map((f) => (
 												<div className="itemList">
 													<div className="fileItem">
-														<p>{file.name}</p>
+														<p>{f.name}</p>
+
 													</div>
 													<div>
 														<button
 															className="deleteFileBtn"
 															onClick={() =>
-																handleDeleteFile(material.id, file.name)
+																handleDeleteFile(material.id, f.name)
+
 															}
 														>
 															<RiDeleteBin6Line />

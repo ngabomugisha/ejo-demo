@@ -24,6 +24,10 @@ import TimeTable from "../../../pages/SCHOOL-ADMIN/timeTable/TimeTable";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "react-bootstrap";
 import { setNewLessonplan } from "../../../store/actions/newLessonPlan.actions";
+import Alert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import Collapse from "@material-ui/core/Collapse";
+import CloseIcon from "@material-ui/icons/Close";
 
 export const LessonPlan_start = (props) => {
 	const { auth, newLessonPlan } = useSelector((state) => state);
@@ -59,6 +63,7 @@ export const LessonPlan_start = (props) => {
 	const [topics, setTopics] = useState([]);
 	const [subtopic, setSubtopic] = useState([]);
 	const [units, setUnits] = useState([]);
+	const [openAlert, setOpenAlert] = useState({ op: false, field: "" });
 
 	const [clas, setClas] = React.useState(null);
 	const [sub, setSub] = useState("");
@@ -153,6 +158,10 @@ export const LessonPlan_start = (props) => {
 			}
 		}
 	};
+
+	// const handleKeyUnitComp = (event) => {
+	// 	setKeyUnitComp(event.target.value);
+	// };
 
 	const handleChange = (e) => {
 		if (e.target.name === "class") {
@@ -537,6 +546,10 @@ export const LessonPlan_start = (props) => {
 	}, [uni]);
 
 	useEffect(() => {
+		props.formData.keyUnitCompetency = keyUnitComp;
+	}, [keyUnitComp]);
+
+	useEffect(() => {
 		props.formData.time.slotOnTimetable = slot;
 		setOpen(false);
 	}, [slot]);
@@ -620,20 +633,20 @@ export const LessonPlan_start = (props) => {
 		const { assignedClass, unit, lessonName, time } = newLessonPlan;
 
 		if (assignedClass == "" || assignedClass == null) {
-			window.alert("class is required");
+			setOpenAlert({ op: true, field: "Class" });
 			return false;
 		}
 		if (time == "" || time == null) {
-			window.alert("time is required");
+			setOpenAlert({ op: true, field: "Time Slot" });
 			return false;
 		}
 		if (unit == "" || unit == null) {
-			window.alert("unit is required");
+			setOpenAlert({ op: true, field: "Unit" });
 			return false;
 		}
 
 		if (lessonName == "" || lessonName == null) {
-			window.alert("lesson Name is required");
+			setOpenAlert({ op: true, field: "Lesson Name" });
 			return false;
 		}
 
@@ -863,6 +876,7 @@ export const LessonPlan_start = (props) => {
 								return fit;
 							}, "")
 						}
+						onChange
 						multiline
 						margin="normal"
 						variant="outlined"
@@ -923,6 +937,26 @@ export const LessonPlan_start = (props) => {
 					>
 						Next
 					</Button>
+					<Collapse in={openAlert.op}>
+						<Alert
+							style={{ width: "100%", marginTop: "10px" }}
+							severity="error"
+							action={
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={() => {
+										setOpenAlert({});
+									}}
+								>
+									<CloseIcon fontSize="inherit" />
+								</IconButton>
+							}
+						>
+							{openAlert.field} is required
+						</Alert>
+					</Collapse>
 				</Grid>
 			</Grid>
 		</>

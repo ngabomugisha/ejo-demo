@@ -228,6 +228,7 @@ export const TechniquesConc = (props) => {
 		problemSolvingArr,
 		reflectionArr,
 		sittingArrangementArr,
+		duration,
 	]);
 
 	return (

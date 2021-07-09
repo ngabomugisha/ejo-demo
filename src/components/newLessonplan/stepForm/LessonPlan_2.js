@@ -131,6 +131,14 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 	}, [formData]);
 	return (
 		<Container maxWidth="xs">
+			<button
+				className="backButton"
+				onClick={() => {
+					navigation.go("names");
+				}}
+			>
+				Back
+			</button>
 			<h5>Instructional Objectives</h5>
 			<Tabs
 				fill={true}
@@ -146,6 +154,7 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 					<div className={classes.root}>
 						<Collapse in={open}>
 							<Alert
+								style={{ width: "100%", marginTop: "10px" }}
 								severity="error"
 								action={
 									<IconButton
@@ -174,6 +183,7 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 						<div className={classes.root}>
 							<Collapse in={open}>
 								<Alert
+									style={{ width: "100%", marginTop: "10px" }}
 									severity="error"
 									action={
 										<IconButton
@@ -217,6 +227,7 @@ export const LessonPlan_2 = ({ formData, setForm, navigation }) => {
 						<div className={classes.root}>
 							<Collapse in={open}>
 								<Alert
+									style={{ width: "100%", marginTop: "10px" }}
 									severity="error"
 									action={
 										<IconButton

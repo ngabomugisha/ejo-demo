@@ -99,7 +99,8 @@ export const TechniquesIntro = (props) => {
 	const [problemSolvingArr, setProblemSolvingArr] = useState([]);
 	const [reflectionArr, setReflectionArr] = useState([]);
 	const [sittingArrangementArr, setSittingArrangementArr] = useState([]);
-	const [duration, setDuration] = useState();
+	const [duration, setDuration] = useState(0);
+
 
 	console.log("TEST DURATION:", newLessonPlan);
 	const classes = useStyles();
@@ -229,6 +230,9 @@ export const TechniquesIntro = (props) => {
 		problemSolvingArr,
 		reflectionArr,
 		sittingArrangementArr,
+
+		duration,
+
 	]);
 
 	return (

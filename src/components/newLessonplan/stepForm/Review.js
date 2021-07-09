@@ -2,36 +2,20 @@ import React from "react";
 import Container from "@material-ui/core/Container";
 import "../NewLessonPlan.css";
 import Button from "@material-ui/core/Button";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetail from "@material-ui/core/AccordionDetails";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import https from "../../../helpers/https";
 import { useState } from "react";
-import ListItemText from "@material-ui/core/ListItemText";
-
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
 import { useSelector } from "react-redux";
-import AttitudeAndValuesForm from "../forms/AttitudeAndValuesForm";
-import { Link } from "react-router-dom";
+import Alert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import Collapse from "@material-ui/core/Collapse";
+import CloseIcon from "@material-ui/icons/Close";
 
 export const Review = ({ formData, navigation }) => {
 	const { go } = navigation;
 	const { newLessonPlan } = useSelector((state) => state);
+	const [open, setOpen] = useState(false);
 
 	const [alertMsg, setAlertMsg] = useState("");
-	// const {
-	// 	firstName,
-	// 	lastName,
-	// 	nickName,
-	// 	address,
-	// 	city,
-	// 	state,
-	// 	zip,
-	// 	phone,
-	// 	email,
-	// } = formData;
 
 	const lesson = {
 		unit: newLessonPlan.unit,
@@ -64,8 +48,8 @@ export const Review = ({ formData, navigation }) => {
 			.then((res) => {
 				if (res.status == 200) {
 					console.log("submitted");
-					setAlertMsg("lesson plan submitted");
-					//setOpen(true);
+					setOpen(true);
+
 				} else return alert("something went wrong");
 			});
 	};
@@ -80,31 +64,70 @@ export const Review = ({ formData, navigation }) => {
 	return (
 		<Container maxWidth="sm">
 			<div className="lessonPlan">
-				<div className="smallDiv leftSide">
+				<button
+					className="backButton"
+					onClick={() => {
+						navigation.go("LessonPlan_4");
+					}}
+				>
+					Back
+				</button>
+				<div className="summaryItem">
 					<h5>Lesson Name:</h5>
-					<p>{newLessonPlan.lessonName}</p>
+					<h3>{newLessonPlan.lessonName}</h3>
+				</div>
+				<div className="summaryItem">
 					<h5>Created on:</h5>
-					<p>{today}</p>
+					<h3>{today}</h3>
 				</div>
-				<div className="smallDiv rightSide">
-					<Link to="/teacher/newLessonPlan/details">
-						<h5>Review before submitting</h5>
-					</Link>
+				<div className="summaryItem last">
+					<h3>Ready to submit? </h3>
 				</div>
+				<Button
+					color="primary"
+					variant="contained"
+					style={{ marginTop: "1.5rem" }}
+					onClick={() => {
+						onSubmit();
+						setTimeout(() => {
+							console.log("done!");
+						}, 2000);
+						go("submit");
+					}}
+				>
+					Submit
+				</Button>
+				<Button
+					color="primary"
+					variant="contained"
+					style={{ marginTop: "1.5rem" }}
+					onClick={() => {
+						go("final");
+					}}
+				>
+					Review before submitting
+				</Button>
+				<Collapse in={open}>
+					<Alert
+						style={{ width: "100%", marginTop: "10px" }}
+						severity="success"
+						action={
+							<IconButton
+								aria-label="close"
+								color="inherit"
+								size="small"
+								onClick={() => {
+									setOpen(false);
+								}}
+							>
+								<CloseIcon fontSize="inherit" />
+							</IconButton>
+						}
+					>
+						Enter atleast one Skill
+					</Alert>
+				</Collapse>
 			</div>
-
-			<h3>Ready to submit </h3>
-			<Button
-				color="primary"
-				variant="contained"
-				style={{ marginTop: "1.5rem" }}
-				onClick={() => {
-					onSubmit();
-					go("submit");
-				}}
-			>
-				Submit
-			</Button>
 		</Container>
 	);
 };
