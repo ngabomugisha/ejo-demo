@@ -189,7 +189,7 @@ export const ActivitiesIntro = (props) => {
 			console.log("updated questions", newLessonPlan);
 		} else {
 			var questionIndex =
-				newLessonPlan.introduction.activities.exercises.questions.indexOf(
+				newLessonPlan.activities.introduction.exercises.questions.indexOf(
 					e.target.value
 				);
 			newLessonPlan.activities.introduction.exercises.questions.splice(
@@ -198,7 +198,6 @@ export const ActivitiesIntro = (props) => {
 			);
 		}
 	};
-
 	const handleTextField = (e) => {
 		if (e.target.name === "otherActivity") {
 			newLessonPlan.activities.introduction.content.otherActivity =

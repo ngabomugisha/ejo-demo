@@ -12,6 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputBase from "@material-ui/core/InputBase";
 import { AiFillPrinter } from "react-icons/ai";
 import Popup from "../../popup/index";
+import Button from "react-bootstrap/Button";
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
@@ -24,14 +25,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const LessonReview = (props) => {
-	const { newLessonPlan, topics } = useSelector((state) => state);
+	const { go } = props.navigation;
+	const { newLessonPlan } = useSelector((state) => state);
 	const [isLoading, setIsLoading] = useState(true);
 	const classes = useStyles();
-	const [subject, setSubject] = useState("");
+	const [subject, setSubject] = useState(newLessonPlan.subject);
 	const [subjects, setSubjects] = useState(null);
 	const [openPopup, setOpenPopup] = useState(false);
 	const [openPrintPopup, setOpenPrintPopup] = useState(false);
 	const [recordForEdit, setRecordForEdit] = useState(null);
+	const [topic, setTopic] = useState();
+	const [subTopic, setSubTopic] = useState();
+	const [unit, setUnit] = useState();
+	const [topicId, setTopicId] = useState("");
+	const [subTopicId, setSubTopicId] = useState("");
 
 	const handleChange = (event) => {
 		setSubject(event.target.value);
@@ -42,24 +49,67 @@ export const LessonReview = (props) => {
 	// 	setOpenPopup(true);
 	// };
 
-	console.log("Topics", topics);
+	async function fetchUnit() {
+		const req = await https
+			.get(`/lessons/units/${newLessonPlan.unit}`, {
+				headers: { Authorization: `Basic ${localStorage.token}` },
+			})
+			.then((res) => {
+				setUnit(res.data);
+				setTopicId(res.data.topic);
+				setSubTopicId(res.data.subTopic);
+				return res.data;
+			})
+			.catch(function (err) {
+				console.log(err);
+				return;
+			});
+		return req;
+	}
 
 	useEffect(() => {
-		async function fetchSubjects() {
+		fetchUnit();
+	}, [newLessonPlan]);
+
+	useEffect(() => {
+		// console.log("test sub topic:", subTopicId);
+		// console.log("test topic:", topicId);
+
+		async function fetchTopic() {
 			const req = await https
-				.get(`/lessons/subjects`, {
+				.get(`/lessons/topics/${topicId}`, {
 					headers: { Authorization: `Basic ${localStorage.token}` },
 				})
 				.then((res) => {
-					setSubjects(res.data);
+					console.log("test topic:", res.data);
+					setTopic(res.data);
+					return res.data;
 				})
 				.catch(function (err) {
 					console.log(err);
+					return;
 				});
 			return req;
 		}
-		fetchSubjects();
-	}, []);
+
+		async function fetchSubTopic() {
+			const req = await https
+				.get(`/lessons/subtopics/${subTopicId}`, {
+					headers: { Authorization: `Basic ${localStorage.token}` },
+				})
+				.then((res) => {
+					console.log("test sub topic:", res.data);
+					return res.data;
+				})
+				.catch(function (err) {
+					console.log(err);
+					return;
+				});
+			return req;
+		}
+		fetchTopic();
+		fetchSubTopic();
+	}, [unit]);
 
 	return (
 		<>
@@ -73,28 +123,36 @@ export const LessonReview = (props) => {
 					<AiFillPrinter /> &nbsp;Print Lesson Plan
 				</button>
 			</div>
-			<div className="plan-container">
+			<button
+				className="backButton"
+				onClick={() => {
+					go("review");
+				}}
+			>
+				Back
+			</button>
+			<div className="plan-container-lesson">
 				<div className="titl">
 					<h1>Syllabus</h1>
 					<div className="titl2">
 						<h4>1. Topic Area:</h4>
-						<h5>Topic</h5>
+						<h5>{topic ? topic.name : "Topic"}</h5>
 					</div>
 					<div className="titl2">
 						<h4>2. Sub Topic Area:</h4>
-						<h5>Sub Topic</h5>
+						<h5>{subTopic ? subTopic.name : "Sub Topic"}</h5>
 					</div>
 					<div className="titl2">
 						<h4>3. Unit:</h4>
-						<h5>Unit</h5>
+						<h5>{unit ? unit.name : "Unit"}</h5>
 					</div>
 					<div className="titl2">
 						<h4>4. Unit Competency:</h4>
-						<h5>Key Unit Competency</h5>
+						<h5>{newLessonPlan.keyUnitCompetency}</h5>
 					</div>
 					<div className="titl2">
 						<h4>5. Lesson Name:</h4>
-						<h5>Lesson Name</h5>
+						<h5>{newLessonPlan.lessonName}</h5>
 					</div>
 				</div>
 				<div className="titl">
@@ -137,7 +195,16 @@ export const LessonReview = (props) => {
 													<div>
 														<h5>Files</h5>
 														{M.items
-															? M.files.map((F) => <h6>{F.name}</h6>)
+															? M.files.map((F) => (
+																	<div className="imgDiv">
+																		<img
+																			src={F.file}
+																			height="200"
+																			width="200"
+																		/>
+																		<h6>{F.name}</h6>
+																	</div>
+															  ))
 															: ""}
 													</div>
 												</div>
@@ -189,7 +256,16 @@ export const LessonReview = (props) => {
 													<div>
 														<h5>Files</h5>
 														{M.items
-															? M.files.map((F) => <h6>{F.name}</h6>)
+															? M.files.map((F) => (
+																	<div className="imgDiv">
+																		<img
+																			src={F.file}
+																			height="200"
+																			width="200"
+																		/>
+																		<h6>{F.name}</h6>
+																	</div>
+															  ))
 															: ""}
 													</div>
 												</div>
@@ -242,7 +318,16 @@ export const LessonReview = (props) => {
 														<div>
 															<h5>Files</h5>
 															{M.items
-																? M.files.map((F) => <h6>{F.name}</h6>)
+																? M.files.map((F) => (
+																		<div className="imgDiv">
+																			<img
+																				src={F.file}
+																				height="200"
+																				width="200"
+																			/>
+																			<h6>{F.name}</h6>
+																		</div>
+																  ))
 																: ""}
 														</div>
 													</div>
@@ -274,38 +359,126 @@ export const LessonReview = (props) => {
 							<Card.Body>
 								<div className="in-card-title">
 									<h4>Content</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Activities</h5>
+										{newLessonPlan.activities.introduction.content.activities
+											? newLessonPlan.activities.introduction.content.activities.map(
+													(C) => (
+														<div>
+															<h5>activity:</h5>
+															<h6>{C.activity}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Other Activities</h5>
+										{newLessonPlan.activities.introduction.content
+											.otherActivity ? (
+											<>
+												<h5>activity:</h5>
+												<h6>
+													{
+														newLessonPlan.activities.introduction.content
+															.otherActivity
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Cross Cutting Issues</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Issues</h5>
+										{newLessonPlan.activities.introduction.crossCuttingIssues
+											.issues
+											? newLessonPlan.activities.introduction.crossCuttingIssues.issues.map(
+													(I) => (
+														<div>
+															<h5>issue:</h5>
+															<h6>{I.issue}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Comment</h5>
+										{newLessonPlan.activities.introduction.crossCuttingIssues
+											.omment ? (
+											<>
+												<h6>
+													{
+														newLessonPlan.activities.introduction
+															.crossCuttingIssues.omment
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Competency</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Competencies</h5>
+										{newLessonPlan.activities.introduction.competency
+											.competencies
+											? newLessonPlan.activities.introduction.competency.competencies.map(
+													(C) => (
+														<div>
+															<h5>competency:</h5>
+															<h6>{C.competency}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Comment</h5>
+										{newLessonPlan.activities.introduction.competency
+											.comment ? (
+											<>
+												<h6>
+													{
+														newLessonPlan.activities.introduction.competency
+															.comment
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Exercices:</h4>
-									<div>
-										<h5>Question</h5>
-										<h5>Type</h5>
-										<h5>Answer</h5>
-									</div>
+									{newLessonPlan.activities.introduction.exercises.questions
+										? newLessonPlan.activities.introduction.exercises.questions.map(
+												(Q) => (
+													<div className="itemCard">
+														<h5>Question</h5>
+														<h6>{Q.question}</h6>
+														<h5>Type</h5>
+														<h6>{Q.questionType}</h6>
+														{Q.answer
+															? Q.answer.map((A) => (
+																	<>
+																		<h5>Answer</h5>
+																		<h6>{A.answer}</h6>
+																	</>
+															  ))
+															: ""}
+													</div>
+												)
+										  )
+										: ""}
+									<div></div>
 								</div>
 							</Card.Body>
 						</Accordion.Collapse>
@@ -318,82 +491,255 @@ export const LessonReview = (props) => {
 							<Card.Body>
 								<div className="in-card-title">
 									<h4>Content</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Activities</h5>
+										{newLessonPlan.activities.development.content.activities
+											? newLessonPlan.activities.development.content.activities.map(
+													(C) => (
+														<div>
+															<h5>activity:</h5>
+															<h6>{C.activity}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Other Activities</h5>
+										{newLessonPlan.activities.development.content
+											.otherActivity ? (
+											<>
+												<h5>activity:</h5>
+												<h6>
+													{
+														newLessonPlan.activities.development.content
+															.otherActivity
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Cross Cutting Issues</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Issues</h5>
+										{newLessonPlan.activities.development.crossCuttingIssues
+											.issues
+											? newLessonPlan.activities.development.crossCuttingIssues.issues.map(
+													(I) => (
+														<div>
+															<h5>issue:</h5>
+															<h6>{I.issue}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Comment</h5>
+										{newLessonPlan.activities.development.crossCuttingIssues
+											.omment ? (
+											<>
+												<h6>
+													{
+														newLessonPlan.activities.development
+															.crossCuttingIssues.omment
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Competency</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Competencies</h5>
+										{newLessonPlan.activities.development.competency
+											.competencies
+											? newLessonPlan.activities.development.competency.competencies.map(
+													(C) => (
+														<div>
+															<h5>competency:</h5>
+															<h6>{C.competency}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Comment</h5>
+										{newLessonPlan.activities.development.competency.comment ? (
+											<>
+												<h6>
+													{
+														newLessonPlan.activities.development.competency
+															.comment
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Exercices:</h4>
-									<div>
-										<h5>Question</h5>
-										<h5>Type</h5>
-										<h5>Answer</h5>
-									</div>
+									{newLessonPlan.activities.development.exercises.questions
+										? newLessonPlan.activities.development.exercises.questions.map(
+												(Q) => (
+													<div className="itemCard">
+														<h5>Question</h5>
+														<h6>{Q.question}</h6>
+														<h5>Type</h5>
+														<h6>{Q.questionType}</h6>
+														{Q.answer
+															? Q.answer.map((A) => (
+																	<>
+																		<h5>Answer</h5>
+																		<h6>{A.answer}</h6>
+																	</>
+															  ))
+															: ""}
+													</div>
+												)
+										  )
+										: ""}
+									<div></div>
 								</div>
 							</Card.Body>
 						</Accordion.Collapse>
 					</Card>
 					<Card>
 						<Accordion.Toggle as={Card.Header} eventKey="0">
-							1. Conclusion
+							3. Conclusion
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey="0">
 							<Card.Body>
 								<div className="in-card-title">
 									<h4>Content</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Activities</h5>
+										{newLessonPlan.activities.conclusion.content.activities
+											? newLessonPlan.activities.conclusion.content.activities.map(
+													(C) => (
+														<div>
+															<h5>activity:</h5>
+															<h6>{C.activity}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Other Activities</h5>
+										{newLessonPlan.activities.conclusion.content
+											.otherActivity ? (
+											<>
+												<h5>activity:</h5>
+												<h6>
+													{
+														newLessonPlan.activities.conclusion.content
+															.otherActivity
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Cross Cutting Issues</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Issues</h5>
+										{newLessonPlan.activities.conclusion.crossCuttingIssues
+											.issues
+											? newLessonPlan.activities.conclusion.crossCuttingIssues.issues.map(
+													(I) => (
+														<div>
+															<h5>issue:</h5>
+															<h6>{I.issue}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Comment</h5>
+										{newLessonPlan.activities.conclusion.crossCuttingIssues
+											.omment ? (
+											<>
+												<h6>
+													{
+														newLessonPlan.activities.conclusion
+															.crossCuttingIssues.omment
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Competency</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Competencies</h5>
+										{newLessonPlan.activities.conclusion.competency.competencies
+											? newLessonPlan.activities.conclusion.competency.competencies.map(
+													(C) => (
+														<div>
+															<h5>competency:</h5>
+															<h6>{C.competency}</h6>
+														</div>
+													)
+											  )
+											: ""}
 									</div>
-									<div>
+									<div className="itemCard">
 										<h5>Comment</h5>
+										{newLessonPlan.activities.conclusion.competency.comment ? (
+											<>
+												<h6>
+													{
+														newLessonPlan.activities.conclusion.competency
+															.comment
+													}
+												</h6>
+											</>
+										) : (
+											""
+										)}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Exercices:</h4>
-									<div>
-										<h5>Question</h5>
-										<h5>Type</h5>
-										<h5>Answer</h5>
-									</div>
+									{newLessonPlan.activities.conclusion.exercises.questions
+										? newLessonPlan.activities.conclusion.exercises.questions.map(
+												(Q) => (
+													<div className="itemCard">
+														<h5>Question</h5>
+														<h6>{Q.question}</h6>
+														<h5>Type</h5>
+														<h6>{Q.questionType}</h6>
+														{Q.answer
+															? Q.answer.map((A) => (
+																	<>
+																		<h5>Answer</h5>
+																		<h6>{A.answer}</h6>
+																	</>
+															  ))
+															: ""}
+													</div>
+												)
+										  )
+										: ""}
+									<div></div>
 								</div>
 							</Card.Body>
 						</Accordion.Collapse>
@@ -405,50 +751,90 @@ export const LessonReview = (props) => {
 				<Accordion defaultActiveKey="0">
 					<Card>
 						<Accordion.Toggle as={Card.Header} eventKey="0">
-							1. Introduction: 10 min
+							1. Introduction:{" "}
+							{newLessonPlan.teachingTechniques.introduction.duration} min
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey="0">
 							<Card.Body>
 								<div className="in-card-title">
 									<h4>Content Focus:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.introduction.contentFocus
+											? newLessonPlan.teachingTechniques.introduction.contentFocus.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Interactive Focus:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.introduction
+											.interactiveFocus
+											? newLessonPlan.teachingTechniques.introduction.interactiveFocus.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Critical Thinking:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.introduction
+											.criticalThinking
+											? newLessonPlan.teachingTechniques.introduction.criticalThinking.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Production:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.introduction.production
+											? newLessonPlan.teachingTechniques.introduction.production.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Problem Solving:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.introduction
+											.problemSolving
+											? newLessonPlan.teachingTechniques.introduction.problemSolving.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Reflection:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.introduction.reflection
+											? newLessonPlan.teachingTechniques.introduction.reflection.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Sitting Arrangement:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.introduction
+											.sittingArrangement
+											? newLessonPlan.teachingTechniques.introduction.sittingArrangement.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 							</Card.Body>
@@ -456,50 +842,89 @@ export const LessonReview = (props) => {
 					</Card>
 					<Card>
 						<Accordion.Toggle as={Card.Header} eventKey="0">
-							2. Development: 40 min
+							2. Development:{" "}
+							{newLessonPlan.teachingTechniques.development.duration} min
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey="0">
 							<Card.Body>
 								<div className="in-card-title">
 									<h4>Content Focus:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.development.contentFocus
+											? newLessonPlan.teachingTechniques.development.contentFocus.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Interactive Focus:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.development
+											.interactiveFocus
+											? newLessonPlan.teachingTechniques.development.interactiveFocus.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Critical Thinking:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.development
+											.criticalThinking
+											? newLessonPlan.teachingTechniques.development.criticalThinking.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Production:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.development.production
+											? newLessonPlan.teachingTechniques.development.production.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Problem Solving:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.development.problemSolving
+											? newLessonPlan.teachingTechniques.development.problemSolving.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Reflection:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.development.reflection
+											? newLessonPlan.teachingTechniques.development.reflection.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Sitting Arrangement:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.development
+											.sittingArrangement
+											? newLessonPlan.teachingTechniques.development.sittingArrangement.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 							</Card.Body>
@@ -507,56 +932,103 @@ export const LessonReview = (props) => {
 					</Card>
 					<Card>
 						<Accordion.Toggle as={Card.Header} eventKey="0">
-							3. Conclusion: 10 min
+							3. Conlusion:{" "}
+							{newLessonPlan.teachingTechniques.conclusion.duration} min
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey="0">
 							<Card.Body>
 								<div className="in-card-title">
 									<h4>Content Focus:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.conclusion.contentFocus
+											? newLessonPlan.teachingTechniques.conclusion.contentFocus.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Interactive Focus:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.conclusion
+											.interactiveFocus
+											? newLessonPlan.teachingTechniques.conclusion.interactiveFocus.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Critical Thinking:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.conclusion
+											.criticalThinking
+											? newLessonPlan.teachingTechniques.conclusion.criticalThinking.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Production:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.conclusion.production
+											? newLessonPlan.teachingTechniques.conclusion.production.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Problem Solving:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.conclusion.problemSolving
+											? newLessonPlan.teachingTechniques.conclusion.problemSolving.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Reflection:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.conclusion.reflection
+											? newLessonPlan.teachingTechniques.conclusion.reflection.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Sitting Arrangement:</h4>
-									<div>
+									<div className="itemCard">
 										<h5>Content</h5>
+										{newLessonPlan.teachingTechniques.conclusion
+											.sittingArrangement
+											? newLessonPlan.teachingTechniques.conclusion.sittingArrangement.map(
+													(cf) => <h6>{cf.item}</h6>
+											  )
+											: ""}
 									</div>
 								</div>
 							</Card.Body>
 						</Accordion.Collapse>
 					</Card>
 				</Accordion>
+				<button
+					className="backButton"
+					onClick={() => {
+						go("review");
+					}}
+				>
+					Back
+				</button>
 			</div>
 
 			<Popup

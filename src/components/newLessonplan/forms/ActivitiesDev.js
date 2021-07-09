@@ -213,7 +213,7 @@ export const ActivitiesDev = (props) => {
 			answer,
 		} = quest[0];
 		if (e.target.checked) {
-			newLessonPlan.activities.introduction.exercises.questions.push({
+			newLessonPlan.activities.development.exercises.questions.push({
 				difficultLevel,
 				questionsObjective,
 				question,
@@ -224,10 +224,10 @@ export const ActivitiesDev = (props) => {
 			console.log("updated questions", newLessonPlan);
 		} else {
 			var questionIndex =
-				newLessonPlan.introduction.activities.exercises.questions.indexOf(
+				newLessonPlan.activities.development.exercises.questions.indexOf(
 					e.target.value
 				);
-			newLessonPlan.activities.introduction.exercises.questions.splice(
+			newLessonPlan.activities.development.exercises.questions.splice(
 				questionIndex,
 				1
 			);

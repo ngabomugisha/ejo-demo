@@ -95,6 +95,14 @@ export const LessonPlan_4 = ({ formData, setForm, navigation }) => {
 	return (
 		<Container maxWidth="xs">
 			<div className="slide3-container">
+				<button
+					className="backButton"
+					onClick={() => {
+						navigation.go("LessonPlan_3");
+					}}
+				>
+					Back
+				</button>
 				<h5>Teaching Techniques</h5>
 				<Tabs
 					fill={true}
