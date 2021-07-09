@@ -14,6 +14,7 @@ import { AiFillPrinter } from "react-icons/ai";
 import Popup from "../../popup/index";
 import Button from "react-bootstrap/Button";
 
+
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: theme.spacing(1),
@@ -25,11 +26,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const LessonReview = (props) => {
+
 	const { go } = props.navigation;
 	const { newLessonPlan } = useSelector((state) => state);
 	const [isLoading, setIsLoading] = useState(true);
 	const classes = useStyles();
 	const [subject, setSubject] = useState(newLessonPlan.subject);
+
 	const [subjects, setSubjects] = useState(null);
 	const [openPopup, setOpenPopup] = useState(false);
 	const [openPrintPopup, setOpenPrintPopup] = useState(false);
@@ -39,6 +42,7 @@ export const LessonReview = (props) => {
 	const [unit, setUnit] = useState();
 	const [topicId, setTopicId] = useState("");
 	const [subTopicId, setSubTopicId] = useState("");
+
 
 	const handleChange = (event) => {
 		setSubject(event.target.value);
@@ -110,7 +114,6 @@ export const LessonReview = (props) => {
 		fetchTopic();
 		fetchSubTopic();
 	}, [unit]);
-
 	return (
 		<>
 			<div className="select-subject">
@@ -132,6 +135,7 @@ export const LessonReview = (props) => {
 				Back
 			</button>
 			<div className="plan-container-lesson">
+
 				<div className="titl">
 					<h1>Syllabus</h1>
 					<div className="titl2">
@@ -205,6 +209,7 @@ export const LessonReview = (props) => {
 																		<h6>{F.name}</h6>
 																	</div>
 															  ))
+
 															: ""}
 													</div>
 												</div>
@@ -266,6 +271,7 @@ export const LessonReview = (props) => {
 																		<h6>{F.name}</h6>
 																	</div>
 															  ))
+
 															: ""}
 													</div>
 												</div>
@@ -328,6 +334,7 @@ export const LessonReview = (props) => {
 																			<h6>{F.name}</h6>
 																		</div>
 																  ))
+
 																: ""}
 														</div>
 													</div>
@@ -388,10 +395,12 @@ export const LessonReview = (props) => {
 										) : (
 											""
 										)}
+
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Cross Cutting Issues</h4>
+
 									<div className="itemCard">
 										<h5>Issues</h5>
 										{newLessonPlan.activities.introduction.crossCuttingIssues
@@ -421,6 +430,7 @@ export const LessonReview = (props) => {
 										) : (
 											""
 										)}
+
 									</div>
 								</div>
 								<div className="in-card-title">
@@ -458,6 +468,7 @@ export const LessonReview = (props) => {
 								</div>
 								<div className="in-card-title">
 									<h4>Exercices:</h4>
+
 									{newLessonPlan.activities.introduction.exercises.questions
 										? newLessonPlan.activities.introduction.exercises.questions.map(
 												(Q) => (
@@ -609,7 +620,7 @@ export const LessonReview = (props) => {
 												)
 										  )
 										: ""}
-									<div></div>
+									<div></div>n
 								</div>
 							</Card.Body>
 						</Accordion.Collapse>
@@ -651,6 +662,7 @@ export const LessonReview = (props) => {
 										) : (
 											""
 										)}
+
 									</div>
 								</div>
 								<div className="in-card-title">
@@ -753,6 +765,7 @@ export const LessonReview = (props) => {
 						<Accordion.Toggle as={Card.Header} eventKey="0">
 							1. Introduction:{" "}
 							{newLessonPlan.teachingTechniques.introduction.duration} min
+
 						</Accordion.Toggle>
 						<Accordion.Collapse eventKey="0">
 							<Card.Body>
@@ -765,6 +778,7 @@ export const LessonReview = (props) => {
 													(cf) => <h6>{cf.item}</h6>
 											  )
 											: ""}
+
 									</div>
 								</div>
 								<div className="in-card-title">
@@ -777,10 +791,12 @@ export const LessonReview = (props) => {
 													(cf) => <h6>{cf.item}</h6>
 											  )
 											: ""}
+
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Critical Thinking:</h4>
+
 									<div className="itemCard">
 										<h5>Content</h5>
 										{newLessonPlan.teachingTechniques.introduction
@@ -800,10 +816,12 @@ export const LessonReview = (props) => {
 													(cf) => <h6>{cf.item}</h6>
 											  )
 											: ""}
+
 									</div>
 								</div>
 								<div className="in-card-title">
 									<h4>Problem Solving:</h4>
+
 									<div className="itemCard">
 										<h5>Content</h5>
 										{newLessonPlan.teachingTechniques.introduction
@@ -812,6 +830,7 @@ export const LessonReview = (props) => {
 													(cf) => <h6>{cf.item}</h6>
 											  )
 											: ""}
+
 									</div>
 								</div>
 								<div className="in-card-title">
@@ -1021,6 +1040,7 @@ export const LessonReview = (props) => {
 						</Accordion.Collapse>
 					</Card>
 				</Accordion>
+
 				<button
 					className="backButton"
 					onClick={() => {

@@ -16,7 +16,6 @@ import { setNewLessonplan } from "../../../store/actions/newLessonPlan.actions";
 import { FormControlLabel } from "@material-ui/core";
 import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
-import FilePreviewer from "react-file-previewer";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -206,6 +205,7 @@ export const KnowledgeForm = () => {
 		});
 
 		setUploadFiles([...uploadFiles, file]);
+
 	};
 
 	const handleDeleteFile = (id, name) => {
@@ -411,6 +411,7 @@ export const KnowledgeForm = () => {
 											<MenuItem value="REMEMBERING">Remembering</MenuItem>
 											<MenuItem value="UNDERSTANDING">Understanding</MenuItem>
 										</TextField>
+
 									</div>
 									<div className="field">
 										<TextField
@@ -445,6 +446,7 @@ export const KnowledgeForm = () => {
 											<MenuItem value={100}>100</MenuItem>
 										</TextField>
 									</div>
+
 									<ProgressBar
 										now={input.standardCriteriaPerfomance}
 										label={`${input.standardCriteriaPerfomance}%`}
@@ -650,12 +652,14 @@ export const KnowledgeForm = () => {
 												<div className="itemList">
 													<div className="fileItem">
 														<p>{f.name}</p>
+
 													</div>
 													<div>
 														<button
 															className="deleteFileBtn"
 															onClick={() =>
 																handleDeleteFile(material.id, f.name)
+
 															}
 														>
 															<RiDeleteBin6Line />

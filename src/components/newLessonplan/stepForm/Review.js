@@ -49,6 +49,7 @@ export const Review = ({ formData, navigation }) => {
 				if (res.status == 200) {
 					console.log("submitted");
 					setOpen(true);
+
 				} else return alert("something went wrong");
 			});
 	};
