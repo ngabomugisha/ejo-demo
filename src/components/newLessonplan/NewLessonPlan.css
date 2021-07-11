@@ -53,7 +53,7 @@ h5 {
 
 .delete-btn {
 	display: flex;
-  justify-content: flex-end;
+	justify-content: flex-end;
 }
 
 .delete-btn > button {
@@ -126,20 +126,20 @@ h5 {
 
 .lessonPlan {
 	display: flex;
+	flex-direction: column;
 	justify-content: space-between;
+}
+.summaryItem {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
+.last {
+	margin-top: 10px;
 }
 
 .smallDiv {
 	font-weight: 500;
-}
-.rightSide {
-	display: flex;
-	justify-content: flex-end;
-	flex-direction: column;
-}
-.rightSide h5 {
-	text-decoration: underline;
-	padding-bottom: 10px;
 }
 
 .toggleSelection {
@@ -183,4 +183,26 @@ h5 {
 	border: none;
 	color: red;
 	font-size: 1.6em;
+}
+
+.backButton {
+	width: fit-content;
+	background-color: #fff;
+	border: 2px solid #007bff;
+	border-radius: 4px;
+	padding: 4px 10px;
+	color: #007bff;
+	font-weight: 600;
+}
+
+.lastStepCard {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.lastStepCard > p {
+	font-weight: bold;
+	font-size: 16px;
 }
